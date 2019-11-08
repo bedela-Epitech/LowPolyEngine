@@ -23,8 +23,8 @@ L_OpenGL::L_OpenGL(Camera *camera)
 
 void	L_OpenGL::init()
 {
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
 }
 
 void	L_OpenGL::initReshape(sf::RenderWindow &window)
@@ -33,9 +33,12 @@ void	L_OpenGL::initReshape(sf::RenderWindow &window)
 	glLoadIdentity();
 	int x = window.getSize().x;
 	int y = window.getSize().y;
-	glViewport(0, 0, x, y);
-	gluPerspective(60, (float)x / (float)y, 0.1f, 2512.f);
-	glMatrixMode(GL_MODELVIEW);
+	//glViewport(0, 0, x, y);
+	gluPerspective(60, (float)x / (float)y, 1.f, 1000.f);
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+    glDepthFunc(GL_EQUAL);
+	glDepthRange(0.0f, 1.0f);
 }
 
 void	L_OpenGL::initLights()
@@ -64,22 +67,21 @@ void	L_OpenGL::initLights()
 void	L_OpenGL::clear()
 {
 	glClearColor(0.3f, 0.3f, 0.3f, 1.f);
+	glClearDepth(1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void	L_OpenGL::updateCamera()
 {
+	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+
+	gluLookAt(0.f, 0.f, -3.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f);
 
 	glRotatef(0.0f + _camera->_rotate.x, 1.0, 0.0, 0.0);
 	glRotatef(0.0f + _camera->_rotate.y, 0.0, 1.0, 0.0);
 
-
 	glTranslatef(0.f - _camera->_move.x, -5.f, -3.f - _camera->_move.z);
-
-	glPushMatrix();
-
-	gluLookAt(0.f, 0.f, -3.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f);
 }
 
 void	L_OpenGL::initRendering()
@@ -103,6 +105,8 @@ void	L_OpenGL::finishRendering()
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
+
+	glFlush();
 }
 
 /////////////////////

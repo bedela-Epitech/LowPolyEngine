@@ -5,6 +5,7 @@
 #define _L_OPENGL_HPP_
 
 #include <vector>
+#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 

@@ -22,7 +22,7 @@ FIND_LIBRARY(GLUT_glut_LIBRARY NAMES glut glut32 PATHS ${GLUT_ROOT_PATH}/lib/)
 find_package(SFML 2 REQUIRED COMPONENTS graphics window system)
 find_package(OpenGL REQUIRED)
 find_package(GLUT  REQUIRED)
-
+find_package(GLEW REQUIRED)
 
 include_directories(include)
 
@@ -69,7 +69,7 @@ if (WIN32)
 else()
 	set(LIBS	dl
 			${SFML_LIBRARIES} ${SFML_DEPENDENCIES}
-			${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
+			${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARIES})
 endif (WIN32)
 
 
@@ -78,6 +78,7 @@ target_include_directories(ledeb
 		PRIVATE ${SFML_INCLUDE_DIR}
 		PRIVATE ${OPENGL_INCLUDE_DIRS}
 		PRIVATE ${GLUT_INCLUDE_DIRS}
+		PRIVATE ${GLEW_INCLUDE_DIRS}
 		PRIVATE include/
 		)
 

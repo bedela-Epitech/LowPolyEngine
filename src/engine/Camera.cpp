@@ -24,22 +24,22 @@ Camera::~Camera()
 
 void	Camera::moveLeft(const float &speed)
 {
-	_move -= Vector3df(cos((_rotate.y / 180) * 3.14f) * speed, 0.0f, sin((_rotate.y / 180) * 3.14f) * speed);
+	_move += Vector3df(cos((_rotate.y / 180) * 3.14f) * speed, 0.0f, sin((_rotate.y / 180) * 3.14f) * speed);
 }
 
 void	Camera::moveRight(const float &speed)
 {
-	_move += Vector3df(cos((_rotate.y / 180) * 3.14f) * speed, 0.0f, sin((_rotate.y / 180) * 3.14f) * speed);
+	_move -= Vector3df(cos((_rotate.y / 180) * 3.14f) * speed, 0.0f, sin((_rotate.y / 180) * 3.14f) * speed);
 }
 
 void	Camera::moveBack(const float &speed)
 {
-	_move += Vector3df(sin((_rotate.y / 180) * 3.14f) * speed * -1, 0.0f, cos((_rotate.y / 180) * 3.14f) * speed);
+	_move += Vector3df(sin((_rotate.y / 180) * 3.14f) * speed, 0.0f, cos((_rotate.y / 180) * 3.14f) * speed * -1);
 }
 
 void	Camera::moveForward(const float &speed)
 {
-	_move += Vector3df(sin((_rotate.y / 180) * 3.14f) * speed, 0.0f, cos((_rotate.y / 180) * 3.14f) * speed * -1);
+	_move += Vector3df(sin((_rotate.y / 180) * 3.14f) * speed * -1, 0.0f, cos((_rotate.y / 180) * 3.14f) * speed);
 }
 
 /////////////////////
@@ -60,10 +60,10 @@ void	Camera::rotateRight(const float &speed)
 
 void	Camera::rotateUp(const float &speed)
 {
-	_rotate.x--;
+	_rotate.x++;
 }
 
 void	Camera::rotateDown(const float &speed)
 {
-	_rotate.x++;
+	_rotate.x--;
 }

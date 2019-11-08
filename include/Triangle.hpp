@@ -68,13 +68,13 @@ namespace game
 //		<< "\tSecond Point : " << triangle.vertices[1]
 //		<< "\tThird Point  : " << triangle.vertices[2] << std::endl;
 //}
-//std::ostream  &operator<<(std::ostream& out, const game::Triangle<float> &triangle)
-//{
-//	return out << "Triangle points :" << std::endl
-//		<< "\tFirst Point  : " << triangle.vertices[0]
-//		<< "\tSecond Point : " << triangle.vertices[1]
-//		<< "\tThird Point  : " << triangle.vertices[2] << std::endl;
-//}
+/*std::ostream  &operator<<(std::ostream& out, const game::Triangle<float> &triangle)
+{
+	return out << "Triangle points :" << std::endl
+		<< "\tFirst Point  : " << triangle.vertices[0].x
+		<< "\tSecond Point : " << triangle.vertices[1].x
+		<< "\tThird Point  : " << triangle.vertices[2].x << std::endl;
+}*/
 //std::ostream  &operator<<(std::ostream& out, const game::Triangle<double> &triangle)
 //{
 //	return out << "Triangle points :" << std::endl
