@@ -24,6 +24,8 @@ find_package(OpenGL REQUIRED)
 find_package(GLUT  REQUIRED)
 find_package(GLEW REQUIRED)
 FIND_PACKAGE(FLTK REQUIRED)
+find_package(PkgConfig REQUIRED)
+pkg_search_module(GLFW REQUIRED glfw3)
 
 
 include_directories(include)
@@ -71,7 +73,7 @@ if (WIN32)
 else()
 	set(LIBS	dl
 			${SFML_LIBRARIES} ${SFML_DEPENDENCIES}
-			${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARIES} ${FLTK_LIBRARIES})
+			${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARIES} ${FLTK_LIBRARIES} ${GLFW_LIBRARIES})
 endif (WIN32)
 
 
@@ -84,4 +86,11 @@ target_include_directories(ledeb
 		PRIVATE include/
 		)
 
-target_link_libraries(ledeb ${LIBS}  )
+set(GLAD_DIR "/usr/include/glad")
+add_library("glad" "${GLAD_DIR}/src/glad.c")
+target_include_directories("glad" PRIVATE "${GLAD_DIR}/include")
+target_include_directories(ledeb PRIVATE "${GLAD_DIR}/include")
+target_link_libraries(ledeb "glad" "${CMAKE_DL_LIBS}")
+target_link_libraries(ledeb ${LIBS})
+
+

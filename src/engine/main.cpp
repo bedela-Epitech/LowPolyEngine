@@ -11,17 +11,16 @@
 
 //#include "encapsulation/Input.hpp"
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
-
-#include <GL/glew.h>
-#include <FL/glut.H>
-//#include <GL/gl.h>
-//#include <GL/glut.h>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <GL/glut.h>
 //#include "encapsulation/L_OpenGL.hpp"
 #include <iostream>
 #include <vector>
 #include "Triangle.hpp"
 //#include "engine/ObjParser.hpp"
 //#include "Light.hpp"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -181,14 +180,14 @@ const char* ff = GLSL(
 // Fragment shader
 const char* vv = GLSL(
 
-                         attribute vec4 vPos;
+                         attribute vec3 vPos;
                          uniform mat4 MVP;
                          in  vec3 in_Color;
                          out  vec3 ex_Color;
                          void main()
                          {
                              ex_Color = in_Color;
-                             gl_Position = MVP * vPos;
+                             gl_Position = MVP * vec4(vPos, 1);
                          }
                  );
 
@@ -332,9 +331,10 @@ namespace Cube {
 }
 
 float angle = 20.f;
-GLfloat vertices[] = {	-1.0f,0.0f,0.0f,
-                          0.0f,1.0f,0.0f,
-                          0.0f,0.0f,0.0f };
+float translation = 0.1f;
+GLfloat vertices[] = {	-1.0f,0.0f,0.9f,
+                          0.0f,1.0f,0.9f,
+                          0.0f,0.0f,0.9f };
 GLfloat colours[] = {	1.0f, 0.0f, 0.0f,
                          0.0f, 1.0f, 0.0f,
                          0.0f, 0.0f, 1.0f };
@@ -417,12 +417,25 @@ void initShaders(void)
         delete[] infoLog;
     }
     glUseProgram(p);
+
 }
 
 void display() {
     //glClear(GL_COLOR_BUFFER_BIT);
     //Cube::draw();
     // clear the screen
+    //glViewport( 0, 0, 500.f, 500.f ) ;
+
+    auto projection = glm::perspective(glm::radians(60.0f), 500.f / 500.f, 0.5f, 400.f);
+    //glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, translation));
+    auto view = glm::lookAt(glm::vec3(0.f, 0.f, -3.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+    //model = glm::translate(model, glm::vec3(0.0f, 0.0f, -translation));
+    //std::cout << translation << std::endl;
+    glm::mat4 MVP = projection * view * model;
+
+    glUniformMatrix4fv(glGetUniformLocation(p, "MVP"), 1, 0, &model[0][0]);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glBindVertexArray(vertexArrayObjID[0]);	// First VAO
@@ -434,20 +447,18 @@ void display() {
     //model = glm::translate(model, glm::vec3(0.1,0.1, 0.1));
 
 
-    auto projection = glm::perspective(60.f, 1.f, 0.5f, 40.f);
-    auto view = glm::lookAt(glm::vec3(0.f, 0.f, -3.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 
 
-    glm::mat4 MVP = projection * view * model;
-    glUniformMatrix4fv(glGetUniformLocation(p, "MVP"), 1, 0, &model[0][0]);
+
+
 
     glDrawArrays(GL_TRIANGLES, 0, 3);	// draw second object
 
-    glFlush();
+    //gluLookAt(0.f, 0.f, -3.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f);
+    //glFlush();
     glutSwapBuffers();
     angle += 1.f;
+    translation += 1.f;
 }
 
 // We'll be flying around the cube by moving the camera along the orbit of the
@@ -457,7 +468,6 @@ void display() {
 void timer(int v) {
     static GLfloat u = 0.0;
     u += 0.01;
-    glLoadIdentity();
     //gluLookAt(0.f, 0.f, -3.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f);
     glutPostRedisplay();
     glutTimerFunc(1000/60.0, timer, v);
@@ -471,8 +481,9 @@ void reshape(int w, int h) {
     glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    //gluPerspective(60.0, GLfloat(w) / GLfloat(h), 0.5, 40.0);
+    gluPerspective(60.0, GLfloat(w) / GLfloat(h), 0.5, 40.0);
     glMatrixMode(GL_MODELVIEW);
+
 }
 
 // Application specific initialization:  The only thing we really need to do
@@ -497,13 +508,13 @@ void init(void)
 
     // VBO for vertex data
     glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObjID[0]);
-    glBufferData(GL_ARRAY_BUFFER, 9*sizeof(GLfloat), vertices, GL_STREAM_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 9*sizeof(GLfloat), vertices, GL_STATIC_DRAW);
     glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(0);
 
     // VBO for colour data
     glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObjID[1]);
-    glBufferData(GL_ARRAY_BUFFER, 9*sizeof(GLfloat), colours, GL_STREAM_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 9*sizeof(GLfloat), colours, GL_STATIC_DRAW);
     glVertexAttribPointer((GLuint)1, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(1);
 
@@ -513,7 +524,7 @@ void init(void)
 
     // VBO for vertex data
     glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObjID[2]);
-    glBufferData(GL_ARRAY_BUFFER, 9*sizeof(GLfloat), vertices2, GL_STREAM_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 9*sizeof(GLfloat), vertices2, GL_STATIC_DRAW);
     glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(0);
 
@@ -522,7 +533,7 @@ void init(void)
 
 
 // The usual main for a GLUT application.
-int main(int argc, char** argv) {
+/*int main(int argc, char** argv) {
     Diamond diams(0.75f, 65);
     diams.fillMap();
     diams.updateVertices(5, 250);
@@ -542,9 +553,9 @@ int main(int argc, char** argv) {
 
 
 
-    glutReshapeFunc(reshape);
+    //glutReshapeFunc(reshape);
 
-    glutTimerFunc(100, timer, 0);
+    glutTimerFunc(100, timer, 0);*/
 
 
 
@@ -665,11 +676,11 @@ int main(int argc, char** argv) {
 
 
 
-    initShaders();
+    /*initShaders();
     init();
     glutDisplayFunc(display);
     glutMainLoop();
-}
+}*/
 
 /*GLfloat vertices[] = {	-1.0f,0.0f,0.0f,
                           0.0f,1.0f,0.0f,
@@ -855,3 +866,121 @@ int main (int argc, char* argv[])
     glutMainLoop();
     return 0;
 }*/
+
+
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void processInput(GLFWwindow *window);
+
+// settings
+const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_HEIGHT = 600;
+
+int main()
+{
+    // glfw: initialize and configure
+    // ------------------------------
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    // glfw window creation
+    // --------------------
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    if (window == NULL)
+    {
+        std::cout << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
+        return -1;
+    }
+    glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+    // glad: load all OpenGL function pointers
+    // ---------------------------------------
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        return -1;
+    }
+
+    // configure global opengl state
+    // -----------------------------
+    glEnable(GL_DEPTH_TEST);
+
+    initShaders();
+    init();
+
+    // pass projection matrix to shader (as projection matrix rarely changes there's no need to do this per frame)
+    // -----------------------------------------------------------------------------------------------------------
+    auto projection = glm::perspective(glm::radians(60.0f), 500.f / 500.f, 0.5f, 400.f);
+    auto view = glm::lookAt(glm::vec3(0.f, 0.f, -3.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
+    glm::mat4 model = glm::mat4(1.0f);
+
+
+    // render loop
+    // -----------
+    while (!glfwWindowShouldClose(window))
+    {
+        // input
+        // -----
+        processInput(window);
+
+        // render
+        // ------
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        //glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, translation));
+        //model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+        //model = glm::translate(model, glm::vec3(0.0f, 0.0f, translation));
+        //std::cout << translation << std::endl;
+        glm::mat4 MVP = projection * view * model;
+
+        glUniformMatrix4fv(glGetUniformLocation(p, "MVP"), 1, 0, &model[0][0]);
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glBindVertexArray(vertexArrayObjID[0]);	// First VAO
+        glDrawArrays(GL_TRIANGLES, 0, 3);	// draw first object
+
+        glBindVertexArray(vertexArrayObjID[1]);		// select second VAO
+        glVertexAttrib3f((GLuint)1, 1.0, 0.0, 0.0); // set constant color attribute
+
+        //model = glm::translate(model, glm::vec3(0.1,0.1, 0.1));
+
+
+
+
+
+
+
+        glDrawArrays(GL_TRIANGLES, 0, 3);	// draw second object
+        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+        // -------------------------------------------------------------------------------
+        glfwSwapBuffers(window);
+    }
+
+    // optional: de-allocate all resources once they've outlived their purpose:
+    // ------------------------------------------------------------------------
+    // glfw: terminate, clearing all previously allocated GLFW resources.
+    // ------------------------------------------------------------------
+    return 0;
+}
+
+// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
+// ---------------------------------------------------------------------------------------------------------
+void processInput(GLFWwindow *window)
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+}
+
+// glfw: whenever the window size changed (by OS or user resize) this callback function executes
+// ---------------------------------------------------------------------------------------------
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    // make sure the viewport matches the new window dimensions; note that width and
+    // height will be significantly larger than specified on retina displays.
+    glViewport(0, 0, width, height);
+}
