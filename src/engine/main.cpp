@@ -13,15 +13,18 @@
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 #include <GL/glew.h>
-#include <GL/gl.h>
-#include <GL/glut.h>
+#include <FL/glut.H>
+//#include <GL/gl.h>
+//#include <GL/glut.h>
 //#include "encapsulation/L_OpenGL.hpp"
 #include <iostream>
 #include <vector>
 #include "Triangle.hpp"
 //#include "engine/ObjParser.hpp"
 //#include "Light.hpp"
-
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include "map/Diamond.hpp"
 
 /*void Reshape(int width, int height)
@@ -33,10 +36,10 @@
     //glViewport(0, 0, x, y);
     gluPerspective(60, (float)x / (float)y, 1.f, 1000.f);
     glEnable(GL_DEPTH_TEST);
-}*/
+}
 
 std::vector<game::Triangle<float>> triangles;
-/*void Draw()
+void Draw()
 {
     //glClearColor(0.3f, 0.3f, 0.3f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -162,7 +165,79 @@ int main(int argc,char ** argv)
 	return 0;
 }*/
 
+#define GLSL(src) "#version 130\n" #src
 
+// Vertex shader
+const char* ff = GLSL(
+                                      precision highp float;
+                                      in  vec3 ex_Color;
+                                      out vec4 out_Color;
+                                      void main(void)
+                                      {
+                                          out_Color = vec4(ex_Color,1.0);
+                                      }
+                              );
+
+// Fragment shader
+const char* vv = GLSL(
+
+                         attribute vec4 vPos;
+                         uniform mat4 MVP;
+                         in  vec3 in_Color;
+                         out  vec3 ex_Color;
+                         void main()
+                         {
+                             ex_Color = in_Color;
+                             gl_Position = MVP * vPos;
+                         }
+                 );
+
+
+/*#ifdef __APPLE__
+#define SHADING_LANG_VERS "140"
+#else
+#define SHADING_LANG_VERS "130"
+#endif
+// load shaders
+const char *vv = "#version "SHADING_LANG_VERS"\n\
+  in  vec3 in_Position;\
+  in  vec3 in_Color;\
+  out vec3 ex_Color;\
+  void main(void)\
+  {\
+    ex_Color = in_Color;\
+    gl_Position = vec4(in_Position, 1.0);\
+  }";
+
+const char *ff = "#version "SHADING_LANG_VERS"\n\
+  precision highp float;\
+  in  vec3 ex_Color;\
+  out vec4 out_Color;\
+  void main(void)\
+  {\
+    out_Color = vec4(ex_Color,1.0);\
+  }";*/
+
+
+const char *vertexShaderSource ="#version 330 core\n"
+                                "layout (location = 2) in vec3 vertexColor;\n"
+                                "out vec3 fragmentColor;"
+                                "void main()\n"
+                                "{\n"
+                                "   fragmentColor = vertexColor;\n"
+                                "}\0";
+
+const char *fragmentShaderSource = "#version 330 core\n"
+                                   "in vec3 fragmentColor;\n"
+                                   "out vec3 color;\n"
+                                   "void main()\n"
+                                   "{\n"
+                                   "   color = fragmentColor;\n"
+                                   "}\n\0";
+
+GLuint colorbuffer;
+GLuint shaderProgram;
+GLuint vertexbuffer;
 namespace Cube {
 
     const int NUM_VERTICES = 8;
@@ -182,11 +257,8 @@ namespace Cube {
 
     void draw() {
         //GLfloat tete[9];
-        /*std::cout << triangles[0].vertices[0].x << " ";
-        std::cout << triangles[0].vertices[1].x << " ";
-        std::cout << triangles[0].vertices[2].x << std::endl;
         std::vector<GLfloat> verts;
-        for (const auto & tri : triangles)
+        /*for (const auto & tri : triangles)
         {
             verts.push_back(tri.vertices[0].x / 100.f);
             verts.push_back(tri.vertices[0].y / 100.f);
@@ -199,7 +271,7 @@ namespace Cube {
             verts.push_back(tri.vertices[2].x / 100.f);
             verts.push_back(tri.vertices[2].y / 100.f);
             verts.push_back(tri.vertices[2].z / 100.f);
-        }
+        }*/
         verts.push_back(0.0);
         verts.push_back(0.0);
         verts.push_back(0.0);
@@ -211,11 +283,6 @@ namespace Cube {
         verts.push_back(0.0);
         verts.push_back(0.0);
         verts.push_back(1.0);
-            static const GLfloat tete[] = {
-                    0.0f, 0.0f, 0.0f,
-                    0.0f, 1.0f, 0.0f,
-                    0.0f,  0.0f, 1.0f,
-            };
         GLuint vertexbuffer;
 // Generate 1 buffer, put the resulting identifier in vertexbuffer
         glGenBuffers(1, &vertexbuffer);
@@ -224,133 +291,62 @@ namespace Cube {
 // Give our vertices to OpenGL.
         glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * verts.size(), verts.data(), GL_STATIC_DRAW);
 
+
+
+
         //glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);*/
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+// The following commands will talk about our 'vertexbuffer' buffer
+
+        //glUseProgram(shaderProgram);
+
+        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+// Give our vertices to OpenGL.
+        // 1st attribute buffer : vertices
+        glEnableVertexAttribArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+
+// Draw the triangle !
+        glDrawArrays( GL_TRIANGLES, 0, 12 * 3 );
+        glDisableVertexAttribArray(0);
+
+        glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+        glEnableVertexAttribArray(2);
+        glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+        glDisableVertexAttribArray(2);
 
 
-
-        struct MyVertex
-        {
-            float x, y, z;        // Vertex
-            float nx, ny, nz;     // Normal
-            float s0, t0;         // Texcoord0
-        };
-
-        MyVertex pvertex[3];
-        // VERTEX 0
-        pvertex[0].x = 0.0;
-        pvertex[0].y = 0.0;
-        pvertex[0].z = 0.0;
-        pvertex[0].nx = 0.0;
-        pvertex[0].ny = 0.0;
-        pvertex[0].nz = 1.0;
-        pvertex[0].s0 = 0.0;
-        pvertex[0].t0 = 0.0;
-        // VERTEX 1
-        pvertex[1].x = 1.0;
-        pvertex[1].y = 0.0;
-        pvertex[1].z = 0.0;
-        pvertex[1].nx = 0.0;
-        pvertex[1].ny = 0.0;
-        pvertex[1].nz = 1.0;
-        pvertex[1].s0 = 1.0;
-        pvertex[1].t0 = 0.0;
-        // VERTEX 2
-        pvertex[2].x = 0.0;
-        pvertex[2].y = 1.0;
-        pvertex[2].z = 0.0;
-        pvertex[2].nx = 0.0;
-        pvertex[2].ny = 0.0;
-        pvertex[2].nz = 1.0;
-        pvertex[2].s0 = 0.0;
-        pvertex[2].t0 = 1.0;
-        GLuint VertexVBOID;
-        GLuint IndexVBOID;
-
-        glGenBuffers(1, &VertexVBOID);
-        glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(MyVertex)*3, &pvertex[0].x, GL_STATIC_DRAW);
-
-        ushort pindices[3];
-        pindices[0] = 0;
-        pindices[1] = 1;
-        pindices[2] = 2;
-
-        glGenBuffers(1, &IndexVBOID);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(ushort)*3, pindices, GL_STATIC_DRAW);
-
-        // Define this somewhere in your header file
-
-        glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
-        glEnableVertexAttribArray(0);    // We like submitting vertices on stream 0 for no special reason
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(MyVertex), BUFFER_OFFSET(0));      // The starting point of the VBO, for the vertices
-        glEnableVertexAttribArray(1);    // We like submitting normals on stream 1 for no special reason
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(MyVertex), BUFFER_OFFSET(12));     // The starting point of normals, 12 bytes away
-        glEnableVertexAttribArray(2);    // We like submitting texcoords on stream 2 for no special reason
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(MyVertex), BUFFER_OFFSET(24));     // The starting point of texcoords, 24 bytes away
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
-        // To render, we can either use glDrawElements or glDrawRangeElements
-        // The is the number of indices. 3 indices needed to make a single triangle
-        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, BUFFER_OFFSET(0));
-        /*glVertexAttribPointer(
+        //glBindBuffer( GL_ARRAY_BUFFER, vertexbuffer );
+        //glBindBuffer( GL_ARRAY_BUFFER, 0 );
+        glVertexAttribPointer(
                 0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
                 3,                  // size
                 GL_FLOAT,           // type
                 GL_FALSE,           // normalized?
                 0,                  // stride
                 (void*)0            // array buffer offset
-        );*/
-// Draw the triangle !
-        //glDrawArrays(GL_TRIANGLES, 0, verts.size()); // Starting from vertex 0; 3 vertices total -> 1 triangle
-        //glDisableVertexAttribArray(0);
+        );
 
-        //glBegin(GL_TRIANGLES);
-        /*glColor3f(0.25f, 0.25f, 0.25f);
-        glVertex3f(0,0,0);
-        glColor3f(0.25f, 0.25f, 0.25f);
-        glVertex3f(0,1,0);
-        glColor3f(0.25f, 0.25f, 0.25f);
-        glVertex3f(0,0,1);
-        glColor3f(0.25f, 0.25f, 0.25f);
-        glVertex3f(0,1,1);
-        glColor3f(0.25f, 0.25f, 0.25f);
-        glVertex3f(1,0,0);
-        glColor3f(0.25f, 0.25f, 0.25f);
-        glVertex3f(1,0,1);*/
-
-        //glNormal3f(triangles[k].normal.x, triangles[k].normal.y, triangles[k].normal.z);
-        /*glNormal3f(0, 1, 0);
-        glVertexPointer(3, GL_FLOAT, 0, tete);
-        glDrawArrays(GL_TRIANGLES, 0, 3);*/
-        /*for (size_t k = 0; k < triangles.size(); k++)
-        {
-            tete[0] = triangles[k].vertices[0].x;
-            tete[1] = triangles[k].vertices[0].y;
-            tete[2] = triangles[k].vertices[0].z;
-
-            tete[3] = triangles[k].vertices[1].x;
-            tete[4] = triangles[k].vertices[1].y;
-            tete[5] = triangles[k].vertices[1].z;
-
-            tete[6] = triangles[k].vertices[2].x;
-            tete[7] = triangles[k].vertices[2].y;
-            tete[8] = triangles[k].vertices[2].z;
-
-            //glNormal3f(triangles[k].normal.x, triangles[k].normal.y, triangles[k].normal.z);
-            glColor3f(0.25f, 0.25f, 0.25f);
-            glVertex3f(triangles[k].vertices[0].x, triangles[k].vertices[0].y, triangles[k].vertices[0].z);
-            glColor3f(0.25f, 0.25f, 0.25f);
-            glVertex3f(triangles[k].vertices[1].x, triangles[k].vertices[1].y, triangles[k].vertices[1].z);
-            glColor3f(0.25f, 0.25f, 0.25f);
-            glVertex3f(triangles[k].vertices[2].x, triangles[k].vertices[2].y, triangles[k].vertices[2].z);
-            //glVertexPointer(3, GL_FLOAT, 0, tete);
-            //glDrawArrays(GL_TRIANGLES, 0, 3);
-        }*/
-        //glEnd();
     }
 }
+
+float angle = 20.f;
+GLfloat vertices[] = {	-1.0f,0.0f,0.0f,
+                          0.0f,1.0f,0.0f,
+                          0.0f,0.0f,0.0f };
+GLfloat colours[] = {	1.0f, 0.0f, 0.0f,
+                         0.0f, 1.0f, 0.0f,
+                         0.0f, 0.0f, 1.0f };
+GLfloat vertices2[] = {	0.0f,0.0f,0.0f,
+                           0.0f,-1.0f,0.0f,
+                           1.0f,0.0f,0.0f };
+
+GLuint p, f, v;
+// two vertex array objects, one for each object drawn
+unsigned int vertexArrayObjID[2];
+// three vertex buffer objects in this example
+unsigned int vertexBufferObjID[3];
 
 // Display and Animation. To draw we just clear the window and draw the cube.
 // Because our main window is double buffered we have to swap the buffers to
@@ -358,11 +354,100 @@ namespace Cube {
 // camera and drawing. The function nextAnimationFrame() moves the camera to
 // the next point and draws. The way that we get animation in OpenGL is to
 // register nextFrame as the idle function; this is done in main().
+
+void printShaderInfoLog(GLint shader)
+{
+    int infoLogLen = 0;
+    GLchar *infoLog;
+
+    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLen);
+    if (infoLogLen > 0)
+    {
+        infoLog = new GLchar[infoLogLen];
+        // error check for fail to allocate memory omitted
+        glGetShaderInfoLog(shader,infoLogLen, NULL, infoLog);
+        fprintf(stderr, "InfoLog:\n%s\n", infoLog);
+        delete [] infoLog;
+    }
+}
+void initShaders(void)
+{
+    glClearColor (1.0, 1.0, 1.0, 0.0);
+
+    v = glCreateShader(GL_VERTEX_SHADER);
+    f = glCreateShader(GL_FRAGMENT_SHADER);
+
+    glShaderSource(v, 1, &vv,NULL);
+    glShaderSource(f, 1, &ff,NULL);
+
+    GLint compiled;
+
+    glCompileShader(v);
+    glGetShaderiv(v, GL_COMPILE_STATUS, &compiled);
+    if (!compiled)
+    {
+        fprintf(stderr, "Vertex shader not compiled.\n");
+        printShaderInfoLog(v);
+    }
+
+    glCompileShader(f);
+    glGetShaderiv(f, GL_COMPILE_STATUS, &compiled);
+    if (!compiled)
+    {
+        fprintf(stderr, "Fragment shader not compiled.\n");
+        printShaderInfoLog(f);
+    }
+
+    p = glCreateProgram();
+
+    glAttachShader(p,v);
+    glAttachShader(p,f);
+    glBindAttribLocation(p,0, "vPos");
+    glBindAttribLocation(p,1, "in_Color");
+    glBindAttribLocation(p, 2, "MVP");
+
+    glLinkProgram(p);
+    glGetProgramiv(p, GL_LINK_STATUS, &compiled);
+    if (compiled != GL_TRUE) {
+        GLchar *infoLog; GLint length;
+        glGetProgramiv(p, GL_INFO_LOG_LENGTH, &length);
+        infoLog = new GLchar[length];
+        glGetProgramInfoLog(p, length, NULL, infoLog);
+        fprintf(stderr, "Link log=%s\n", infoLog);
+        delete[] infoLog;
+    }
+    glUseProgram(p);
+}
+
 void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
-    Cube::draw();
+    //glClear(GL_COLOR_BUFFER_BIT);
+    //Cube::draw();
+    // clear the screen
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glBindVertexArray(vertexArrayObjID[0]);	// First VAO
+    glDrawArrays(GL_TRIANGLES, 0, 3);	// draw first object
+
+    glBindVertexArray(vertexArrayObjID[1]);		// select second VAO
+    glVertexAttrib3f((GLuint)1, 1.0, 0.0, 0.0); // set constant color attribute
+
+    //model = glm::translate(model, glm::vec3(0.1,0.1, 0.1));
+
+
+    auto projection = glm::perspective(60.f, 1.f, 0.5f, 40.f);
+    auto view = glm::lookAt(glm::vec3(0.f, 0.f, -3.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+
+
+    glm::mat4 MVP = projection * view * model;
+    glUniformMatrix4fv(glGetUniformLocation(p, "MVP"), 1, 0, &model[0][0]);
+
+    glDrawArrays(GL_TRIANGLES, 0, 3);	// draw second object
+
     glFlush();
     glutSwapBuffers();
+    angle += 1.f;
 }
 
 // We'll be flying around the cube by moving the camera along the orbit of the
@@ -373,7 +458,7 @@ void timer(int v) {
     static GLfloat u = 0.0;
     u += 0.01;
     glLoadIdentity();
-    gluLookAt(8*cos(u), 7*cos(u)-1, 4*cos(u/3)+2, .5, .5, .5, cos(u), 1, 0);
+    //gluLookAt(0.f, 0.f, -3.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f);
     glutPostRedisplay();
     glutTimerFunc(1000/60.0, timer, v);
 }
@@ -386,17 +471,55 @@ void reshape(int w, int h) {
     glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(60.0, GLfloat(w) / GLfloat(h), 0.5, 40.0);
+    //gluPerspective(60.0, GLfloat(w) / GLfloat(h), 0.5, 40.0);
     glMatrixMode(GL_MODELVIEW);
 }
 
 // Application specific initialization:  The only thing we really need to do
 // is enable back face culling because the only thing in the scene is a cube
 // which is a convex polyhedron.
-void init() {
+/*void init() {
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
+}*/
+
+
+
+void init(void)
+{
+    // Would load objects from file here - but using globals in this example
+
+    // Allocate Vertex Array Objects
+    glGenVertexArrays(2, &vertexArrayObjID[0]);
+    // Setup first Vertex Array Object
+    glBindVertexArray(vertexArrayObjID[0]);
+    glGenBuffers(2, vertexBufferObjID);
+
+    // VBO for vertex data
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObjID[0]);
+    glBufferData(GL_ARRAY_BUFFER, 9*sizeof(GLfloat), vertices, GL_STREAM_DRAW);
+    glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(0);
+
+    // VBO for colour data
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObjID[1]);
+    glBufferData(GL_ARRAY_BUFFER, 9*sizeof(GLfloat), colours, GL_STREAM_DRAW);
+    glVertexAttribPointer((GLuint)1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(1);
+
+    // Setup second Vertex Array Object
+    glBindVertexArray(vertexArrayObjID[1]);
+    glGenBuffers(1, &vertexBufferObjID[2]);
+
+    // VBO for vertex data
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObjID[2]);
+    glBufferData(GL_ARRAY_BUFFER, 9*sizeof(GLfloat), vertices2, GL_STREAM_DRAW);
+    glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(0);
+
+    glBindVertexArray(0);
 }
+
 
 // The usual main for a GLUT application.
 int main(int argc, char** argv) {
@@ -404,15 +527,331 @@ int main(int argc, char** argv) {
     diams.fillMap();
     diams.updateVertices(5, 250);
     diams.updateTriangles();
-    triangles = diams._triangles;
+    //triangles = diams._triangles;
+
+
     glutInit(&argc, argv);
+
+
+
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowSize(500, 500);
     glutCreateWindow("The RGB Color Cube");
     GLenum err = glewInit();
+
+
+
+
     glutReshapeFunc(reshape);
+
     glutTimerFunc(100, timer, 0);
-    glutDisplayFunc(display);
+
+
+
+    /*static const GLfloat g_vertex_buffer_data[] = {
+            -1.0f,-1.0f,-1.0f, // triangle 1 : begin
+            -1.0f,-1.0f, 1.0f,
+            -1.0f, 1.0f, 1.0f, // triangle 1 : end
+            1.0f, 1.0f,-1.0f, // triangle 2 : begin
+            -1.0f,-1.0f,-1.0f,
+            -1.0f, 1.0f,-1.0f, // triangle 2 : end
+            1.0f,-1.0f, 1.0f,
+            -1.0f,-1.0f,-1.0f,
+            1.0f,-1.0f,-1.0f,
+            1.0f, 1.0f,-1.0f,
+            1.0f,-1.0f,-1.0f,
+            -1.0f,-1.0f,-1.0f,
+            -1.0f,-1.0f,-1.0f,
+            -1.0f, 1.0f, 1.0f,
+            -1.0f, 1.0f,-1.0f,
+            1.0f,-1.0f, 1.0f,
+            -1.0f,-1.0f, 1.0f,
+            -1.0f,-1.0f,-1.0f,
+            -1.0f, 1.0f, 1.0f,
+            -1.0f,-1.0f, 1.0f,
+            1.0f,-1.0f, 1.0f,
+            1.0f, 1.0f, 1.0f,
+            1.0f,-1.0f,-1.0f,
+            1.0f, 1.0f,-1.0f,
+            1.0f,-1.0f,-1.0f,
+            1.0f, 1.0f, 1.0f,
+            1.0f,-1.0f, 1.0f,
+            1.0f, 1.0f, 1.0f,
+            1.0f, 1.0f,-1.0f,
+            -1.0f, 1.0f,-1.0f,
+            1.0f, 1.0f, 1.0f,
+            -1.0f, 1.0f,-1.0f,
+            -1.0f, 1.0f, 1.0f,
+            1.0f, 1.0f, 1.0f,
+            -1.0f, 1.0f, 1.0f,
+            1.0f,-1.0f, 1.0f
+    };
+// Generate 1 buffer, put the resulting identifier in vertexbuffer
+    glGenBuffers(1, &vertexbuffer);
+// The following commands will talk about our 'vertexbuffer' buffer
+    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+// Give our vertices to OpenGL.
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+    // 1st attribute buffer : vertices
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glVertexAttribPointer(
+            0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+            3,                  // size
+            GL_FLOAT,           // type
+            GL_FALSE,           // normalized?
+            0,                  // stride
+            (void*)0            // array buffer offset
+    );
+// Draw the triangle !
+    glDrawArrays( GL_TRIANGLES, 0, 12 * 3 );
+
+   static const GLfloat g_color_buffer_data[] = {
+            0.583f,  0.771f,  0.014f,
+            0.609f,  0.115f,  0.436f,
+            0.327f,  0.483f,  0.844f,
+            0.822f,  0.569f,  0.201f,
+            0.435f,  0.602f,  0.223f,
+            0.310f,  0.747f,  0.185f,
+            0.597f,  0.770f,  0.761f,
+            0.559f,  0.436f,  0.730f,
+            0.359f,  0.583f,  0.152f,
+            0.483f,  0.596f,  0.789f,
+            0.559f,  0.861f,  0.639f,
+            0.195f,  0.548f,  0.859f,
+            0.014f,  0.184f,  0.576f,
+            0.771f,  0.328f,  0.970f,
+            0.406f,  0.615f,  0.116f,
+            0.676f,  0.977f,  0.133f,
+            0.971f,  0.572f,  0.833f,
+            0.140f,  0.616f,  0.489f,
+            0.997f,  0.513f,  0.064f,
+            0.945f,  0.719f,  0.592f,
+            0.543f,  0.021f,  0.978f,
+            0.279f,  0.317f,  0.505f,
+            0.167f,  0.620f,  0.077f,
+            0.347f,  0.857f,  0.137f,
+            0.055f,  0.953f,  0.042f,
+            0.714f,  0.505f,  0.345f,
+            0.783f,  0.290f,  0.734f,
+            0.722f,  0.645f,  0.174f,
+            0.302f,  0.455f,  0.848f,
+            0.225f,  0.587f,  0.040f,
+            0.517f,  0.713f,  0.338f,
+            0.053f,  0.959f,  0.120f,
+            0.393f,  0.621f,  0.362f,
+            0.673f,  0.211f,  0.457f,
+            0.820f,  0.883f,  0.371f,
+            0.982f,  0.099f,  0.879f
+    };
+    glGenBuffers(2, &colorbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(2);
+    std::cout << "hello" << std::endl;
+    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+    std::cout << "hello" << std::endl;
+    glVertexAttribPointer(
+            2,                                // attribute. No particular reason for 1, but must match the layout in the shader.
+            3,                                // size
+            GL_FLOAT,                         // type
+            GL_FALSE,                         // normalized?
+            0,                                // stride
+            (void*)0                          // array buffer offset
+    );*/
+
+
+
+
+
+
+    initShaders();
     init();
+    glutDisplayFunc(display);
     glutMainLoop();
 }
+
+/*GLfloat vertices[] = {	-1.0f,0.0f,0.0f,
+                          0.0f,1.0f,0.0f,
+                          0.0f,0.0f,0.0f };
+GLfloat colours[] = {	1.0f, 0.0f, 0.0f,
+                         0.0f, 1.0f, 0.0f,
+                         0.0f, 0.0f, 1.0f };
+GLfloat vertices2[] = {	0.0f,0.0f,0.0f,
+                           0.0f,-1.0f,0.0f,
+                           1.0f,0.0f,0.0f };
+
+// two vertex array objects, one for each object drawn
+unsigned int vertexArrayObjID[2];
+// three vertex buffer objects in this example
+unsigned int vertexBufferObjID[3];
+
+
+void printShaderInfoLog(GLint shader)
+{
+    int infoLogLen = 0;
+    GLchar *infoLog;
+
+    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLen);
+    if (infoLogLen > 0)
+    {
+        infoLog = new GLchar[infoLogLen];
+        // error check for fail to allocate memory omitted
+        glGetShaderInfoLog(shader,infoLogLen, NULL, infoLog);
+        fprintf(stderr, "InfoLog:\n%s\n", infoLog);
+        delete [] infoLog;
+    }
+}
+
+
+void init(void)
+{
+    // Would load objects from file here - but using globals in this example
+
+    // Allocate Vertex Array Objects
+    glGenVertexArrays(2, &vertexArrayObjID[0]);
+    // Setup first Vertex Array Object
+    glBindVertexArray(vertexArrayObjID[0]);
+    glGenBuffers(2, vertexBufferObjID);
+
+    // VBO for vertex data
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObjID[0]);
+    glBufferData(GL_ARRAY_BUFFER, 9*sizeof(GLfloat), vertices, GL_STATIC_DRAW);
+    glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(0);
+
+    // VBO for colour data
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObjID[1]);
+    glBufferData(GL_ARRAY_BUFFER, 9*sizeof(GLfloat), colours, GL_STATIC_DRAW);
+    glVertexAttribPointer((GLuint)1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(1);
+
+    // Setup second Vertex Array Object
+    glBindVertexArray(vertexArrayObjID[1]);
+    glGenBuffers(1, &vertexBufferObjID[2]);
+
+    // VBO for vertex data
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObjID[2]);
+    glBufferData(GL_ARRAY_BUFFER, 9*sizeof(GLfloat), vertices2, GL_STATIC_DRAW);
+    glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(0);
+
+    glBindVertexArray(0);
+}
+
+
+void initShaders(void)
+{
+    GLuint p, f, v;
+    glClearColor (1.0, 1.0, 1.0, 0.0);
+
+    v = glCreateShader(GL_VERTEX_SHADER);
+    f = glCreateShader(GL_FRAGMENT_SHADER);
+
+#ifdef __APPLE__
+#define SHADING_LANG_VERS "140"
+#else
+#define SHADING_LANG_VERS "130"
+#endif
+    // load shaders
+    const char *vv = "#version "SHADING_LANG_VERS"\n\
+  in  vec3 in_Position;\
+  in  vec3 in_Color;\
+  out vec3 ex_Color;\
+  void main(void)\
+  {\
+    ex_Color = in_Color;\
+    gl_Position = vec4(in_Position, 1.0);\
+  }";
+
+    const char *ff = "#version "SHADING_LANG_VERS"\n\
+  precision highp float;\
+  in  vec3 ex_Color;\
+  out vec4 out_Color;\
+  void main(void)\
+  {\
+    out_Color = vec4(ex_Color,1.0);\
+  }";
+
+    glShaderSource(v, 1, &vv,NULL);
+    glShaderSource(f, 1, &ff,NULL);
+
+    GLint compiled;
+
+    glCompileShader(v);
+    glGetShaderiv(v, GL_COMPILE_STATUS, &compiled);
+    if (!compiled)
+    {
+        fprintf(stderr, "Vertex shader not compiled.\n");
+        printShaderInfoLog(v);
+    }
+
+    glCompileShader(f);
+    glGetShaderiv(f, GL_COMPILE_STATUS, &compiled);
+    if (!compiled)
+    {
+        fprintf(stderr, "Fragment shader not compiled.\n");
+        printShaderInfoLog(f);
+    }
+
+    p = glCreateProgram();
+
+    glAttachShader(p,v);
+    glAttachShader(p,f);
+    glBindAttribLocation(p,0, "in_Position");
+    glBindAttribLocation(p,1, "in_Color");
+
+    glLinkProgram(p);
+    glGetProgramiv(p, GL_LINK_STATUS, &compiled);
+    if (compiled != GL_TRUE) {
+        GLchar *infoLog; GLint length;
+        glGetProgramiv(p, GL_INFO_LOG_LENGTH, &length);
+        infoLog = new GLchar[length];
+        glGetProgramInfoLog(p, length, NULL, infoLog);
+        fprintf(stderr, "Link log=%s\n", infoLog);
+        delete[] infoLog;
+    }
+    glUseProgram(p);
+}
+
+
+void display(void)
+{
+    // clear the screen
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glBindVertexArray(vertexArrayObjID[0]);	// First VAO
+    glDrawArrays(GL_TRIANGLES, 0, 3);	// draw first object
+
+    glBindVertexArray(vertexArrayObjID[1]);		// select second VAO
+    glVertexAttrib3f((GLuint)1, 1.0, 0.0, 0.0); // set constant color attribute
+    glDrawArrays(GL_TRIANGLES, 0, 3);	// draw second object
+}
+
+
+int main (int argc, char* argv[])
+{
+    Fl::use_high_res_GL(true);
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | FL_OPENGL3);
+    glutInitWindowSize(400,400);
+    glutCreateWindow("Triangle Test");
+#ifndef __APPLE__
+    GLenum err = glewInit(); // defines pters to functions of OpenGL V 1.2 and above
+    if (err) Fl::error("glewInit() failed returning %u", err);
+    fprintf(stderr, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
+#endif
+    int gl_version_major;
+    const char *glv = (const char*)glGetString(GL_VERSION);
+    fprintf(stderr, "OpenGL version %s supported\n", glv);
+    sscanf(glv, "%d", &gl_version_major);
+    if (gl_version_major < 3) {
+        fprintf(stderr, "\nThis platform does not support OpenGL V3\n\n");
+        exit(1);
+    }
+    initShaders();
+    init();
+    glutDisplayFunc(display);
+    glutMainLoop();
+    return 0;
+}*/

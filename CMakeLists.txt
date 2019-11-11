@@ -23,6 +23,8 @@ find_package(SFML 2 REQUIRED COMPONENTS graphics window system)
 find_package(OpenGL REQUIRED)
 find_package(GLUT  REQUIRED)
 find_package(GLEW REQUIRED)
+FIND_PACKAGE(FLTK REQUIRED)
+
 
 include_directories(include)
 
@@ -69,7 +71,7 @@ if (WIN32)
 else()
 	set(LIBS	dl
 			${SFML_LIBRARIES} ${SFML_DEPENDENCIES}
-			${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARIES})
+			${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARIES} ${FLTK_LIBRARIES})
 endif (WIN32)
 
 
