@@ -213,6 +213,9 @@ const unsigned int SCR_HEIGHT = 540;
 
 float rotateX = 0.0f;
 float rotateY = 0.0f;
+float translateZ = 0.0f;
+float translateX = 0.0f;
+float translationCelerity = 1.5f;
 int main()
 {
     Diamond diams(0.75f, 65);
@@ -332,11 +335,12 @@ int main()
         glBindVertexArray(VAO);
 
         glm::mat4 model = glm::mat4(1.0f);
-        /*model = glm::translate(model, cubePositions[0]);
-        float angle = 20.0f * 0;*/
+        auto transz = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.f, translateZ));
+        auto transx = glm::translate(glm::mat4(1.0f), glm::vec3(translateX, 0.f, 0.f));
+        /*float angle = 20.0f * 0;*/
         auto roty = glm::rotate(glm::mat4(1.0f), glm::radians(rotateY), glm::vec3(0.f, 1.f, 0.f));
         auto rotx = glm::rotate(glm::mat4(1.0f), glm::radians(rotateX), glm::vec3(1.f, 0.f, 0.f));
-        model = rotx * roty * model;
+        model = transx * transz * rotx * roty * model;
         ourShader.setMat4("model", model);
 
         glDrawArrays(GL_TRIANGLES, 0, vertices.size() / 3);
@@ -379,6 +383,22 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
         rotateX -= 0.5;
+    }
+    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
+    {
+        translateZ += translationCelerity;
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    {
+        translateZ += translationCelerity;
+    }
+    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+    {
+        translateX -= translationCelerity;
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    {
+        translateX += translationCelerity;
     }
 
 }
