@@ -216,6 +216,12 @@ float rotateY = 0.0f;
 float translateZ = 0.0f;
 float translateX = 0.0f;
 float translationCelerity = 1.5f;
+glm::vec3 cameraPos;
+glm::vec3 cameraFront;
+glm::vec3 cameraUp;
+glm::vec3 dirLook;
+float upAngleLimit = 89.9f;
+float downAngleLimit = -89.9f;
 int main()
 {
     Diamond diams(0.75f, 65);
@@ -307,9 +313,12 @@ int main()
     glm::mat4 projection = glm::perspective(glm::radians(60.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 2512.f);
     ourShader.setMat4("projection", projection);
 
-
+    cameraPos = glm::vec3(0.f, 0.0f, -3.f);
+    cameraFront = glm::vec3(0.0f, 0.0f, 0.0f);
+    cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
     // render loop
     // -----------
+    dirLook = cameraFront - cameraPos;
     while (!glfwWindowShouldClose(window))
     {
         // input
@@ -326,21 +335,29 @@ int main()
 
         // camera/view transformation
         glm::mat4 view = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+
         //float camX   = sin(glfwGetTime()) * radius;
         //float camZ   = cos(glfwGetTime()) * radius;
-        view = glm::lookAt(glm::vec3(0.f, 0.0f, -3.f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        //std::cout << "before = " << dirLook.x << " " << dirLook.y << " " << dirLook.z << std::endl;
+        dirLook = glm::vec3(sin(glm::radians(rotateY)) * cos(glm::radians(rotateX)),
+                            sin(glm::radians(rotateX)),
+                            cos(glm::radians(rotateY)) * cos(glm::radians(rotateX)));
+        //std::cout << "after = " << cos(glm::radians(rotateY)) * cos(glm::radians(rotateX)) << " " << sin(glm::radians(rotateX)) << " " << sin(glm::radians(rotateY)) * cos(glm::radians(rotateX)) << std::endl;
+        view = glm::lookAt(cameraPos,
+                           cameraPos + dirLook,
+                           cameraUp);
         ourShader.setMat4("view", view);
 
         // render boxes
         glBindVertexArray(VAO);
 
         glm::mat4 model = glm::mat4(1.0f);
-        auto transz = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.f, translateZ));
-        auto transx = glm::translate(glm::mat4(1.0f), glm::vec3(translateX, 0.f, 0.f));
+        //auto transz = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.f, translateZ));
+        //auto transx = glm::translate(glm::mat4(1.0f), glm::vec3(translateX, 0.f, 0.f));
         /*float angle = 20.0f * 0;*/
-        auto roty = glm::rotate(glm::mat4(1.0f), glm::radians(rotateY), glm::vec3(0.f, 1.f, 0.f));
-        auto rotx = glm::rotate(glm::mat4(1.0f), glm::radians(rotateX), glm::vec3(1.f, 0.f, 0.f));
-        model = transx * transz * rotx * roty * model;
+        //auto roty = glm::rotate(glm::mat4(1.0f), glm::radians(rotateY), glm::vec3(0.f, 1.f, 0.f));
+        //auto rotx = glm::rotate(glm::mat4(1.0f), glm::radians(rotateX), glm::vec3(1.f, 0.f, 0.f));
+        model = model;
         ourShader.setMat4("model", model);
 
         glDrawArrays(GL_TRIANGLES, 0, vertices.size() / 3);
@@ -370,35 +387,41 @@ void processInput(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
     if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
-        rotateY -= 0.5;
+        rotateY += 0.5;
     }
     if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
     {
-        rotateY += 0.5;
+        rotateY -= 0.5;
     }
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
     {
+        std::cout << rotateX << std::endl;
         rotateX += 0.5;
+        rotateX = std::max(downAngleLimit, rotateX);
+        rotateX = std::min(upAngleLimit, rotateX);
     }
     if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
+        std::cout << rotateX << std::endl;
         rotateX -= 0.5;
+        rotateX = std::max(downAngleLimit, rotateX);
+        rotateX = std::min(upAngleLimit, rotateX);
     }
-    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
-        translateZ += translationCelerity;
+        cameraPos += translationCelerity * dirLook;
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
     {
-        translateZ += translationCelerity;
+        cameraPos -= translationCelerity * dirLook;
     }
-    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
-        translateX -= translationCelerity;
+        cameraPos += translationCelerity * glm::normalize(glm::cross(cameraUp, dirLook));
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
-        translateX += translationCelerity;
+        cameraPos -= translationCelerity * glm::normalize(glm::cross(cameraUp, dirLook));
     }
 
 }
