@@ -334,8 +334,9 @@ int main()
         glm::mat4 model = glm::mat4(1.0f);
         /*model = glm::translate(model, cubePositions[0]);
         float angle = 20.0f * 0;*/
-        model = glm::rotate(model, glm::radians(rotateY), glm::vec3(0.f, 1.f, 0.f));
-        model = glm::rotate(model, glm::radians(rotateX), glm::vec3(1.f, 0.f, 0.f));
+        auto roty = glm::rotate(glm::mat4(1.0f), glm::radians(rotateY), glm::vec3(0.f, 1.f, 0.f));
+        auto rotx = glm::rotate(glm::mat4(1.0f), glm::radians(rotateX), glm::vec3(1.f, 0.f, 0.f));
+        model = rotx * roty * model;
         ourShader.setMat4("model", model);
 
         glDrawArrays(GL_TRIANGLES, 0, vertices.size() / 3);
