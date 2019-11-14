@@ -207,10 +207,9 @@ private:
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
-
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 960;
+const unsigned int SCR_HEIGHT = 540;
 
 int main()
 {
@@ -257,7 +256,9 @@ int main()
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
-    std::vector<float> vertices;
+    std::vector<float> vertices;/*{0.f, 0.f, 0.5f, 0.f, 0.5f, 0.5f, -0.5f, 0.f, 0.5f,
+                                -0.5f, 0.f, 0.5f, -0.5f, 0.5f, 0.5f, 0.f, 0.5f, 0.5f};*/
+    std::vector<float> colours;/*{0.5f, 0.5f, 0.5f, 0.5f, 1.f, 0.5f, 0.5f, 0.5f, 1.f};*/
     for (const auto &triangle : diams._triangles)
     {
         for (const auto &vertex : triangle.vertices)
@@ -265,52 +266,13 @@ int main()
             vertices.push_back(vertex.x);
             vertices.push_back(vertex.y);
             vertices.push_back(vertex.z);
+
+            colours.push_back(0.5f);
+            colours.push_back(0.0f);
+            colours.push_back(0.5f);
         }
     }
 
-    float colours[] = {
-            0.5f,  0.0f,  0.5f,
-            0.5f,  0.0f, 0.5f,
-            0.5f, 0.0f, 0.5f,
-            0.5f, 0.5f, 0.5f,
-            0.5f, 0.5f,  0.5f,
-            0.5f,  0.5f,  0.5f,
-
-            0.5f, 0.5f, 0.5f,
-            0.5f, 0.5f, 0.5f,
-            0.5f, 0.5f,  0.5f,
-            0.5f, 0.5f,  0.5f,
-            0.5f, 0.5f,  0.5f,
-            0.5f, 0.5f, 0.5f,
-
-            0.5f,  0.5f, 0.5f,
-            0.5f,  0.5f, 0.5f,
-            0.5f,  0.5f,  0.5f,
-            0.5f,  0.5f,  0.5f,
-            0.5f,  0.5f,  0.5f,
-            0.5f,  0.5f, 0.5f,
-
-            0.5f,  0.5f,  0.5f,
-            0.5f,  0.5f, 0.5f,
-            0.5f, 0.5f, 0.5f,
-            0.5f, 0.5f, 0.5f,
-            0.5f, 0.5f,  0.5f,
-            0.5f,  0.5f,  0.5f,
-
-            0.5f, 0.5f, 0.5f,
-            0.5f, 0.5f, 0.5f,
-            0.5f, 0.5f,  0.5f,
-            0.5f, 0.5f,  0.5f,
-            0.5f, 0.5f,  0.5f,
-            0.5f, 0.5f, 0.5f,
-
-            0.5f,  0.5f, 0.5f,
-            0.5f,  0.5f, 0.5f,
-            0.5f,  0.5f,  0.5f,
-            0.5f,  0.5f,  0.5f,
-            0.5f,  0.5f,  0.5f,
-            0.5f,  0.5f, 0.5f
-    };
     // world space positions of our cubes
     glm::vec3 cubePositions[] = {
             glm::vec3( 0.0f,  0.0f,  0.0f),
@@ -335,7 +297,7 @@ int main()
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
 
     // position attribute
     glVertexAttribPointer(vpos_location, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
@@ -346,7 +308,7 @@ int main()
 
     glGenBuffers(1, &vertexBufferObjID);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObjID);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(colours), colours, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * colours.size(), colours.data(), GL_STATIC_DRAW);
     glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
     glEnableVertexAttribArray(vcol_location);
 
@@ -382,17 +344,14 @@ int main()
 
         // render boxes
         glBindVertexArray(VAO);
-        for (unsigned int i = 0; i < 10; i++)
-        {
-            // calculate the model matrix for each object and pass it to shader before drawing
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, cubePositions[i]);
-            float angle = 20.0f * i;
-            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-            //ourShader.setMat4("model", model);
 
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
+        glm::mat4 model = glm::mat4(1.0f);
+        /*model = glm::translate(model, cubePositions[0]);
+        float angle = 20.0f * 0;
+        model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));*/
+        ourShader.setMat4("model", model);
+
+        glDrawArrays(GL_TRIANGLES, 0, vertices.size() / 3);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
