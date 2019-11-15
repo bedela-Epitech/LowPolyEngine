@@ -213,15 +213,14 @@ const unsigned int SCR_HEIGHT = 540;
 
 float rotateX = 0.0f;
 float rotateY = 0.0f;
-float translateZ = 0.0f;
-float translateX = 0.0f;
 float translationCelerity = 1.5f;
 glm::vec3 cameraPos;
-glm::vec3 cameraFront;
 glm::vec3 cameraUp;
 glm::vec3 dirLook;
 float upAngleLimit = 89.9f;
 float downAngleLimit = -89.9f;
+float deltaTime = 0.0f;	// Time between current frame and last frame
+float lastFrame = 0.0f; // Time of last frame
 int main()
 {
     Diamond diams(0.75f, 65);
@@ -269,6 +268,8 @@ int main()
     // ------------------------------------------------------------------
     std::vector<float> vertices;
     std::vector<float> colours;
+    float inc = 1.f / (diams._triangles.size() * 9);
+    float color = 0.f;
     for (const auto &triangle : diams._triangles)
     {
         for (const auto &vertex : triangle.vertices)
@@ -278,8 +279,9 @@ int main()
             vertices.push_back(vertex.z);
 
             colours.push_back(0.5f);
-            colours.push_back(0.0f);
+            colours.push_back(color);
             colours.push_back(0.5f);
+            color += inc;
         }
     }
 
@@ -314,14 +316,14 @@ int main()
     ourShader.setMat4("projection", projection);
 
     cameraPos = glm::vec3(0.f, 0.0f, -3.f);
-    cameraFront = glm::vec3(0.0f, 0.0f, 0.0f);
     cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
     // render loop
     // -----------
-    dirLook = cameraFront - cameraPos;
     while (!glfwWindowShouldClose(window))
     {
-        // input
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;  // input
         // -----
         processInput(window);
 
@@ -336,29 +338,16 @@ int main()
         // camera/view transformation
         glm::mat4 view = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 
-        //float camX   = sin(glfwGetTime()) * radius;
-        //float camZ   = cos(glfwGetTime()) * radius;
-        //std::cout << "before = " << dirLook.x << " " << dirLook.y << " " << dirLook.z << std::endl;
         dirLook = glm::vec3(sin(glm::radians(rotateY)) * cos(glm::radians(rotateX)),
                             sin(glm::radians(rotateX)),
                             cos(glm::radians(rotateY)) * cos(glm::radians(rotateX)));
-        //std::cout << "after = " << cos(glm::radians(rotateY)) * cos(glm::radians(rotateX)) << " " << sin(glm::radians(rotateX)) << " " << sin(glm::radians(rotateY)) * cos(glm::radians(rotateX)) << std::endl;
-        view = glm::lookAt(cameraPos,
-                           cameraPos + dirLook,
-                           cameraUp);
+
+        view = glm::lookAt(cameraPos, cameraPos + dirLook, cameraUp);
+
         ourShader.setMat4("view", view);
 
         // render boxes
         glBindVertexArray(VAO);
-
-        glm::mat4 model = glm::mat4(1.0f);
-        //auto transz = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.f, translateZ));
-        //auto transx = glm::translate(glm::mat4(1.0f), glm::vec3(translateX, 0.f, 0.f));
-        /*float angle = 20.0f * 0;*/
-        //auto roty = glm::rotate(glm::mat4(1.0f), glm::radians(rotateY), glm::vec3(0.f, 1.f, 0.f));
-        //auto rotx = glm::rotate(glm::mat4(1.0f), glm::radians(rotateX), glm::vec3(1.f, 0.f, 0.f));
-        model = model;
-        ourShader.setMat4("model", model);
 
         glDrawArrays(GL_TRIANGLES, 0, vertices.size() / 3);
 
@@ -367,7 +356,6 @@ int main()
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-
     // optional: de-allocate all resources once they've outlived their purpose:
     // ------------------------------------------------------------------------
     glDeleteVertexArrays(1, &VAO);
@@ -383,45 +371,43 @@ int main()
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow *window)
 {
+    float cameraTransSpeed = translationCelerity * deltaTime * 100.f;
+    float cameraRotSpeed = translationCelerity * deltaTime * 40.f;
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
     if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
-        rotateY += 0.5;
+        rotateY += cameraRotSpeed;
     }
     if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
     {
-        rotateY -= 0.5;
+        rotateY -= cameraRotSpeed;
     }
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
     {
-        std::cout << rotateX << std::endl;
-        rotateX += 0.5;
-        rotateX = std::max(downAngleLimit, rotateX);
-        rotateX = std::min(upAngleLimit, rotateX);
+        rotateX += cameraRotSpeed;
+        rotateX = std::min(std::max(downAngleLimit, rotateX), upAngleLimit);
     }
     if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
-        std::cout << rotateX << std::endl;
-        rotateX -= 0.5;
-        rotateX = std::max(downAngleLimit, rotateX);
-        rotateX = std::min(upAngleLimit, rotateX);
+        rotateX -= cameraRotSpeed;
+        rotateX = std::min(std::max(downAngleLimit, rotateX), upAngleLimit);
     }
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
-        cameraPos += translationCelerity * dirLook;
+        cameraPos += cameraTransSpeed * dirLook;
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
     {
-        cameraPos -= translationCelerity * dirLook;
+        cameraPos -= cameraTransSpeed * dirLook;
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
-        cameraPos += translationCelerity * glm::normalize(glm::cross(cameraUp, dirLook));
+        cameraPos += cameraTransSpeed * glm::normalize(glm::cross(cameraUp, dirLook));
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
-        cameraPos -= translationCelerity * glm::normalize(glm::cross(cameraUp, dirLook));
+        cameraPos -= cameraTransSpeed * glm::normalize(glm::cross(cameraUp, dirLook));
     }
 
 }
