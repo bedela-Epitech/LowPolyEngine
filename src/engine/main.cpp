@@ -263,15 +263,24 @@ int main()
     Shader ourShader("../7.1.camera.vs", "../7.1.camera.fs");
 
     ourShader.use();
+    ourShader.setVec3("lightDir", glm::normalize(glm::vec3(0, 1, 0)));
+    ourShader.setFloat("ambiantCoeff", 0.3);
+    ourShader.setVec3("lightColor", glm::vec3(1.0, 1.0, 1.0));
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
     std::vector<float> vertices;
     std::vector<float> colours;
+    std::vector<float> normals;
+    glm::vec3 normal;
     float inc = 1.f / (diams._triangles.size() * 9);
     float color = 0.f;
     for (const auto &triangle : diams._triangles)
     {
+        auto v0 = glm::vec3(triangle.vertices[0].x, triangle.vertices[0].y, triangle.vertices[0].z);
+        auto v1 = glm::vec3(triangle.vertices[1].x, triangle.vertices[1].y, triangle.vertices[1].z);
+        auto v2 = glm::vec3(triangle.vertices[2].x, triangle.vertices[2].y, triangle.vertices[2].z);
+        normal = glm::normalize(glm::cross(v1 - v0, v2 - v0));
         for (const auto &vertex : triangle.vertices)
         {
             vertices.push_back(vertex.x);
@@ -281,12 +290,19 @@ int main()
             colours.push_back(0.5f);
             colours.push_back(color);
             colours.push_back(0.5f);
+
+            normals.push_back(normal.x);
+            normals.push_back(normal.y);
+            normals.push_back(normal.z);
+
+
             color += inc;
         }
     }
 
     auto vpos_location = glGetAttribLocation(ourShader.ID, "aPos");
     auto vcol_location = glGetAttribLocation(ourShader.ID, "in_Color");
+    auto vnorm_location = glGetAttribLocation(ourShader.ID, "normal");
 
     unsigned int VBO, VAO;
     glGenVertexArrays(1, &VAO);
@@ -309,6 +325,14 @@ int main()
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * colours.size(), colours.data(), GL_STATIC_DRAW);
     glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
     glEnableVertexAttribArray(vcol_location);
+
+    unsigned int normalID;
+
+    glGenBuffers(1, &normalID);
+    glBindBuffer(GL_ARRAY_BUFFER, normalID);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * normals.size(), normals.data(), GL_STATIC_DRAW);
+    glVertexAttribPointer(vnorm_location, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
+    glEnableVertexAttribArray(vnorm_location);
 
     // pass projection matrix to shader (as projection matrix rarely changes there's no need to do this per frame)
     // -----------------------------------------------------------------------------------------------------------
@@ -341,6 +365,8 @@ int main()
         dirLook = glm::vec3(sin(glm::radians(rotateY)) * cos(glm::radians(rotateX)),
                             sin(glm::radians(rotateX)),
                             cos(glm::radians(rotateY)) * cos(glm::radians(rotateX)));
+
+        ourShader.setVec3("cameraDir", dirLook);
 
         view = glm::lookAt(cameraPos, cameraPos + dirLook, cameraUp);
 
