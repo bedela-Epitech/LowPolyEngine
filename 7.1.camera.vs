@@ -9,14 +9,14 @@ uniform vec3 lightDir;
 uniform float ambiantCoeff;
 uniform vec3 cameraDir;
 uniform vec3 lightColor;
+uniform float specularStrength;
 
 uniform mat4 view;
 uniform mat4 projection;
 
 float diff = max(dot(normal, lightDir), 0.0);
-vec3 reflectDir = reflect(-lightDir, normal);
+vec3 reflectDir = reflect(lightDir, normal);
 float spec = pow(max(dot(cameraDir, reflectDir), 0.0), 32);
-float specularStrength = 0.5;
 
 
 vec3 ambiant = ambiantCoeff * lightColor;

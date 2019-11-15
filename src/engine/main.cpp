@@ -266,6 +266,7 @@ int main()
     ourShader.setVec3("lightDir", glm::normalize(glm::vec3(0, 1, 0)));
     ourShader.setFloat("ambiantCoeff", 0.3);
     ourShader.setVec3("lightColor", glm::vec3(1.0, 1.0, 1.0));
+    ourShader.setFloat("specularStrength", 0.5);
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
