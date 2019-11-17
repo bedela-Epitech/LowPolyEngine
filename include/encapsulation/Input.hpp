@@ -2,10 +2,6 @@
 #ifndef		_LEDEB_INPUT_HPP_
 #define		_LEDEB_INPUT_HPP_
 
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/System.hpp>
-
 #include <functional>
 #include <map>
 #include <utility>
@@ -15,18 +11,15 @@
 class Input
 {
 private:
-	std::map<sf::Keyboard::Key, std::function<void(const float &)>> _cameraFunctions;
-	std::map<sf::Keyboard::Key, bool> _isPressed;
+    float               _deltaTime = 0.f;
+    float               _lastFrame = 0.f;
+	std::vector<int>	keys;
+	std::map<int, std::function<void(GLFWwindow *, const float &)>> _cameraFunctions;
 
-public:
-	sf::Event _event;
-	
 public:
 	Input(Camera *camera);
-	~Input();
 
-	void	KeyManager(bool &running);
-
+	void	KeyManager(GLFWwindow *);
 };
 
 

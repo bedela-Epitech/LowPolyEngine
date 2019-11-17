@@ -2,27 +2,42 @@
 #ifndef		_LEDEB_CAMERA_HPP_
 #define		_LEDEB_CAMERA_HPP_
 
-#include "TypeDef.hpp"
+#include "encapsulation/Window.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class Camera
 {
 public:
-	Vector3df	_move;
-	Vector3df	_rotate;
+	glm::vec3	_cameraPos;
+	glm::vec3	_cameraUp;
+    glm::vec3	_dirLook;
+    glm::mat4	_view;
+
+    float       _rotateX = 0.f;
+    float       _rotateY = 0.f;
+    float       _upAngleLimit = 89.9f;
+    float       _downAngleLimit = -89.9f;
+
+    float       _translationCelerity = 1.5f;
 
 public:
-	Camera();
-	~Camera();
+	Camera(float, float, float, float, float, float, float, float, float);
 
-	void	moveLeft(const float &speed);
-	void	moveRight(const float &speed);
-	void	moveForward(const float &speed);
-	void	moveBack(const float &speed);
+    void	closeWindow(GLFWwindow *, const float &speed);
 
-	void	rotateLeft(const float &speed);
-	void	rotateRight(const float &speed);
-	void	rotateUp(const float &speed);
-	void	rotateDown(const float &speed);
+    void	moveLeft(GLFWwindow *, const float &speed);
+	void	moveRight(GLFWwindow *, const float &speed);
+	void	moveForward(GLFWwindow *, const float &speed);
+	void	moveBack(GLFWwindow *, const float &speed);
+
+	void	rotateLeft(GLFWwindow *, const float &speed);
+	void	rotateRight(GLFWwindow *, const float &speed);
+	void	rotateUp(GLFWwindow *, const float &speed);
+	void	rotateDown(GLFWwindow *, const float &speed);
+
+    void    updateCamera();
 
 };
 

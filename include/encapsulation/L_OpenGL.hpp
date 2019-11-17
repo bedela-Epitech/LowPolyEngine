@@ -5,39 +5,25 @@
 #define _L_OPENGL_HPP_
 
 #include <vector>
-#include <iostream>
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-
-#include "GL/glut.h"
-
-#include "TypeDef.hpp"
-#include "engine/Camera.hpp"
-#include "Light.hpp"
+#include "Shader.h"
+#include "map/Diamond.hpp"
 
 class L_OpenGL
 {
-
-private:
-	Camera * _camera;
-	Light _light;
-	Light _light2;
+public:
+    Shader              _shader;
+    std::vector<float>  _vertices;
+    std::vector<float>  _colours;
+    std::vector<float>  _normals;
+    unsigned int        _VBO;
+    unsigned int        _VAO;
 
 public:
-	L_OpenGL(Camera *camera);
-	~L_OpenGL();
+    L_OpenGL(const std::string &, const std::string &);
 
-	void	clear();
-	void	switchOfLights();
-	void	initLights();
-	void	render(GLfloat tete[], Vector3df &normal);
-	void	initReshape(sf::RenderWindow &window);
-	void	resetReshap();
-	void	updateCamera();
-	void	init();
-	void	finishRendering();
-	void	initRendering();
-
+    void    linkVertices();
+    void    linkColors();
+    void    linkNormals();
 };
 
 #endif // _L_OPENGL_HPP_

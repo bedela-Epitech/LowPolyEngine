@@ -3,7 +3,6 @@
 
 
 #include <vector>
-#include <SFML/Graphics.hpp>
 #include "TypeDef.hpp"
 
 namespace game
@@ -13,20 +12,18 @@ namespace game
 
 	public:
 		std::vector<Vector3d<T> > vertices;
-		sf::Color		color;
 		Vector3d<T>	normal;
 
 	public:
 	
-		template <typename _L> operator Triangle<_L>() const { return Triangle<_L>(vertices, color, normal); };
+		template <typename _L> operator Triangle<_L>() const { return Triangle<_L>(vertices, normal); };
 
 		Triangle() {};
 		Triangle(const std::vector<Vector3d<T> > &Vertices) {
 			vertices.insert(vertices.begin(), Vertices.begin(), Vertices.end());
 		}
-		Triangle(const std::vector<Vector3d<T> > &Vertices, sf::Color COLOR, const Vector3d<T> &norm) {
+		Triangle(const std::vector<Vector3d<T> > &Vertices, const Vector3d<T> &norm) {
 			vertices.insert(vertices.begin(), Vertices.begin(), Vertices.end());
-			color = COLOR;
 			normal = norm;
 		}
 		Triangle(const Vector3d<T> &a, const Vector3d<T> &b, const Vector3d<T> &c) {
