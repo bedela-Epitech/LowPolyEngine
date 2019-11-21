@@ -4,8 +4,14 @@
 
 #include "encapsulation/Window.hpp"
 
-Window::Window(int sizeX, int sizeY) : _windowSize(glm::ivec2(sizeX, sizeY))
+// Declare static members
+GLFWwindow * Window::_window;
+glm::ivec2   Window::_windowSize;
+
+Window::Window(int sizeX, int sizeY)
 {
+    _windowSize = glm::ivec2(sizeX, sizeY);
+
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -22,6 +28,11 @@ Window::Window(int sizeX, int sizeY) : _windowSize(glm::ivec2(sizeX, sizeY))
     glfwMakeContextCurrent(_window);
     glfwSetFramebufferSizeCallback(_window, framebufferSizeCallback);
 
+}
+
+float   Window::getScreenRatio()
+{
+    return ((float)(_windowSize.x) / (float)(_windowSize.y));
 }
 
 bool    Window::isOpen()

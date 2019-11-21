@@ -11,32 +11,23 @@ const unsigned int SCR_HEIGHT = 540;
 int main()
 {
     Window window(SCR_WIDTH, SCR_HEIGHT);
-    // glad: load all OpenGL function pointers
-    // ---------------------------------------
+
     window.loadFunctions();
 
-    // configure global opengl state
-    // -----------------------------
-
-    Camera *camera = new Camera(window,
-                                0.f, 0.0f, -3.f, // eye position
+    Camera *camera = new Camera(0.f, 0.0f, -3.f, // eye position
                                 0.0f, 1.0f, 0.0f, // eye look at direction
                                 0.0f, 0.0f, 1.0f); // eye look up direction
-    Input inputKeys(camera, window);
+
+    Input inputKeys(camera);
+
     L_OpenGL opengl("../7.1.camera.vs", "../7.1.camera.fs");
-    // build and compile our shader zprogram
-    // ------------------------------------
 
     opengl.linkVertices();
     opengl.linkColors();
     opengl.linkNormals();
 
-    // pass projection matrix to shader (as projection matrix rarely changes there's no need to do this per frame)
-    // -----------------------------------------------------------------------------------------------------------
     opengl._shader.setMat4("projection", camera->_projection);
 
-    // render loop
-    // -----------
     while (window.isOpen())
     {
         inputKeys.KeyManager();

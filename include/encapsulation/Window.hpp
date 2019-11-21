@@ -12,19 +12,24 @@
 class Window
 {
 public:
-    GLFWwindow* _window;
-    glm::ivec2   _windowSize;
+    static GLFWwindow * _window;
+    static glm::ivec2   _windowSize;
+
+private:
+    static void framebufferSizeCallback(GLFWwindow* , int , int );
 
 public:
-    Window() = default;
+    Window() = delete;
     Window(int, int);
-    static void framebufferSizeCallback(GLFWwindow* , int , int );
+
     void update();
     bool isOpen();
     void close();
-    double getTime();
-    int getKey(int);
     void loadFunctions();
+
+    static double getTime();
+    static int getKey(int);
+    static float getScreenRatio();
 };
 
 #endif // !_LEDEB_WINDOW_HPP_

@@ -8,16 +8,15 @@
 //
 /////////////////////
 
-Camera::Camera(Window window, float cameraX,  float cameraY, float cameraZ,
+Camera::Camera(float cameraX,  float cameraY, float cameraZ,
                float cameraUpX, float cameraUpY, float cameraUpZ,
                float dirLookX, float dirLookY, float dirLookZ)
         : _cameraPos(glm::vec3(cameraX, cameraY, cameraZ)),
           _cameraUp(glm::vec3(cameraUpX, cameraUpY, cameraUpZ)),
           _dirLook(glm::vec3(dirLookX, dirLookY, dirLookZ))
 {
-    _window = window;
     _fov = 60.f;
-    _screenRatio = (float)(_window._windowSize.x) / (float)(_window._windowSize.y);
+    _screenRatio = Window::getScreenRatio();
     _near = 0.1f;
     _far = 2512.f;
     _projection = glm::perspective(glm::radians(_fov), _screenRatio, _near, _far);
@@ -87,7 +86,7 @@ void    Camera::updateProjection()
 
 void	Camera::closeWindow(const float &speed)
 {
-    glfwSetWindowShouldClose(_window._window, true);
+    glfwSetWindowShouldClose(Window::_window, true);
 }
 
 /////////////////////

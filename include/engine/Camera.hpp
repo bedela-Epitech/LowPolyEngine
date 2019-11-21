@@ -16,7 +16,6 @@ public:
     float               _near;
     float               _far;
     glm::mat4           _projection;
-    Window              _window;
 
 	glm::vec3	_cameraPos;
 	glm::vec3	_cameraUp;
@@ -31,7 +30,7 @@ public:
     float       _translationCelerity = 1.5f;
 
 public:
-	Camera(Window , float, float, float, float, float, float, float, float, float);
+	Camera(float, float, float, float, float, float, float, float, float);
 
     void	closeWindow(const float &speed);
 
