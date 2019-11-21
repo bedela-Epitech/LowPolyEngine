@@ -7,9 +7,16 @@
 //
 /////////////////////
 
-L_OpenGL::L_OpenGL(const std::string &vertexShaderPath, const std::string &fragmentShaderPath)
+L_OpenGL::L_OpenGL(const glm::ivec2 &windowSize, const std::string &vertexShaderPath, const std::string &fragmentShaderPath)
 : _shader(vertexShaderPath, fragmentShaderPath)
 {
+    glEnable(GL_DEPTH_TEST);
+
+    _fov= 60.f;
+    _screenRatio = (float)windowSize.x / (float)windowSize.y;
+    _near = 0.1f;
+    _far = 2512.f;
+
     Diamond diams(0.75f, 65);
     diams.fillMap();
     diams.updateVertices(5, 250);
@@ -93,4 +100,24 @@ void    L_OpenGL::linkNormals()
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * _normals.size(), _normals.data(), GL_STATIC_DRAW);
     glVertexAttribPointer(vnorm_location, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
     glEnableVertexAttribArray(vnorm_location);
+}
+
+void    L_OpenGL::display()
+{
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glBindVertexArray(_VAO);
+
+    glDrawArrays(GL_TRIANGLES, 0, _vertices.size() / 3);
+}
+
+void    L_OpenGL::cleanUp()
+{
+    glDeleteVertexArrays(1, &_VAO);
+    glDeleteBuffers(1, &_VBO);
+}
+
+void    L_OpenGL::setProjection()
+{
+    _shader.setMat4("projection", glm::perspective(_fov, _screenRatio, _near, _far));
 }

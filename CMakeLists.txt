@@ -62,7 +62,7 @@ set(71K2ledeb
 		include/map/Cross.hpp
 		src/map/Cross.cpp
 
-        include/encapsulation/Shader.h src/encapsulation/Shader.cpp)
+        include/encapsulation/Shader.h src/encapsulation/Shader.cpp src/encapsulation/Window.cpp)
 
 
 add_executable(ledeb ${71K2ledeb})

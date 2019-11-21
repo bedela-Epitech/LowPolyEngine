@@ -3,6 +3,7 @@
 #define		_LEDEB_CAMERA_HPP_
 
 #include "encapsulation/Window.hpp"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
