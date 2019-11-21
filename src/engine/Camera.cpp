@@ -8,13 +8,19 @@
 //
 /////////////////////
 
-Camera::Camera(float cameraX,  float cameraY, float cameraZ,
+Camera::Camera(const glm::ivec2 &windowSize, float cameraX,  float cameraY, float cameraZ,
                float cameraUpX, float cameraUpY, float cameraUpZ,
                float dirLookX, float dirLookY, float dirLookZ)
         : _cameraPos(glm::vec3(cameraX, cameraY, cameraZ)),
           _cameraUp(glm::vec3(cameraUpX, cameraUpY, cameraUpZ)),
           _dirLook(glm::vec3(dirLookX, dirLookY, dirLookZ))
 {
+
+    _fov = 60.f;
+    _screenRatio = (float)windowSize.x / (float)windowSize.y;
+    _near = 0.1f;
+    _far = 2512.f;
+    _projection = glm::perspective(_fov, _screenRatio, _near, _far);
 }
 
 /////////////////////
@@ -31,6 +37,46 @@ void    Camera::updateCamera()
                          cos(glm::radians(_rotateY)) * cos(glm::radians(_rotateX)));
 
     _view = glm::lookAt(_cameraPos, _cameraPos + _dirLook, _cameraUp);
+}
+
+/////////////////////
+//
+//	SETTERS
+//
+/////////////////////
+
+void    Camera::setFov(float fov)
+{
+    _fov = fov;
+    updateProjection();
+}
+
+void    Camera::setScreenRatio(float screenratio)
+{
+    _screenRatio = screenratio;
+    updateProjection();
+}
+
+void    Camera::setNear(float near)
+{
+    _near = near;
+    updateProjection();
+}
+
+void    Camera::setFar(float far)
+{
+    _far = far;
+    updateProjection();
+}
+
+void    Camera::setProjection(const glm::mat4 &projection)
+{
+    _projection = projection;
+}
+
+void    Camera::updateProjection()
+{
+    _projection = glm::perspective(_fov, _screenRatio, _near, _far);
 }
 
 /////////////////////

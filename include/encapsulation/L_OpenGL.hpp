@@ -23,14 +23,11 @@ public:
     unsigned int        _VBO;
     unsigned int        _VAO;
 
-    float               _fov;
-    float               _screenRatio;
-    float               _near;
-    float               _far;
+
 
 
 public:
-    L_OpenGL(const glm::ivec2 &, const std::string &, const std::string &);
+    L_OpenGL(const std::string &, const std::string &);
 
     void    linkVertices();
     void    linkColors();
@@ -38,8 +35,6 @@ public:
 
     void    display();
     void    cleanUp();
-
-    void    setProjection();
 };
 
 #endif // _L_OPENGL_HPP_

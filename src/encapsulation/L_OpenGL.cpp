@@ -7,15 +7,11 @@
 //
 /////////////////////
 
-L_OpenGL::L_OpenGL(const glm::ivec2 &windowSize, const std::string &vertexShaderPath, const std::string &fragmentShaderPath)
+L_OpenGL::L_OpenGL(const std::string &vertexShaderPath, const std::string &fragmentShaderPath)
 : _shader(vertexShaderPath, fragmentShaderPath)
 {
     glEnable(GL_DEPTH_TEST);
 
-    _fov= 60.f;
-    _screenRatio = (float)windowSize.x / (float)windowSize.y;
-    _near = 0.1f;
-    _far = 2512.f;
 
     Diamond diams(0.75f, 65);
     diams.fillMap();
@@ -115,9 +111,4 @@ void    L_OpenGL::cleanUp()
 {
     glDeleteVertexArrays(1, &_VAO);
     glDeleteBuffers(1, &_VBO);
-}
-
-void    L_OpenGL::setProjection()
-{
-    _shader.setMat4("projection", glm::perspective(_fov, _screenRatio, _near, _far));
 }

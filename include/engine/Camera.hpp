@@ -11,6 +11,12 @@
 class Camera
 {
 public:
+    float               _fov;
+    float               _screenRatio;
+    float               _near;
+    float               _far;
+    glm::mat4           _projection;
+
 	glm::vec3	_cameraPos;
 	glm::vec3	_cameraUp;
     glm::vec3	_dirLook;
@@ -24,7 +30,7 @@ public:
     float       _translationCelerity = 1.5f;
 
 public:
-	Camera(float, float, float, float, float, float, float, float, float);
+	Camera(const glm::ivec2 &, float, float, float, float, float, float, float, float, float);
 
     void	closeWindow(GLFWwindow *, const float &speed);
 
@@ -38,7 +44,17 @@ public:
 	void	rotateUp(GLFWwindow *, const float &speed);
 	void	rotateDown(GLFWwindow *, const float &speed);
 
+    void    setFov(float);
+    void    setScreenRatio(float);
+    void    setNear(float);
+    void    setFar(float);
+    void    setProjection(const glm::mat4 &);
+
+
     void    updateCamera();
+
+private:
+    void    updateProjection();
 
 };
 

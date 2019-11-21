@@ -22,7 +22,8 @@ int main()
     // configure global opengl state
     // -----------------------------
 
-    L_OpenGL opengl(window._windowSize, "../7.1.camera.vs", "../7.1.camera.fs");
+
+    L_OpenGL opengl("../7.1.camera.vs", "../7.1.camera.fs");
     // build and compile our shader zprogram
     // ------------------------------------
 
@@ -32,10 +33,12 @@ int main()
 
     // pass projection matrix to shader (as projection matrix rarely changes there's no need to do this per frame)
     // -----------------------------------------------------------------------------------------------------------
-    opengl.setProjection();
+    opengl._shader.setMat4("projection", glm::perspective(60.f, (float)window._windowSize.x / (float)window._windowSize.y, 0.1f, 2200.f));
 
-
-    Camera *camera = new Camera(0.f, 0.0f, -3.f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+    Camera *camera = new Camera(window._windowSize,
+                                0.f, 0.0f, -3.f, // eye position
+                                0.0f, 1.0f, 0.0f, // eye look at direction
+                                0.0f, 0.0f, 1.0f); // eye look up direction
     Input inputKeys(camera, window._window);
     // render loop
     // -----------
