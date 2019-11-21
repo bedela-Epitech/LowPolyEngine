@@ -16,6 +16,7 @@ public:
     float               _near;
     float               _far;
     glm::mat4           _projection;
+    Window              _window;
 
 	glm::vec3	_cameraPos;
 	glm::vec3	_cameraUp;
@@ -30,19 +31,19 @@ public:
     float       _translationCelerity = 1.5f;
 
 public:
-	Camera(const glm::ivec2 &, float, float, float, float, float, float, float, float, float);
+	Camera(Window , float, float, float, float, float, float, float, float, float);
 
-    void	closeWindow(GLFWwindow *, const float &speed);
+    void	closeWindow(const float &speed);
 
-    void	moveLeft(GLFWwindow *, const float &speed);
-	void	moveRight(GLFWwindow *, const float &speed);
-	void	moveForward(GLFWwindow *, const float &speed);
-	void	moveBack(GLFWwindow *, const float &speed);
+    void	moveLeft(const float &speed);
+	void	moveRight(const float &speed);
+	void	moveForward(const float &speed);
+	void	moveBack(const float &speed);
 
-	void	rotateLeft(GLFWwindow *, const float &speed);
-	void	rotateRight(GLFWwindow *, const float &speed);
-	void	rotateUp(GLFWwindow *, const float &speed);
-	void	rotateDown(GLFWwindow *, const float &speed);
+	void	rotateLeft(const float &speed);
+	void	rotateRight(const float &speed);
+	void	rotateUp(const float &speed);
+	void	rotateDown(const float &speed);
 
     void    setFov(float);
     void    setScreenRatio(float);

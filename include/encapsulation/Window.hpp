@@ -16,6 +16,7 @@ public:
     glm::ivec2   _windowSize;
 
 public:
+    Window() = default;
     Window(int, int);
     static void framebufferSizeCallback(GLFWwindow* , int , int );
     void update();

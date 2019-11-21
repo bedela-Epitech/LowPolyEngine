@@ -15,7 +15,7 @@ private:
     float               _deltaTime = 0.f;
     float               _lastFrame = 0.f;
 	std::vector<int>	keys;
-	std::map<int, std::function<void(GLFWwindow *, const float &)>> _cameraFunctions;
+	std::map<int, std::function<void(const float &)>> _cameraFunctions;
 
 public:
 	Input(Camera *camera, GLFWwindow *);
