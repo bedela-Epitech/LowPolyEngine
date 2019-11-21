@@ -2,7 +2,7 @@
 #include "encapsulation/Input.hpp"
 #include <iostream>
 
-Input::Input(Camera *camera, GLFWwindow *window) : _window(window)
+Input::Input(Camera *camera, Window window) : _window(window)
 {
 	keys = std::vector<int>{GLFW_KEY_ESCAPE, GLFW_KEY_W, GLFW_KEY_S,
 							GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_RIGHT,
@@ -21,13 +21,13 @@ Input::Input(Camera *camera, GLFWwindow *window) : _window(window)
 
 void	Input::KeyManager()
 {
-	float currentFrame = glfwGetTime();
+	float currentFrame = _window.getTime();
 	_deltaTime = currentFrame - _lastFrame;
-	_lastFrame = currentFrame;  // input
+	_lastFrame = currentFrame;
 
 	for (const auto &key : keys)
 	{
-		if (glfwGetKey(_window, key) == GLFW_PRESS)
+		if (_window.getKey(key) == GLFW_PRESS)
 			_cameraFunctions[key](_deltaTime);
 	}
 

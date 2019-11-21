@@ -13,22 +13,16 @@ int main()
     Window window(SCR_WIDTH, SCR_HEIGHT);
     // glad: load all OpenGL function pointers
     // ---------------------------------------
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
-    }
+    window.loadFunctions();
 
     // configure global opengl state
     // -----------------------------
-
-
 
     Camera *camera = new Camera(window,
                                 0.f, 0.0f, -3.f, // eye position
                                 0.0f, 1.0f, 0.0f, // eye look at direction
                                 0.0f, 0.0f, 1.0f); // eye look up direction
-    Input inputKeys(camera, window._window);
+    Input inputKeys(camera, window);
     L_OpenGL opengl("../7.1.camera.vs", "../7.1.camera.fs");
     // build and compile our shader zprogram
     // ------------------------------------

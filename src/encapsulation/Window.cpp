@@ -40,6 +40,24 @@ void    Window::update()
     glfwPollEvents();
 }
 
+double  Window::getTime()
+{
+    return (glfwGetTime());
+}
+
+int     Window::getKey(int key)
+{
+    return (glfwGetKey(_window, key));
+}
+
+void    Window::loadFunctions()
+{
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+    }
+}
+
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
 void Window::framebufferSizeCallback(GLFWwindow* window, int width, int height)

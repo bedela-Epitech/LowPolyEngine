@@ -22,6 +22,9 @@ public:
     void update();
     bool isOpen();
     void close();
+    double getTime();
+    int getKey(int);
+    void loadFunctions();
 };
 
 #endif // !_LEDEB_WINDOW_HPP_
