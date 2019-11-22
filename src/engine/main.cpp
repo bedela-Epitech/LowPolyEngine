@@ -78,9 +78,10 @@ int main()
 	while (running)
 	{
         end = std::chrono::system_clock::now();
-        start = std::chrono::system_clock::now();
-        elapsed_seconds = std::chrono::duration_cast<std::chrono::nanoseconds>
+        elapsed_seconds = std::chrono::duration_cast<std::chrono::milliseconds>
                 (end-start).count();
+        start = std::chrono::system_clock::now();
+
         std::cout << elapsed_seconds << std::endl;
         while (window.pollEvent(input._event))
 		{
