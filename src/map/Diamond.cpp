@@ -7,9 +7,9 @@ Diamond::Diamond(const float &height, const int &size)
 	srand(time(NULL));
 	_height = height;
 	std::vector<float> vector;
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < size + 1; i++)
 	{
-		for (int j = 0; j < size; j++)
+		for (int j = 0; j < size + 1; j++)
 		{
 			vector.push_back(0);
 		}
