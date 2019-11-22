@@ -4,9 +4,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 project(71K2ledeb)
 
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/modules/)
+#set(SFML_ROOT ${CMAKE_SOURCE_DIR}/modules/lib/cmake/SFML/)
 if (WIN32)
-	set(SFML_ROOT ${CMAKE_SOURCE_DIR}/lib/SFML/)
 	set(GLUT_ROOT_PATH ${CMAKE_SOURCE_DIR}/lib/GL/)
 	set(GLUT_LIB_DIR ${CMAKE_SOURCE_DIR}/lib/GL/lib/)
 
@@ -19,7 +18,6 @@ endif()
 find_path( GLUT_INCLUDE_DIR NAMES GL/glut.h PATHS  ${GLUT_ROOT_PATH}/include/)
 FIND_LIBRARY(GLUT_glut_LIBRARY NAMES glut glut32 PATHS ${GLUT_ROOT_PATH}/lib/)
 
-find_package(SFML 2 REQUIRED COMPONENTS graphics window system)
 find_package(OpenGL REQUIRED)
 find_package(GLUT  REQUIRED)
 
@@ -68,17 +66,26 @@ if (WIN32)
 			${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
 else()
 	set(LIBS	dl
-			${SFML_LIBRARIES} ${SFML_DEPENDENCIES}
 			${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
 endif (WIN32)
 
 
 target_include_directories(ledeb
 		PRIVATE ${CMAKE_SOURCE_DIR}/include
-		PRIVATE ${SFML_INCLUDE_DIR}
 		PRIVATE ${OPENGL_INCLUDE_DIRS}
 		PRIVATE ${GLUT_INCLUDE_DIRS}
 		PRIVATE include/
 		)
 
-target_link_libraries(ledeb ${LIBS}  )
+target_link_libraries(ledeb ${LIBS})
+set(GLAD_DIR "/usr/include/glad")
+add_library("glad" "${GLAD_DIR}/src/glad.c")
+target_include_directories("glad" PRIVATE "${GLAD_DIR}/include")
+target_include_directories(ledeb PRIVATE "${GLAD_DIR}/include")
+target_link_libraries(ledeb "glad" "${CMAKE_DL_LIBS}")
+target_link_libraries(ledeb ${LIBS})
+target_link_libraries(ledeb -L/home/adrien/Project/PERSO/LowPolyEngine/modules/lib  -lsfml-graphics)
+target_link_libraries(ledeb -L/home/adrien/Project/PERSO/LowPolyEngine/modules/lib  -lsfml-audio)
+target_link_libraries(ledeb -L/home/adrien/Project/PERSO/LowPolyEngine/modules/lib  -lsfml-window)
+target_link_libraries(ledeb -L/home/adrien/Project/PERSO/LowPolyEngine/modules/lib  -lsfml-system)
+

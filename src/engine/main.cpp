@@ -21,6 +21,8 @@
 
 #include "map/Diamond.hpp"
 
+#include <chrono>
+#include <ctime>
 
 void draw(std::vector<game::Triangle<float> > &triangles, L_OpenGL &gl)
 {
@@ -68,10 +70,19 @@ int main()
 
 	gl.initReshape(window);
 
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+    start = std::chrono::system_clock::now();
+
+    int elapsed_seconds;
 	bool running = true;
 	while (running)
 	{
-		while (window.pollEvent(input._event))
+        end = std::chrono::system_clock::now();
+        start = std::chrono::system_clock::now();
+        elapsed_seconds = std::chrono::duration_cast<std::chrono::nanoseconds>
+                (end-start).count();
+        std::cout << elapsed_seconds << std::endl;
+        while (window.pollEvent(input._event))
 		{
 			input.KeyManager(running);
 		}
