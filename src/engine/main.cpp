@@ -14,11 +14,10 @@ int main()
 
     window.loadFunctions();
 
-    Camera *camera = new Camera(0.f, 0.0f, -3.f, // eye position
-                                0.0f, 1.0f, 0.0f, // eye look at direction
-                                0.0f, 0.0f, 1.0f); // eye look up direction
-
-    Input inputKeys(camera);
+    std::shared_ptr<Camera> camera = std::make_shared<Camera>(0.f, 0.0f, -3.f, // eye position
+                                                              0.0f, 1.0f, 0.0f, // eye look at direction
+                                                              0.0f, 0.0f, 1.0f); // eye look up direction
+²    Input inputKeys(camera);
 
     L_OpenGL opengl("../7.1.camera.vs", "../7.1.camera.fs");
 

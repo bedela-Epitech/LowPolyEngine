@@ -19,7 +19,7 @@ Window::Window(int sizeX, int sizeY)
 
     // glfw window creation
     // --------------------
-    _window = glfwCreateWindow(_windowSize.x, _windowSize.y, "LearnOpenGL", NULL, NULL);
+    _window = glfwCreateWindow(_windowSize.x, _windowSize.y, "LowPolyEngine", NULL, NULL);
     if (_window == nullptr)
     {
         std::cout << "Failed to create GLFW window" << std::endl;

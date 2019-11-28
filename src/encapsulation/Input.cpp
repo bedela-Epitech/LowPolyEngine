@@ -1,7 +1,7 @@
 
 #include "encapsulation/Input.hpp"
 
-Input::Input(Camera *camera)
+Input::Input(const std::shared_ptr<Camera> &camera)
 {
 	keys = std::vector<int>{GLFW_KEY_ESCAPE, GLFW_KEY_W, GLFW_KEY_S,
 							GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_RIGHT,

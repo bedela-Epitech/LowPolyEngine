@@ -17,7 +17,7 @@ private:
 	std::map<int, std::function<void(const float &)>> _cameraFunctions;
 
 public:
-	Input(Camera *camera);
+	Input(const std::shared_ptr<Camera> &);
 
 	void	KeyManager();
 };
