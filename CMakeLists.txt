@@ -33,9 +33,6 @@ include_directories(include)
 set(71K2ledeb
 		src/engine/main.cpp
 
-		include/engine/ObjParser.hpp
-		src/engine/ObjParser.cpp
-
 		include/encapsulation/L_OpenGL.hpp
 		src/encapsulation/L_OpenGL.cpp
 
