@@ -6,8 +6,8 @@ Diamond::Diamond(const float &height, const unsigned int &powPower)
 {
 	srand(time(NULL));
 	_height = height;
-    _size = (unsigned int)pow(2, powPower) + 1;
-    _map = std::vector<std::vector<float>>(_size, std::vector<float>(_size, 0.0));
+	_size = (unsigned int)pow(2, powPower) + 1;
+	_map = std::vector<std::vector<float>>(_size, std::vector<float>(_size, 0.0));
 
 	_map[0][0] = boundedRand(-height, height);
 	_map[_map.size() - 1][0] = boundedRand(-height, height);
@@ -17,35 +17,78 @@ Diamond::Diamond(const float &height, const unsigned int &powPower)
 
 void    Diamond::manageSquare(const glm::uvec2 &pos, const unsigned int size)
 {
-    std::cout << pos.x << pos.y << " ";
-    std::cout << pos.x + size << pos.y << " ";
-    std::cout << pos.x << pos.y + size << " ";
-    std::cout << pos.x + size << pos.y + size << " ";
-
-    std::cout << pos.x + size / 2 << pos.y + size / 2 << std::endl;
+	_map[pos.x + size / 2][pos.y + size / 2] =
+			(_map[pos.x][pos.y] +
+			 _map[pos.x + size][pos.y] +
+			 _map[pos.x][pos.y + size] +
+			 _map[pos.x + size][pos.y + size]) / 4.f;
 }
 
-void    Diamond::manageDiamond(const glm::uvec2 &pos, const unsigned int size)
+void    Diamond::manageDiamond(const glm::uvec2 &pos, const unsigned int size, int flag)
 {
+	float topDiamond;
+	float leftDiamond;
+	float topDivider = 4.f;
+	float leftDivider = 4.f;
 
+	if (pos.y < size / 2)
+	{
+		topDiamond = 0.f;
+		topDivider--;
+	} else {
+		topDiamond = _map[pos.x + size / 2][pos.y - size / 2];
+	}
+
+
+	if (pos.x < size / 2)
+	{
+		leftDiamond = 0.f;
+		leftDivider--;
+	} else {
+		leftDiamond = _map[pos.x - size / 2][pos.y + size / 2];
+	}
+
+
+	_map[pos.x + size / 2][pos.y] = (_map[pos.x][pos.y] +
+									 _map[pos.x + size][pos.y] +
+									 _map[pos.x + size / 2][pos.y + size / 2] +
+									 topDiamond) / topDivider;
+
+	_map[pos.x][pos.y + size / 2] = (_map[pos.x][pos.y] +
+									 _map[pos.x][pos.y + size] +
+									 _map[pos.x + size / 2][pos.y + size / 2] +
+									 leftDiamond) / leftDivider;
+	if (flag & 1)
+	{
+		_map[pos.x + size][pos.y + size / 2] = (_map[pos.x + size][pos.y + size] +
+												_map[pos.x + size][pos.y] +
+												_map[pos.x + size / 2][pos.y + size / 2]) / 3.f;
+	}
+	if (flag & 2)
+	{
+		_map[pos.x + size / 2][pos.y + size] = (_map[pos.x + size][pos.y + size] +
+												_map[pos.x][pos.y + size] +
+												_map[pos.x + size / 2][pos.y + size / 2]) / 3.f;
+	}
 }
 
 void    Diamond::fillMap()
 {
-    unsigned int    nbSquare = (_size -1) / 2;
-    unsigned int    squareSize = _size - 1;
-    glm::uvec2      pos;
+	unsigned int    nbSquare = (_size -1) / 2;
+	unsigned int    squareSize = _size - 1;
+	glm::uvec2      pos;
 
-    for (int i = 1; i < _size; i *= 2)
-    {
-        for (int j = 0; j < i * i; ++j)
-        {
-            pos = glm::uvec2(j % i, j / i);
-            manageSquare(pos, squareSize);
-            manageDiamond(pos, squareSize);
-        }
-        squareSize /= 2;
-    }
+	for (int i = 1; i <= nbSquare; i *= 2)
+	{
+		for (int j = 0; j < i * i; ++j)
+		{
+			pos = glm::uvec2(j % i * squareSize, j / i * squareSize);
+			manageSquare(pos, squareSize);
+			manageDiamond(pos, squareSize, (2 * (j / i == i - 1)) + (j % i == i - 1));
+		}
+		squareSize /= 2;
+	}
+	printMap();
 }
 
 void	Diamond::printMap() const
@@ -94,5 +137,5 @@ void	Diamond::updateTriangles()
 
 float	Diamond::boundedRand(float min, float max)
 {
-    return (((float)rand() / (float)(RAND_MAX)) * (max - min) + min);
+	return (((float)rand() / (float)(RAND_MAX)) * (max - min) + min);
 }

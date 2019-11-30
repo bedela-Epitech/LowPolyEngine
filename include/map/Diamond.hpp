@@ -10,8 +10,6 @@
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 
-#define MULT 0.3
-
 class Diamond
 {
 
@@ -29,7 +27,7 @@ public:
 	Diamond(const float &, const unsigned int &);
 
     void	manageSquare(const glm::uvec2 &, const unsigned int);
-    void	manageDiamond(const glm::uvec2 &, const unsigned int);
+    void	manageDiamond(const glm::uvec2 &, const unsigned int, int);
 	void	fillMap();
 	void	printMap() const;
 
