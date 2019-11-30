@@ -2,12 +2,12 @@
 
 #include "map/Diamond.hpp"
 
-Diamond::Diamond(const float &height, const unsigned int &size)
+Diamond::Diamond(const float &height, const unsigned int &powPower)
 {
 	srand(time(NULL));
 	_height = height;
-
-    _map = std::vector<std::vector<float>>(size, std::vector<float>(size, 0.0));
+    _size = (unsigned int)pow(2, powPower) + 1;
+    _map = std::vector<std::vector<float>>(_size, std::vector<float>(_size, 0.0));
 
 	_map[0][0] = boundedRand(-height, height);
 	_map[_map.size() - 1][0] = boundedRand(-height, height);
@@ -15,93 +15,37 @@ Diamond::Diamond(const float &height, const unsigned int &size)
 	_map[_map.size() - 1][_map.size() - 1] = boundedRand(-height, height);
 }
 
-Diamond::~Diamond()
+void    Diamond::manageSquare(const glm::uvec2 &pos, const unsigned int size)
+{
+    std::cout << pos.x << pos.y << " ";
+    std::cout << pos.x + size << pos.y << " ";
+    std::cout << pos.x << pos.y + size << " ";
+    std::cout << pos.x + size << pos.y + size << " ";
+
+    std::cout << pos.x + size / 2 << pos.y + size / 2 << std::endl;
+}
+
+void    Diamond::manageDiamond(const glm::uvec2 &pos, const unsigned int size)
 {
 
 }
 
-void	Diamond::square(const Vector2di &pos, const unsigned int &size)
+void    Diamond::fillMap()
 {
-	Cross		cross(_height);
+    unsigned int    nbSquare = (_size -1) / 2;
+    unsigned int    squareSize = _size - 1;
+    glm::uvec2      pos;
 
-	cross._topleft = _map[pos.y][pos.x];
-	cross._topRight = _map[pos.y][pos.x + size];
-	cross._botLeft = _map[pos.y + size][pos.x];
-	cross._botRight = _map[pos.y + size][pos.x + size];
-
-	float rando = ((((float)rand() / (float)(RAND_MAX)) * _height * 2.f) - _height);
-	//rando = 0;
-	_map[pos.x + (size / 2)][pos.y + (size / 2)] = cross.getMiddle(rando);
-
-	_crosses.push_back(cross);
-}
-
-void	Diamond::manageCrosses()
-{
-	int	crossNb = sqrt(_crosses.size());
-	Vector2di	step;
-	int size = _map.size() / (crossNb * 2);
-	int randomAdd;
-	for (int y = 0; y < crossNb; y++)
-	{
-		for (int x = 0; x < crossNb; x++)
-		{
-			randomAdd = ((((float)rand() / (float)(RAND_MAX)) * _height * 2.f) - _height);
-			//randomAdd = 0;
-			step.x = ((_map.size() * x) / crossNb) + size;
-			step.y = ((_map.size() * y) / crossNb) + size;
-			if (x == 0)
-				_map[step.x - size][step.y] = _crosses[x + (y * crossNb)].leftCross() / 3 + randomAdd;
-			else
-				_map[step.x - size][step.y] = (_crosses[x + (y * crossNb)].leftCross() + _crosses[(x - 1) + (y * crossNb)]._middle) / 4 + randomAdd;
-
-			if (x == crossNb - 1)
-				_map[step.x + size][step.y] = _crosses[x + (y * crossNb)].RightCross() / 3 + randomAdd;
-			else
-				_map[step.x + size][step.y] = (_crosses[x + (y * crossNb)].RightCross() + _crosses[(x + 1) + (y * crossNb)]._middle) / 4 + randomAdd;
-
-
-			if (y == 0)
-				_map[step.x][step.y - size] = _crosses[x + (y * crossNb)].TopCross() / 3 + randomAdd;
-			else
-				_map[step.x][step.y - size] = (_crosses[x + (y * crossNb)].TopCross() + _crosses[x + ((y - 1) * crossNb)]._middle) / 4 + randomAdd;
-
-
-			if (y == crossNb - 1)
-				_map[step.x][step.y + size] = _crosses[x + (y * crossNb)].BotCross() / 3 + randomAdd;
-			else
-				_map[step.x][step.y + size] = (_crosses[x + (y * crossNb)].BotCross() + _crosses[x + ((y + 1) * crossNb)]._middle) / 4 + randomAdd;
-
-
-		}
-	}
-	_crosses.clear();
-}
-
-void	Diamond::fillMap()
-{
-	int size = _map.size();
-	int squareNb = 1;
-	int x;
-	int y;
-	while (squareNb < _map.size() - 1)
-	{
-		for (int i = 0; i < squareNb; i++)
-		{
-			for (int j = 0; j < squareNb; j++)
-			{
-				x = (_map.size() * j) / squareNb;
-				y = (_map.size() * i) / squareNb;
-				square(Vector2di(x, y), size - 1);
-			}
-		}
-		manageCrosses();
-		//printMap();
-		std::cout << std::endl;
-		size = (size + 1) / 2;
-		squareNb *= 2;
-		_height /= 2.f;
-	}
+    for (int i = 1; i < _size; i *= 2)
+    {
+        for (int j = 0; j < i * i; ++j)
+        {
+            pos = glm::uvec2(j % i, j / i);
+            manageSquare(pos, squareSize);
+            manageDiamond(pos, squareSize);
+        }
+        squareSize /= 2;
+    }
 }
 
 void	Diamond::printMap() const
