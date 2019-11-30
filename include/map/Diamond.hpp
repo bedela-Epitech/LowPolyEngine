@@ -24,7 +24,7 @@ private:
 	std::vector<Cross>	_crosses;
 
 public:
-	Diamond(const float &height, const int &size);
+	Diamond(const float &height, const unsigned int &size);
 	~Diamond();
 
 	void	square(const Vector2di &pos, const unsigned int &size);
@@ -34,6 +34,8 @@ public:
 
 	void	updateVertices(float scale, float smooth);
 	void	updateTriangles();
+	float	boundedRand(float, float);
+
 };
 
 

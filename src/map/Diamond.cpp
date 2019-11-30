@@ -2,26 +2,17 @@
 
 #include "map/Diamond.hpp"
 
-Diamond::Diamond(const float &height, const int &size)
+Diamond::Diamond(const float &height, const unsigned int &size)
 {
 	srand(time(NULL));
 	_height = height;
-	std::vector<float> vector;
-	for (int i = 0; i < size; i++)
-	{
-		for (int j = 0; j < size; j++)
-		{
-			vector.push_back(0);
-		}
-		_map.push_back(vector);
-		vector.clear();
-	}
 
-	_map[0][0] = 0;// ((float)rand() / (float)(RAND_MAX)) * height;
-	_map[_map.size() - 1][0] = 0;//((float)rand() / (float)(RAND_MAX)) * height;
-	_map[0][_map.size() - 1] = 0;//((float)rand() / (float)(RAND_MAX)) * height;
-	_map[_map.size() - 1][_map.size() - 1] = 0.4f;//((float)rand() / (float)(RAND_MAX)) * height;
+    _map = std::vector<std::vector<float>>(size, std::vector<float>(size, 0.0));
 
+	_map[0][0] = boundedRand(-height, height);
+	_map[_map.size() - 1][0] = boundedRand(-height, height);
+	_map[0][_map.size() - 1] = boundedRand(-height, height);
+	_map[_map.size() - 1][_map.size() - 1] = boundedRand(-height, height);
 }
 
 Diamond::~Diamond()
@@ -155,4 +146,9 @@ void	Diamond::updateTriangles()
 			_triangles.push_back(game::Triangle<float>(_vertices[y + 1][x + 1], _vertices[y][x + 1], _vertices[y + 1][x]));
 		}
 	}
+}
+
+float	Diamond::boundedRand(float min, float max)
+{
+    return (((float)rand() / (float)(RAND_MAX)) * (max - min) + min);
 }
