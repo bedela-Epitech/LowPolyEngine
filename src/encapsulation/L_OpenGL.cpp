@@ -13,10 +13,10 @@ L_OpenGL::L_OpenGL(const std::string &vertexShaderPath, const std::string &fragm
     glEnable(GL_DEPTH_TEST);
 
 
-    Diamond diams(0.35f, 8);
+    Diamond diams(0.55f, 7);
     diams.fillMap();
     diams.updateVertices(5, 250);
-    diams.updateTriangles();
+    //diams.updateTriangles();
 
     _shader.use();
 
@@ -26,8 +26,18 @@ L_OpenGL::L_OpenGL(const std::string &vertexShaderPath, const std::string &fragm
     _shader.setFloat("specularStrength", 0.5);
 
 
+    for (int i = 0; i < diams._trueTriangles.size(); ++i)
+    {
+        _vertices.push_back(diams._trueTriangles[i]);
+        _normals.push_back(diams._normals[i]);
+        _colours.push_back(diams._colors[i]);
+    }
+    for (const auto &data : _colours)
+        std::cout << data << ", ";
+    std::cout << std::endl;
 
-    float inc = 1.f / (diams._triangles.size() * 9);
+
+    /*float inc = 1.f / (diams._triangles.size() * 9);
     float color = 0.f;
     glm::vec3 normal;
     for (const auto &triangle : diams._triangles)
@@ -53,7 +63,7 @@ L_OpenGL::L_OpenGL(const std::string &vertexShaderPath, const std::string &fragm
 
             color += inc;
         }
-    }
+    }*/
 }
 
 void    L_OpenGL::linkVertices()

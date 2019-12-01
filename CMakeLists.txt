@@ -39,12 +39,6 @@ set(71K2ledeb
 		include/engine/Camera.hpp
 		src/engine/Camera.cpp
 
-		include/Triangle.hpp
-
-		include/TypeDef.hpp
-
-		include/Vector.hpp
-
 		include/Light.hpp
 		src/Light.cpp
 
@@ -56,10 +50,7 @@ set(71K2ledeb
 		include/map/Diamond.hpp
 		src/map/Diamond.cpp
 
-		include/map/Cross.hpp
-		src/map/Cross.cpp
-
-        include/encapsulation/Shader.h src/encapsulation/Shader.cpp src/encapsulation/Window.cpp)
+		include/encapsulation/Shader.h src/encapsulation/Shader.cpp src/encapsulation/Window.cpp)
 
 
 add_executable(ledeb ${71K2ledeb})

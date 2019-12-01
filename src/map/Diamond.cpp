@@ -106,32 +106,81 @@ void	Diamond::printMap() const
 
 void	Diamond::updateVertices(float scale, float smooth)
 {
-	std::vector<Vector3df>	verticesLine;
-	float x = 0;
-	float z = 0;
-	float inc = 1;
-	for (const auto &vec : _map)
+	float inc = 1.f / (_map.size() * _map.size());
+	float color = 0.f;
+	for (int x = 0; x < _map.size() - 1; x++)
 	{
-		x = 0;
-		for (const auto &value : vec)
+		for (int z = 0; z < _map.size() - 1; z++)
 		{
-			verticesLine.push_back(Vector3df(x * scale, (float)value * smooth - 100, z * scale));
-			x += inc;
-		}
-		z += inc;
-		_vertices.push_back(verticesLine);
-		verticesLine.clear();
-	}
-}
+			_trueTriangles.push_back(x * scale);
+			_trueTriangles.push_back(_map[x][z + 1] * smooth - 100);
+			_trueTriangles.push_back((z + 1) * scale);
+			_trueTriangles.push_back((x + 1) * scale);
+			_trueTriangles.push_back(_map[x + 1][z] * smooth - 100);
+			_trueTriangles.push_back(z * scale);
+			_trueTriangles.push_back(x * scale);
+			_trueTriangles.push_back(_map[x][z] * smooth - 100);
+			_trueTriangles.push_back(z * scale);
 
-void	Diamond::updateTriangles()
-{
-	for (int y = 0; y < _vertices.size() - 1; y++)
-	{
-		for (int x = 0; x < _vertices.size() - 1; x++)
-		{
-			_triangles.push_back(game::Triangle<float>(_vertices[y + 1][x], _vertices[y][x + 1], _vertices[y][x]));
-			_triangles.push_back(game::Triangle<float>(_vertices[y + 1][x + 1], _vertices[y][x + 1], _vertices[y + 1][x]));
+			glm::vec3 v0(x * scale, _map[x][z + 1] * smooth - 100, (z + 1) * scale);
+			glm::vec3 v1((x + 1) * scale, _map[x + 1][z] * smooth - 100, z * scale);
+			glm::vec3 v2(x * scale, _map[x][z] * smooth - 100, z * scale);
+			glm::vec3 normal = glm::normalize(glm::cross(v1 - v0, v2 - v0));
+			_normals.push_back(normal.x);
+			_normals.push_back(normal.y);
+			_normals.push_back(normal.z);
+			_normals.push_back(normal.x);
+			_normals.push_back(normal.y);
+			_normals.push_back(normal.z);
+			_normals.push_back(normal.x);
+			_normals.push_back(normal.y);
+			_normals.push_back(normal.z);
+
+			_trueTriangles.push_back((x + 1) * scale);
+			_trueTriangles.push_back(_map[x + 1][z + 1] * smooth - 100);
+			_trueTriangles.push_back((z + 1) * scale);
+			_trueTriangles.push_back((x + 1) * scale);
+			_trueTriangles.push_back(_map[x + 1][z] * smooth - 100);
+			_trueTriangles.push_back(z * scale);
+			_trueTriangles.push_back(x * scale);
+			_trueTriangles.push_back(_map[x][z + 1] * smooth - 100);
+			_trueTriangles.push_back((z + 1) * scale);
+
+			v0 = glm::vec3((x + 1) * scale, _map[x + 1][z + 1] * smooth - 100, (z + 1) * scale);
+			v1 = glm::vec3((x + 1) * scale, _map[x + 1][z] * smooth - 100, z * scale);
+			v2 = glm::vec3(x * scale, _map[x][z + 1] * smooth - 100, (z + 1) * scale);
+			normal = glm::normalize(glm::cross(v1 - v0, v2 - v0));
+
+			_normals.push_back(normal.x);
+			_normals.push_back(normal.y);
+			_normals.push_back(normal.z);
+			_normals.push_back(normal.x);
+			_normals.push_back(normal.y);
+			_normals.push_back(normal.z);
+			_normals.push_back(normal.x);
+			_normals.push_back(normal.y);
+			_normals.push_back(normal.z);
+
+			_colors.push_back(0.5f);
+			_colors.push_back(color);
+			_colors.push_back(0.5f);
+			_colors.push_back(0.5f);
+			_colors.push_back(color);
+			_colors.push_back(0.5f);
+			_colors.push_back(0.5f);
+			_colors.push_back(color);
+			_colors.push_back(0.5f);
+
+			_colors.push_back(0.5f);
+			_colors.push_back(color);
+			_colors.push_back(0.5f);
+			_colors.push_back(0.5f);
+			_colors.push_back(color);
+			_colors.push_back(0.5f);
+			_colors.push_back(0.5f);
+			_colors.push_back(color);
+			_colors.push_back(0.5f);
+			color += inc;
 		}
 	}
 }

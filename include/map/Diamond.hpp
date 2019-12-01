@@ -3,9 +3,6 @@
 #ifndef _L_DIAMOND_HPP_
 #define _L_DIAMOND_HPP_
 
-#include "Cross.hpp"
-#include "TypeDef.hpp"
-#include "Triangle.hpp"
 #include <random>
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
@@ -14,14 +11,14 @@ class Diamond
 {
 
 public:
-	std::vector<std::vector<Vector3df>>		_vertices;
-	std::vector<game::Triangle<float>>		_triangles;
+    std::vector<float>                      _trueTriangles;
+    std::vector<float>                      _normals;
+    std::vector<float>                      _colors;
 	unsigned int							_size;
 
 private:
 	std::vector<std::vector<float>>	_map;
 	float		_height;
-	std::vector<Cross>	_crosses;
 
 public:
 	Diamond(const float &, const unsigned int &);
