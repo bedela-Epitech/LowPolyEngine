@@ -18,10 +18,10 @@ Diamond::Diamond(const float &height, const unsigned int &powPower)
 void    Diamond::manageSquare(const glm::uvec2 &pos, const unsigned int size)
 {
 	_map[pos.x + size / 2][pos.y + size / 2] =
-			(_map[pos.x][pos.y] +
+			((_map[pos.x][pos.y] +
 			 _map[pos.x + size][pos.y] +
 			 _map[pos.x][pos.y + size] +
-			 _map[pos.x + size][pos.y + size]) / 4.f;
+			 _map[pos.x + size][pos.y + size]) / 4.f) + boundedRand(-_height, _height);
 }
 
 void    Diamond::manageDiamond(const glm::uvec2 &pos, const unsigned int size, int flag)
@@ -49,26 +49,26 @@ void    Diamond::manageDiamond(const glm::uvec2 &pos, const unsigned int size, i
 	}
 
 
-	_map[pos.x + size / 2][pos.y] = (_map[pos.x][pos.y] +
+	_map[pos.x + size / 2][pos.y] = ((_map[pos.x][pos.y] +
 									 _map[pos.x + size][pos.y] +
 									 _map[pos.x + size / 2][pos.y + size / 2] +
-									 topDiamond) / topDivider;
+									 topDiamond) / topDivider) + boundedRand(-_height, _height);
 
-	_map[pos.x][pos.y + size / 2] = (_map[pos.x][pos.y] +
+	_map[pos.x][pos.y + size / 2] = ((_map[pos.x][pos.y] +
 									 _map[pos.x][pos.y + size] +
 									 _map[pos.x + size / 2][pos.y + size / 2] +
-									 leftDiamond) / leftDivider;
+									 leftDiamond) / leftDivider) + boundedRand(-_height, _height);
 	if (flag & 1)
 	{
-		_map[pos.x + size][pos.y + size / 2] = (_map[pos.x + size][pos.y + size] +
+		_map[pos.x + size][pos.y + size / 2] = ((_map[pos.x + size][pos.y + size] +
 												_map[pos.x + size][pos.y] +
-												_map[pos.x + size / 2][pos.y + size / 2]) / 3.f;
+												_map[pos.x + size / 2][pos.y + size / 2]) / 3.f) + boundedRand(-_height, _height);
 	}
 	if (flag & 2)
 	{
-		_map[pos.x + size / 2][pos.y + size] = (_map[pos.x + size][pos.y + size] +
+		_map[pos.x + size / 2][pos.y + size] = ((_map[pos.x + size][pos.y + size] +
 												_map[pos.x][pos.y + size] +
-												_map[pos.x + size / 2][pos.y + size / 2]) / 3.f;
+												_map[pos.x + size / 2][pos.y + size / 2]) / 3.f) + boundedRand(-_height, _height);
 	}
 }
 
@@ -87,6 +87,7 @@ void    Diamond::fillMap()
 			manageDiamond(pos, squareSize, (2 * (j / i == i - 1)) + (j % i == i - 1));
 		}
 		squareSize /= 2;
+		_height /= 2.f;
 	}
 	printMap();
 }

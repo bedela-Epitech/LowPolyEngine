@@ -13,7 +13,7 @@ L_OpenGL::L_OpenGL(const std::string &vertexShaderPath, const std::string &fragm
     glEnable(GL_DEPTH_TEST);
 
 
-    Diamond diams(0.75f, 5);
+    Diamond diams(0.35f, 8);
     diams.fillMap();
     diams.updateVertices(5, 250);
     diams.updateTriangles();
