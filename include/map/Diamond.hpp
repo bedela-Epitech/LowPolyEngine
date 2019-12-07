@@ -7,6 +7,8 @@
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 
+enum flag {NORMAL, RIGHT_END, BOTTOM_END};
+
 class Diamond
 {
 
@@ -24,8 +26,8 @@ private:
 public:
 	Diamond(const float &, const unsigned int &);
 
-    void	manageSquare(const glm::uvec2 &, const unsigned int);
-    void	manageDiamond(const glm::uvec2 &, const unsigned int, int);
+    void	manageSquare(unsigned int , unsigned int , const unsigned int);
+    void	manageDiamond(unsigned int, unsigned int , const unsigned int, int);
 	void	fillMap();
 	void	printMap() const;
 

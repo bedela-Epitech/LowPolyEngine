@@ -8,7 +8,7 @@
 /////////////////////
 
 L_OpenGL::L_OpenGL(const std::string &vertexShaderPath, const std::string &fragmentShaderPath)
-: _shader(vertexShaderPath, fragmentShaderPath)
+        : _shader(vertexShaderPath, fragmentShaderPath)
 {
     glEnable(GL_DEPTH_TEST);
 
@@ -16,7 +16,6 @@ L_OpenGL::L_OpenGL(const std::string &vertexShaderPath, const std::string &fragm
     Diamond diams(0.55f, 7);
     diams.fillMap();
     diams.updateVertices(5, 250);
-    //diams.updateTriangles();
 
     _shader.use();
 
@@ -26,44 +25,9 @@ L_OpenGL::L_OpenGL(const std::string &vertexShaderPath, const std::string &fragm
     _shader.setFloat("specularStrength", 0.5);
 
 
-    for (int i = 0; i < diams._trueTriangles.size(); ++i)
-    {
-        _vertices.push_back(diams._trueTriangles[i]);
-        _normals.push_back(diams._normals[i]);
-        _colours.push_back(diams._colors[i]);
-    }
-    for (const auto &data : _colours)
-        std::cout << data << ", ";
-    std::cout << std::endl;
-
-
-    /*float inc = 1.f / (diams._triangles.size() * 9);
-    float color = 0.f;
-    glm::vec3 normal;
-    for (const auto &triangle : diams._triangles)
-    {
-        auto v0 = glm::vec3(triangle.vertices[0].x, triangle.vertices[0].y, triangle.vertices[0].z);
-        auto v1 = glm::vec3(triangle.vertices[1].x, triangle.vertices[1].y, triangle.vertices[1].z);
-        auto v2 = glm::vec3(triangle.vertices[2].x, triangle.vertices[2].y, triangle.vertices[2].z);
-        normal = glm::normalize(glm::cross(v1 - v0, v2 - v0));
-        for (const auto &vertex : triangle.vertices)
-        {
-            _vertices.push_back(vertex.x);
-            _vertices.push_back(vertex.y);
-            _vertices.push_back(vertex.z);
-
-            _colours.push_back(0.5f);
-            _colours.push_back(color);
-            _colours.push_back(0.5f);
-
-            _normals.push_back(normal.x);
-            _normals.push_back(normal.y);
-            _normals.push_back(normal.z);
-
-
-            color += inc;
-        }
-    }*/
+    _vertices = diams._trueTriangles;
+    _normals = diams._normals;
+    _colours= diams._colors;
 }
 
 void    L_OpenGL::linkVertices()
