@@ -14,7 +14,8 @@ public:
     std::vector<float>                      _trueTriangles;
     std::vector<float>                      _normals;
     std::vector<float>                      _colors;
-	unsigned int							_size;
+    unsigned int							_size;
+    float							        _depth = 0;
 
 private:
 	std::vector<std::vector<float>>	_map;

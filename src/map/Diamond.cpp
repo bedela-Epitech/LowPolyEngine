@@ -108,6 +108,17 @@ void	Diamond::updateVertices(float scale, float smooth)
 {
 	float inc = 1.f / (_map.size() * _map.size());
 	float color = 0.f;
+	float maxHeight = 0;
+	float minHeight = 0;
+	for (const auto &line : _map)
+    {
+	    for (const auto &data : line)
+		{
+			maxHeight = std::max(maxHeight, data);
+			minHeight = std::min(minHeight, data);
+		}
+    }
+	_depth = maxHeight - minHeight;
 	for (int x = 0; x < _map.size() - 1; x++)
 	{
 		for (int z = 0; z < _map.size() - 1; z++)
@@ -161,25 +172,25 @@ void	Diamond::updateVertices(float scale, float smooth)
 			_normals.push_back(normal.y);
 			_normals.push_back(normal.z);
 
-			_colors.push_back(0.5f);
-			_colors.push_back(color);
-			_colors.push_back(0.5f);
-			_colors.push_back(0.5f);
-			_colors.push_back(color);
-			_colors.push_back(0.5f);
-			_colors.push_back(0.5f);
-			_colors.push_back(color);
-			_colors.push_back(0.5f);
+			_colors.push_back(1.f - ((maxHeight - _map[x][z + 1]) / _depth));
+			_colors.push_back((maxHeight - _map[x][z + 1]) / _depth);
+			_colors.push_back(0.f);
+			_colors.push_back(1.f - ((maxHeight - _map[x + 1][z]) / _depth));
+			_colors.push_back((maxHeight - _map[x + 1][z]) / _depth);
+			_colors.push_back(0.f);
+			_colors.push_back(1.f - ((maxHeight - _map[x][z]) / _depth));
+			_colors.push_back((maxHeight - _map[x][z]) / _depth);
+			_colors.push_back(0.f);
 
-			_colors.push_back(0.5f);
-			_colors.push_back(color);
-			_colors.push_back(0.5f);
-			_colors.push_back(0.5f);
-			_colors.push_back(color);
-			_colors.push_back(0.5f);
-			_colors.push_back(0.5f);
-			_colors.push_back(color);
-			_colors.push_back(0.5f);
+			_colors.push_back(1.f - ((maxHeight - _map[x + 1][z + 1]) / _depth));
+			_colors.push_back((maxHeight - _map[x + 1][z + 1]) / _depth);
+			_colors.push_back(0.f);
+			_colors.push_back(1.f - ((maxHeight - _map[x + 1][z]) / _depth));
+			_colors.push_back((maxHeight - _map[x + 1][z]) / _depth);
+			_colors.push_back(0.f);
+			_colors.push_back(1.f - ((maxHeight - _map[x][z + 1]) / _depth));
+			_colors.push_back((maxHeight - _map[x][z + 1]) / _depth);
+			_colors.push_back(0.f);
 			color += inc;
 		}
 	}
