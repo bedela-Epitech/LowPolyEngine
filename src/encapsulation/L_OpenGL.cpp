@@ -25,9 +25,27 @@ L_OpenGL::L_OpenGL(const std::string &vertexShaderPath, const std::string &fragm
     _shader.setFloat("specularStrength", 0.5);
 
 
-    _vertices = diams._trueTriangles;
-    _normals = diams._normals;
-    _colours= diams._colors;
+    for (const auto &vertex : diams._vertices)
+    {
+        _vertices.push_back(vertex.x);
+        _vertices.push_back(vertex.y);
+        _vertices.push_back(vertex.z);
+    }
+    for (const auto &color : diams._colors)
+    {
+        _colours.push_back(color.x);
+        _colours.push_back(color.y);
+        _colours.push_back(color.z);
+    }
+    for (const auto &normal : diams._normals)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            _normals.push_back(normal.x);
+            _normals.push_back(normal.y);
+            _normals.push_back(normal.z);
+        }
+    }
 }
 
 void    L_OpenGL::linkVertices()

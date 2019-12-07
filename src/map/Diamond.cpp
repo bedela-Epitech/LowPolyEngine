@@ -110,74 +110,31 @@ void	Diamond::updateVertices(float scale, float smooth)
     {
         for (int z = 0; z < _map.size() - 1; z++)
         {
-            _trueTriangles.push_back(x * scale);
-            _trueTriangles.push_back(_map[x][z + 1] * smooth - 100);
-            _trueTriangles.push_back((z + 1) * scale);
-            _trueTriangles.push_back((x + 1) * scale);
-            _trueTriangles.push_back(_map[x + 1][z] * smooth - 100);
-            _trueTriangles.push_back(z * scale);
-            _trueTriangles.push_back(x * scale);
-            _trueTriangles.push_back(_map[x][z] * smooth - 100);
-            _trueTriangles.push_back(z * scale);
 
             glm::vec3 v0(x * scale, _map[x][z + 1] * smooth - 100, (z + 1) * scale);
             glm::vec3 v1((x + 1) * scale, _map[x + 1][z] * smooth - 100, z * scale);
             glm::vec3 v2(x * scale, _map[x][z] * smooth - 100, z * scale);
-            glm::vec3 normal = glm::normalize(glm::cross(v1 - v0, v2 - v0));
-            _normals.push_back(normal.x);
-            _normals.push_back(normal.y);
-            _normals.push_back(normal.z);
-            _normals.push_back(normal.x);
-            _normals.push_back(normal.y);
-            _normals.push_back(normal.z);
-            _normals.push_back(normal.x);
-            _normals.push_back(normal.y);
-            _normals.push_back(normal.z);
+            _vertices.push_back(v0);
+            _vertices.push_back(v1);
+            _vertices.push_back(v2);
+            _colors.emplace_back(0.5f, color, 0.5f);
+            _colors.emplace_back(0.5f, color, 0.5f);
+            _colors.emplace_back(0.5f, color, 0.5f);
+            _normals.push_back(glm::normalize(glm::cross(v1 - v0, v2 - v0)));
 
-            _trueTriangles.push_back((x + 1) * scale);
-            _trueTriangles.push_back(_map[x + 1][z + 1] * smooth - 100);
-            _trueTriangles.push_back((z + 1) * scale);
-            _trueTriangles.push_back((x + 1) * scale);
-            _trueTriangles.push_back(_map[x + 1][z] * smooth - 100);
-            _trueTriangles.push_back(z * scale);
-            _trueTriangles.push_back(x * scale);
-            _trueTriangles.push_back(_map[x][z + 1] * smooth - 100);
-            _trueTriangles.push_back((z + 1) * scale);
+
 
             v0 = glm::vec3((x + 1) * scale, _map[x + 1][z + 1] * smooth - 100, (z + 1) * scale);
             v1 = glm::vec3((x + 1) * scale, _map[x + 1][z] * smooth - 100, z * scale);
             v2 = glm::vec3(x * scale, _map[x][z + 1] * smooth - 100, (z + 1) * scale);
-            normal = glm::normalize(glm::cross(v1 - v0, v2 - v0));
+            _vertices.push_back(v0);
+            _vertices.push_back(v1);
+            _vertices.push_back(v2);
+            _colors.emplace_back(0.5f, color, 0.5f);
+            _colors.emplace_back(0.5f, color, 0.5f);
+            _colors.emplace_back(0.5f, color, 0.5f);
+            _normals.push_back(glm::normalize(glm::cross(v1 - v0, v2 - v0)));
 
-            _normals.push_back(normal.x);
-            _normals.push_back(normal.y);
-            _normals.push_back(normal.z);
-            _normals.push_back(normal.x);
-            _normals.push_back(normal.y);
-            _normals.push_back(normal.z);
-            _normals.push_back(normal.x);
-            _normals.push_back(normal.y);
-            _normals.push_back(normal.z);
-
-            _colors.push_back(1.f - ((maxHeight - _map[x][z + 1]) / _depth));
-            _colors.push_back((maxHeight - _map[x][z + 1]) / _depth);
-            _colors.push_back(0.f);
-            _colors.push_back(1.f - ((maxHeight - _map[x + 1][z]) / _depth));
-            _colors.push_back((maxHeight - _map[x + 1][z]) / _depth);
-            _colors.push_back(0.f);
-            _colors.push_back(1.f - ((maxHeight - _map[x][z]) / _depth));
-            _colors.push_back((maxHeight - _map[x][z]) / _depth);
-            _colors.push_back(0.f);
-
-            _colors.push_back(1.f - ((maxHeight - _map[x + 1][z + 1]) / _depth));
-            _colors.push_back((maxHeight - _map[x + 1][z + 1]) / _depth);
-            _colors.push_back(0.f);
-            _colors.push_back(1.f - ((maxHeight - _map[x + 1][z]) / _depth));
-            _colors.push_back((maxHeight - _map[x + 1][z]) / _depth);
-            _colors.push_back(0.f);
-            _colors.push_back(1.f - ((maxHeight - _map[x][z + 1]) / _depth));
-            _colors.push_back((maxHeight - _map[x][z + 1]) / _depth);
-            _colors.push_back(0.f);
             color += inc;
         }
     }

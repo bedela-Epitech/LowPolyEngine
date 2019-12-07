@@ -13,9 +13,9 @@ class Diamond
 {
 
 public:
-    std::vector<float>                      _trueTriangles;
-    std::vector<float>                      _normals;
-    std::vector<float>                      _colors;
+    std::vector<glm::vec3>                  _vertices;
+    std::vector<glm::vec3>                  _normals;
+    std::vector<glm::vec3>                  _colors;
     unsigned int							_size;
     float							        _depth = 0;
 
