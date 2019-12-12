@@ -48,6 +48,19 @@ L_OpenGL::L_OpenGL(const std::string &vertexShaderPath, const std::string &fragm
     }
 }
 
+void    L_OpenGL::initShader(const glm::mat4 &projection)
+{
+    _shader.setMat4("projection", projection);
+
+}
+
+void    L_OpenGL::updateShader(const glm::vec3 &dirLook, const glm::mat4 &view)
+{
+    _shader.use();
+    _shader.setVec3("cameraDir", dirLook);
+    _shader.setMat4("view", view);
+}
+
 void    L_OpenGL::linkVertices()
 {
     auto vpos_location = glGetAttribLocation(_shader.ID, "aPos");

@@ -25,7 +25,7 @@ int main()
     opengl.linkColors();
     opengl.linkNormals();
 
-    opengl._shader.setMat4("projection", camera->_projection);
+    opengl.initShader(camera->_projection);
 
     while (window.isOpen())
     {
@@ -33,9 +33,8 @@ int main()
 
         camera->updateCamera();
 
-        opengl._shader.use();
-        opengl._shader.setVec3("cameraDir", camera->_dirLook);
-        opengl._shader.setMat4("view", camera->_view);
+        opengl.updateShader(camera->_dirLook, camera->_view);
+
 
         opengl.display();
 

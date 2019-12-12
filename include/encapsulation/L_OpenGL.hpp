@@ -33,6 +33,9 @@ public:
     void    linkColors();
     void    linkNormals();
 
+    void    initShader(const glm::mat4 &);
+    void    updateShader(const glm::vec3 &, const glm::mat4 &);
+
     void    display();
     void    cleanUp();
 };

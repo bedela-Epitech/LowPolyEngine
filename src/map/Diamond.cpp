@@ -4,7 +4,9 @@
 
 Diamond::Diamond(const float &height, const unsigned int &powPower)
 {
-    srand(time(NULL));
+    std::random_device rd;  //Will be used to obtain a seed for the random number engine
+    _gen = std::mt19937(rd());
+
     _height = height;
     _size = (unsigned int)pow(2, powPower) + 1;
     _map = std::vector<std::vector<float>>(_size, std::vector<float>(_size, 0.0));
@@ -76,7 +78,6 @@ void    Diamond::fillMap()
         squareSize /= 2;
         _height /= 2.f;
     }
-    printMap();
 }
 
 void	Diamond::printMap() const
@@ -93,7 +94,7 @@ void	Diamond::printMap() const
 
 void	Diamond::updateVertices(float scale, float smooth)
 {
-    float inc = 1.f / (_map.size() * _map.size());
+    float inc = 0.5f / (_map.size() * _map.size());
     float color = 0.f;
     float maxHeight = 0;
     float minHeight = 0;
@@ -142,5 +143,6 @@ void	Diamond::updateVertices(float scale, float smooth)
 
 float	Diamond::boundedRand(float min, float max)
 {
-    return (((float)rand() / (float)(RAND_MAX)) * (max - min) + min);
+    std::uniform_real_distribution<> dis(min, max);
+    return (static_cast<float>(dis(_gen)));
 }

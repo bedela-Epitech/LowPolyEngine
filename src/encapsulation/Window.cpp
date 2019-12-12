@@ -31,7 +31,7 @@ Window::Window(int sizeX, int sizeY)
 
 float   Window::getScreenRatio()
 {
-    return ((float)(_windowSize.x) / (float)(_windowSize.y));
+    return (static_cast<float>(_windowSize.x) / static_cast<float>(_windowSize.y));
 }
 
 bool    Window::isOpen()

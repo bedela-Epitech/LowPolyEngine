@@ -21,8 +21,8 @@ public:
 
 private:
 	std::vector<std::vector<float>>	_map;
-	float		_height;
-
+	float		    _height;
+    std::mt19937    _gen;
 public:
 	Diamond(const float &, const unsigned int &);
 

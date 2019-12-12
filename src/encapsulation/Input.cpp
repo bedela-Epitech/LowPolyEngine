@@ -20,7 +20,7 @@ Input::Input(const std::shared_ptr<Camera> &camera)
 
 void	Input::KeyManager()
 {
-	float currentFrame = Window::getTime();
+	auto currentFrame = static_cast<float>(Window::getTime());
 	_deltaTime = currentFrame - _lastFrame;
 	_lastFrame = currentFrame;
 
