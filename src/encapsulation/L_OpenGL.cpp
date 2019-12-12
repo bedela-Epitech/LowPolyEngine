@@ -19,10 +19,10 @@ L_OpenGL::L_OpenGL(const std::string &vertexShaderPath, const std::string &fragm
 
     _shader.use();
 
-    _shader.setVec3("lightDir", glm::normalize(glm::vec3(0, 1, 0)));
-    _shader.setFloat("ambiantCoeff", 0.3);
-    _shader.setVec3("lightColor", glm::vec3(1.0, 1.0, 1.0));
-    _shader.setFloat("specularStrength", 0.5);
+    _shader.setVec3("lightDir", _light._lightDir);
+    _shader.setFloat("ambiantCoeff", _light._ambiantCoeff);
+    _shader.setVec3("lightColor", _light._lightColor);
+    _shader.setFloat("specularStrength", _light._specularStrenght);
 
 
     for (const auto &vertex : diams._vertices)
@@ -116,4 +116,28 @@ void    L_OpenGL::cleanUp()
 {
     glDeleteVertexArrays(1, &_VAO);
     glDeleteBuffers(1, &_VBO);
+}
+
+void L_OpenGL::setDir(const glm::vec3 &dir)
+{
+    _light.setDir(dir);
+    _shader.setVec3("lightDir", _light._lightDir);
+}
+
+void L_OpenGL::setColor(const glm::vec3 &color)
+{
+    _light.setColor(color);
+    _shader.setVec3("lightColor", _light._lightColor);
+}
+
+void L_OpenGL::setAmbient(float ambiant)
+{
+    _light.setAmbient(ambiant);
+    _shader.setFloat("ambiantCoeff", _light._ambiantCoeff);
+}
+
+void L_OpenGL::setSpecular(float specular)
+{
+    _light.setSpecular(specular);
+    _shader.setFloat("specularStrength", _light._specularStrenght);
 }

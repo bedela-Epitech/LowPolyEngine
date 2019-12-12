@@ -35,7 +35,6 @@ int main()
 
         opengl.updateShader(camera->_dirLook, camera->_view);
 
-
         opengl.display();
 
         window.update();

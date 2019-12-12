@@ -7,14 +7,13 @@
 #include <vector>
 #include "Shader.h"
 #include "map/Diamond.hpp"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "Light.hpp"
 
 class L_OpenGL
 {
 public:
     Shader              _shader;
+    Light               _light;
 
     std::vector<float>  _vertices;
     std::vector<float>  _colours;
@@ -38,6 +37,11 @@ public:
 
     void    display();
     void    cleanUp();
+
+    void setDir(const glm::vec3 &);
+    void setColor(const glm::vec3 &);
+    void setAmbient(float);
+    void setSpecular(float);
 };
 
 #endif // _L_OPENGL_HPP_

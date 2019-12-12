@@ -2,26 +2,26 @@
 #ifndef _LEDEB_LIGHT_HPP_
 #define _LEDEB_LIGHT_HPP_
 
-#include "GL/glut.h"
-
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class Light
 {
 
 public:
-	GLfloat _pos[4];
-	GLfloat _diffuse[4];
-	GLfloat _ambient[4];
-	GLfloat _specular[4];
+	glm::vec3   _lightDir{0, 1, 0};
+	glm::vec3   _lightColor{1, 1, 1};
+	float       _specularStrenght = 0.5f;
+    float       _ambiantCoeff = 0.3f;
 
 public:
-	Light();
-	~Light();
+	Light() = default;
 
-	void setPos(const float &r, const float &g, const float &b, const float &a);
-	void setDiffuse(const float &r, const float &g, const float &b, const float &a);
-	void setAmbient(const float &r, const float &g, const float &b, const float &a);
-	void setSpecular(const float &r, const float &g, const float &b, const float &a);
+	void setDir(const glm::vec3 &);
+	void setColor(const glm::vec3 &);
+	void setAmbient(float);
+	void setSpecular(float);
 
 };
 
