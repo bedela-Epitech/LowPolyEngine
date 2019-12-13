@@ -13,9 +13,10 @@ L_OpenGL::L_OpenGL(const std::string &vertexShaderPath, const std::string &fragm
     glEnable(GL_DEPTH_TEST);
 
 
-    Diamond diams(0.55f, 7);
+    /*Diamond diams(0.55f, 7);
     diams.fillMap();
-    diams.updateVertices(5, 250);
+    diams.updateVertices(5, 250);*/
+    Perlin p;
 
     _shader.use();
 
@@ -25,19 +26,19 @@ L_OpenGL::L_OpenGL(const std::string &vertexShaderPath, const std::string &fragm
     _shader.setFloat("specularStrength", _light._specularStrenght);
 
 
-    for (const auto &vertex : diams._vertices)
+    for (const auto &vertex : p._vertices)
     {
         _vertices.push_back(vertex.x);
         _vertices.push_back(vertex.y);
         _vertices.push_back(vertex.z);
     }
-    for (const auto &color : diams._colors)
+    for (const auto &color : p._colors)
     {
         _colours.push_back(color.x);
         _colours.push_back(color.y);
         _colours.push_back(color.z);
     }
-    for (const auto &normal : diams._normals)
+    for (const auto &normal : p._normals)
     {
         for (int i = 0; i < 3; i++)
         {

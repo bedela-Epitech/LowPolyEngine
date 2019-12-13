@@ -8,6 +8,7 @@
 #include "Shader.h"
 #include "map/Diamond.hpp"
 #include "Light.hpp"
+#include "map/Perlin.h"
 
 class L_OpenGL
 {

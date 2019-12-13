@@ -50,7 +50,7 @@ set(71K2ledeb
 		include/map/Diamond.hpp
 		src/map/Diamond.cpp
 
-		include/encapsulation/Shader.h src/encapsulation/Shader.cpp src/encapsulation/Window.cpp)
+		include/encapsulation/Shader.h src/encapsulation/Shader.cpp src/encapsulation/Window.cpp include/map/Perlin.h src/map/Perlin.cpp)
 
 
 add_executable(ledeb ${71K2ledeb})
