@@ -2,8 +2,9 @@
 
 #include "map/Diamond.hpp"
 
-Diamond::Diamond(const float &height, const unsigned int &powPower)
+Diamond::Diamond(const float &height, const unsigned int &powPower, const std::vector<std::vector<float>> &noiseMap)
 {
+    _noiseMap = noiseMap;
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     _gen = std::mt19937(rd());
 
@@ -11,10 +12,10 @@ Diamond::Diamond(const float &height, const unsigned int &powPower)
     _size = (unsigned int)pow(2, powPower) + 1;
     _map = std::vector<std::vector<float>>(_size, std::vector<float>(_size, 0.0));
 
-    _map[0][0] = boundedRand(-height, height);
-    _map[_map.size() - 1][0] = boundedRand(-height, height);
-    _map[0][_map.size() - 1] = boundedRand(-height, height);
-    _map[_map.size() - 1][_map.size() - 1] = boundedRand(-height, height);
+    _map[0][0] = _noiseMap[0][0];//boundedRand(-height, height);
+    _map[_map.size() - 1][0] = _noiseMap[_map.size() - 2][0];//boundedRand(-height, height);
+    _map[0][_map.size() - 1] = _noiseMap[0][_map.size() - 2];//boundedRand(-height, height);
+    _map[_map.size() - 1][_map.size() - 1] = _noiseMap[_map.size() - 2][_map.size() - 2];//boundedRand(-height, height);
 }
 
 void    Diamond::manageSquare(unsigned int x, unsigned int y, const unsigned int size)
@@ -106,10 +107,17 @@ void	Diamond::updateVertices(float scale, float smooth)
             minHeight = std::min(minHeight, data);
         }
     }
-    _depth = maxHeight - minHeight;
-    for (int x = 0; x < _map.size() - 1; x++)
+    for (int x = 0; x < _noiseMap.size(); x++)
     {
-        for (int z = 0; z < _map.size() - 1; z++)
+        for (int z = 0; z < _noiseMap.size(); z++)
+        {
+            _map[x][z] += _noiseMap[x][z];
+        }
+    }
+    _depth = maxHeight - minHeight;
+    for (int x = 0; x < _noiseMap.size() - 1; x++)
+    {
+        for (int z = 0; z < _noiseMap.size() - 1; z++)
         {
 
             glm::vec3 v0(x * scale, _map[x][z + 1] * smooth - 100, (z + 1) * scale);

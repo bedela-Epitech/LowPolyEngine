@@ -134,7 +134,6 @@ Perlin::Perlin()
     // output noise map to PPM
     const uint32_t width = 512, height = 512;
     float  *noiseMapPtr = new float[width * height];
-    std::vector<std::vector<float>> noiseMap;
     std::vector<float> lineMap;
     /*for (uint32_t j = 0; j < height; ++j)
     {
@@ -170,23 +169,23 @@ Perlin::Perlin()
         for (uint32_t i = 0; i < width; ++i) {
             lineMap.push_back(noiseMapPtr[j * width + i]);
         }
-        noiseMap.push_back(lineMap);
+        _noiseMap.push_back(lineMap);
         lineMap.clear();
     }
     std::cout << "end" << std::endl;
 
     float scale = 5;
     float smooth = 250;
-    float inc = 0.5f / (noiseMap.size() * noiseMap.size());
+    float inc = 0.5f / (_noiseMap.size() * _noiseMap.size());
     float color = 0.f;
-    for (int x = 0; x < noiseMap.size() - 1; x++)
+    for (int x = 0; x < _noiseMap.size() - 1; x++)
     {
-        for (int z = 0; z < noiseMap.size() - 1; z++)
+        for (int z = 0; z < _noiseMap.size() - 1; z++)
         {
 
-            glm::vec3 v0(x * scale, noiseMap[x][z + 1] * smooth - 100, (z + 1) * scale);
-            glm::vec3 v1((x + 1) * scale, noiseMap[x + 1][z] * smooth - 100, z * scale);
-            glm::vec3 v2(x * scale, noiseMap[x][z] * smooth - 100, z * scale);
+            glm::vec3 v0(x * scale, _noiseMap[x][z + 1] * smooth - 100, (z + 1) * scale);
+            glm::vec3 v1((x + 1) * scale, _noiseMap[x + 1][z] * smooth - 100, z * scale);
+            glm::vec3 v2(x * scale, _noiseMap[x][z] * smooth - 100, z * scale);
             _vertices.push_back(v0);
             _vertices.push_back(v1);
             _vertices.push_back(v2);
@@ -197,9 +196,9 @@ Perlin::Perlin()
 
 
 
-            v0 = glm::vec3((x + 1) * scale, noiseMap[x + 1][z + 1] * smooth - 100, (z + 1) * scale);
-            v1 = glm::vec3((x + 1) * scale, noiseMap[x + 1][z] * smooth - 100, z * scale);
-            v2 = glm::vec3(x * scale, noiseMap[x][z + 1] * smooth - 100, (z + 1) * scale);
+            v0 = glm::vec3((x + 1) * scale, _noiseMap[x + 1][z + 1] * smooth - 100, (z + 1) * scale);
+            v1 = glm::vec3((x + 1) * scale, _noiseMap[x + 1][z] * smooth - 100, z * scale);
+            v2 = glm::vec3(x * scale, _noiseMap[x][z + 1] * smooth - 100, (z + 1) * scale);
             _vertices.push_back(v0);
             _vertices.push_back(v1);
             _vertices.push_back(v2);

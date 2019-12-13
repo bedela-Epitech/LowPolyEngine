@@ -17,6 +17,7 @@ public:
     std::vector<glm::vec3>                  _normals;
     std::vector<glm::vec3>                  _colors;
     unsigned int							_size;
+    std::vector<std::vector<float>>         _noiseMap;
     float							        _depth = 0;
 
 private:
@@ -24,7 +25,7 @@ private:
 	float		    _height;
     std::mt19937    _gen;
 public:
-	Diamond(const float &, const unsigned int &);
+	Diamond(const float &, const unsigned int &, const std::vector<std::vector<float>> &);
 
     void	manageSquare(unsigned int , unsigned int , const unsigned int);
     void	manageDiamond(unsigned int, unsigned int , const unsigned int, int);
