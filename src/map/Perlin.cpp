@@ -133,13 +133,42 @@ Perlin::Perlin()
 
     // output noise map to PPM
     const uint32_t width = 512, height = 512;
+    float  *noiseMapPtr = new float[width * height];
     std::vector<std::vector<float>> noiseMap;
     std::vector<float> lineMap;
-    for (uint32_t j = 0; j < height; ++j)
+    /*for (uint32_t j = 0; j < height; ++j)
     {
         for (uint32_t i = 0; i < width; ++i)
         {
             lineMap.push_back((noise.eval(Vec3f(i, 0, j) * (1 / 64.), derivs) + 1) * 0.5f);
+        }
+        noiseMap.push_back(lineMap);
+        lineMap.clear();
+    }*/
+
+    uint32_t numLayers = 5;
+    float maxVal = 0;
+    for (uint32_t j = 0; j < height; ++j) {
+        for (uint32_t i = 0; i < width; ++i) {
+            float fractal = 0;
+            float amplitude = 1;
+            Vec3f pt = Vec3f(i, 0, j) * (1 / 128.f);
+            for (uint32_t k = 0; k < numLayers; ++k) {
+                fractal += (1 + noise.eval(pt, derivs)) * 0.5 * amplitude;
+                pt *= 2;
+                amplitude *= 0.5;
+            }
+            if (fractal > maxVal) maxVal = fractal;
+            noiseMapPtr[j * width + i] = fractal;
+        }
+    }
+
+    for (uint32_t i = 0; i < width * height; ++i)
+        noiseMapPtr[i] /= maxVal;
+
+    for (uint32_t j = 0; j < height; ++j) {
+        for (uint32_t i = 0; i < width; ++i) {
+            lineMap.push_back(noiseMapPtr[j * width + i]);
         }
         noiseMap.push_back(lineMap);
         lineMap.clear();
