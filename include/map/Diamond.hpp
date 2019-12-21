@@ -29,6 +29,8 @@ public:
 
     void	manageSquare(unsigned int , unsigned int , const unsigned int);
     void	manageDiamond(unsigned int, unsigned int , const unsigned int, int);
+    void	manageSquare2(unsigned int , unsigned int , const unsigned int);
+    void	manageDiamond2(unsigned int, unsigned int , const unsigned int, int);
 	void	fillMap();
 	void	printMap() const;
 

@@ -5,6 +5,11 @@
 Diamond::Diamond(const float &height, const unsigned int &powPower, const std::vector<std::vector<float>> &noiseMap)
 {
     _noiseMap = noiseMap;
+    for (auto &line : _noiseMap)
+    {
+        line.push_back(line[line.size() - 1]);
+    }
+    _noiseMap.push_back(_noiseMap[_noiseMap.size() - 1]);
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     _gen = std::mt19937(rd());
 
@@ -64,17 +69,51 @@ void    Diamond::manageDiamond(unsigned int x, unsigned int y, const unsigned in
     }
 }
 
+void    Diamond::manageSquare2(unsigned int x, unsigned int y, const unsigned int size)
+{
+    _map[x + size / 2][y + size / 2] = _noiseMap[x + size / 2][y + size / 2];
+}
+
+void    Diamond::manageDiamond2(unsigned int x, unsigned int y, const unsigned int size, int flag)
+{
+    _map[x + size / 2][y] = _noiseMap[x + size / 2][y];
+    _map[x][y + size / 2] = _noiseMap[x][y + size / 2];
+    if (flag & RIGHT_END) {
+        _map[x + size][y + size / 2] = _noiseMap[x + size][y + size / 2];
+    }
+    if (flag & BOTTOM_END)
+    {
+        _map[x + size / 2][y + size] = _noiseMap[x + size / 2][y + size];
+    }
+}
+
 void    Diamond::fillMap()
 {
-    unsigned int    nbSquare = (_size -1) / 2;
+    unsigned int    nbSquare = (_size - 1) / 2;
     unsigned int    squareSize = _size - 1;
-
+    unsigned int    iter = 7;
+    std::cout << "square  = " << nbSquare << std::endl;
     for (int i = 1; i <= nbSquare; i *= 2)
     {
-        for (int j = 0; j < i * i; ++j)
+        if (i > pow(iter, 2))
         {
-            manageSquare(j % i * squareSize, j / i * squareSize, squareSize);// check if end of column + check if end of line
-            manageDiamond(j % i * squareSize, j / i * squareSize, squareSize, (2 * (j / i == i - 1)) + (j % i == i - 1));
+            for (int j = 0; j < i * i; ++j)
+            {
+                manageSquare(j % i * squareSize, j / i * squareSize,
+                             squareSize);// check if end of column + check if end of line
+                manageDiamond(j % i * squareSize, j / i * squareSize, squareSize,
+                              (2 * (j / i == i - 1)) + (j % i == i - 1));
+            }
+        }
+        else
+        {
+            for (int j = 0; j < i * i; ++j)
+            {
+                manageSquare2(j % i * squareSize, j / i * squareSize,
+                             squareSize);// check if end of column + check if end of line
+                manageDiamond2(j % i * squareSize, j / i * squareSize, squareSize,
+                              (2 * (j / i == i - 1)) + (j % i == i - 1));
+            }
         }
         squareSize /= 2;
         _height /= 2.f;
