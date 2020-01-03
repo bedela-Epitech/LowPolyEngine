@@ -56,7 +56,7 @@ int main()
 	L_OpenGL gl(camera);
 	Input input(camera);
 
-	Diamond diams(0.75f, 1000);
+	Diamond diams(0.75f, 64);
 	diams.fillMap();
 	diams.updateVertices(5, 250);
 	diams.updateTriangles();
