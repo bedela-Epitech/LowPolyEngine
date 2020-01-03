@@ -13,8 +13,8 @@ L_OpenGL::L_OpenGL(const std::string &vertexShaderPath, const std::string &fragm
     glEnable(GL_DEPTH_TEST);
 
 
-    Perlin p;
-    Diamond diams(1.55f, 9, p._noiseMap);
+    Perlin p(7, 7);
+    Diamond diams(1.55f, 7, p._noiseMap);
        diams.fillMap();
        diams.updateVertices(5, 250);
 

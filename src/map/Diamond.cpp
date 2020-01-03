@@ -150,7 +150,7 @@ void	Diamond::updateVertices(float scale, float smooth)
     {
         for (int z = 0; z < _noiseMap.size(); z++)
         {
-            _map[x][z] += _noiseMap[x][z];
+            _map[x][z] = _noiseMap[x][z];
         }
     }
     _depth = maxHeight - minHeight;

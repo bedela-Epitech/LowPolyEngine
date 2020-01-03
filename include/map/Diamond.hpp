@@ -3,9 +3,8 @@
 #ifndef _L_DIAMOND_HPP_
 #define _L_DIAMOND_HPP_
 
+#include "map/Chunk.h"
 #include <random>
-#include <iostream>
-#include <glm/gtc/matrix_transform.hpp>
 
 enum flag {NORMAL, RIGHT_END, BOTTOM_END};
 
