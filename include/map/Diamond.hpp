@@ -3,7 +3,9 @@
 #ifndef _L_DIAMOND_HPP_
 #define _L_DIAMOND_HPP_
 
-#include "map/Chunk.h"
+#include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
+#include <vector>
 #include <random>
 
 enum flag {NORMAL, RIGHT_END, BOTTOM_END};
@@ -18,9 +20,9 @@ public:
     unsigned int							_size;
     std::vector<std::vector<float>>         _noiseMap;
     float							        _depth = 0;
+	std::vector<std::vector<float>>	_map;
 
 private:
-	std::vector<std::vector<float>>	_map;
 	float		    _height;
     std::mt19937    _gen;
 public:
@@ -28,13 +30,9 @@ public:
 
     void	manageSquare(unsigned int , unsigned int , const unsigned int);
     void	manageDiamond(unsigned int, unsigned int , const unsigned int, int);
-    void	manageSquare2(unsigned int , unsigned int , const unsigned int);
-    void	manageDiamond2(unsigned int, unsigned int , const unsigned int, int);
 	void	fillMap();
 	void	printMap() const;
 
-	void	updateVertices(float scale, float smooth);
-	void	updateTriangles();
 	float	boundedRand(float, float);
 
 };

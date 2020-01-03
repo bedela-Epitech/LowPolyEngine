@@ -23,7 +23,7 @@ public:
     std::vector<std::vector<float>>         _noiseMap;
 
 public:
-    Perlin(int, int);
+    Perlin(int);
 
 };
 

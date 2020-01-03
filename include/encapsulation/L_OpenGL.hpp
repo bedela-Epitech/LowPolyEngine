@@ -6,9 +6,8 @@
 
 #include <vector>
 #include "Shader.h"
-#include "map/Diamond.hpp"
 #include "Light.hpp"
-#include "map/Perlin.h"
+#include "map/Chunk.h"
 
 class L_OpenGL
 {
