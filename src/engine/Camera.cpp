@@ -18,7 +18,7 @@ Camera::Camera(float cameraX,  float cameraY, float cameraZ,
     _fov = 60.f;
     _screenRatio = Window::getScreenRatio();
     _near = 0.1f;
-    _far = 2512.f;
+    _far = 10240.f;
     _projection = glm::perspective(glm::radians(_fov), _screenRatio, _near, _far);
 }
 
@@ -95,24 +95,24 @@ void	Camera::closeWindow(const float &speed)
 //
 /////////////////////
 
-void	Camera::moveLeft(const float &speed)
+void	Camera::moveLeft(const float &deltaTime)
 {
-    _cameraPos += _translationCelerity * 100.f * speed * glm::normalize(glm::cross(_cameraUp, _dirLook));
+    _cameraPos += _translationCelerity * _cameraSpeed * deltaTime * glm::normalize(glm::cross(_cameraUp, _dirLook));
 }
 
-void	Camera::moveRight(const float &speed)
+void	Camera::moveRight(const float &deltaTime)
 {
-    _cameraPos -= _translationCelerity * 100.f * speed * glm::normalize(glm::cross(_cameraUp, _dirLook));
+    _cameraPos -= _translationCelerity * _cameraSpeed * deltaTime * glm::normalize(glm::cross(_cameraUp, _dirLook));
 }
 
-void	Camera::moveBack(const float &speed)
+void	Camera::moveBack(const float &deltaTime)
 {
-    _cameraPos -= _translationCelerity * 100.f * speed * _dirLook;
+    _cameraPos -= _translationCelerity * _cameraSpeed * deltaTime * _dirLook;
 }
 
-void	Camera::moveForward(const float &speed)
+void	Camera::moveForward(const float &deltaTime)
 {
-    _cameraPos += _translationCelerity * 100.f * speed * _dirLook;
+    _cameraPos += _translationCelerity * _cameraSpeed * deltaTime * _dirLook;
 }
 
 /////////////////////
@@ -121,24 +121,24 @@ void	Camera::moveForward(const float &speed)
 //
 /////////////////////
 
-void	Camera::rotateLeft(const float &speed)
+void	Camera::rotateLeft(const float &deltaTime)
 {
-    _rotateY += _translationCelerity * 40.f * speed;
+    _rotateY += _translationCelerity * 40.f * deltaTime;
 }
 
-void	Camera::rotateRight(const float &speed)
+void	Camera::rotateRight(const float &deltaTime)
 {
-    _rotateY -= _translationCelerity * 40.f * speed;
+    _rotateY -= _translationCelerity * 40.f * deltaTime;
 }
 
-void	Camera::rotateUp(const float &speed)
+void	Camera::rotateUp(const float &deltaTime)
 {
-    _rotateX += _translationCelerity * 40.f * speed;
+    _rotateX += _translationCelerity * 40.f * deltaTime;
     _rotateX = std::min(std::max(_downAngleLimit, _rotateX), _upAngleLimit);
 }
 
-void	Camera::rotateDown(const float &speed)
+void	Camera::rotateDown(const float &deltaTime)
 {
-    _rotateX -= _translationCelerity * 40.f * speed;
+    _rotateX -= _translationCelerity * 40.f * deltaTime;
     _rotateX = std::min(std::max(_downAngleLimit, _rotateX), _upAngleLimit);
 }

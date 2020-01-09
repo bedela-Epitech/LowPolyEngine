@@ -26,6 +26,7 @@ public:
     float       _rotateY = 0.f;
     float       _upAngleLimit = 89.9f;
     float       _downAngleLimit = -89.9f;
+    float       _cameraSpeed = 500.f;
 
     float       _translationCelerity = 1.5f;
 

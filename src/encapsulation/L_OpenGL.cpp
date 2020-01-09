@@ -12,7 +12,7 @@ L_OpenGL::L_OpenGL(const std::string &vertexShaderPath, const std::string &fragm
 {
     glEnable(GL_DEPTH_TEST);
 
-    Chunk chunk(9);
+    Chunk chunk(10);
 
     _shader.use();
 

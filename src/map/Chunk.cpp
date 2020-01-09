@@ -8,14 +8,15 @@ Chunk::Chunk(int power)
 {
     Perlin p(power);
     _chunkRelief = p._noiseMap;
-    Diamond diams(1.55f, power, p._noiseMap);
+    Diamond diams(3.55f, power, p._noiseMap);
     diams.fillMap();
     updateVertices(5, 250, diams._map);
 }
 
 void	Chunk::updateVertices(float scale, float smooth, std::vector<std::vector<float>> &map)
 {
-    float inc = 0.5f / (map.size() * map.size());
+    int nbIgnore = 5;
+    float inc = 0.5f / static_cast<float>(map.size() * map.size());
     float color = 0.f;
     float maxHeight = 0;
     float minHeight = 0;
@@ -34,13 +35,13 @@ void	Chunk::updateVertices(float scale, float smooth, std::vector<std::vector<fl
             map[x][z] += _chunkRelief[x][z];
         }
     }
-    for (int x = 0; x < _chunkRelief.size() - 1; x++)
+    for (int x = 0; x < _chunkRelief.size() - nbIgnore; x += nbIgnore)
     {
-        for (int z = 0; z < _chunkRelief.size() - 1; z++)
+        for (int z = 0; z < _chunkRelief.size() - nbIgnore; z += nbIgnore)
         {
 
-            glm::vec3 v0(x * scale, map[x][z + 1] * smooth - 100, (z + 1) * scale);
-            glm::vec3 v1((x + 1) * scale, map[x + 1][z] * smooth - 100, z * scale);
+            glm::vec3 v0(x * scale, map[x][z + nbIgnore] * smooth - 100, (z + nbIgnore) * scale);
+            glm::vec3 v1((x + nbIgnore) * scale, map[x + nbIgnore][z] * smooth - 100, z * scale);
             glm::vec3 v2(x * scale, map[x][z] * smooth - 100, z * scale);
             _vertices.push_back(v0);
             _vertices.push_back(v1);
@@ -52,9 +53,9 @@ void	Chunk::updateVertices(float scale, float smooth, std::vector<std::vector<fl
 
 
 
-            v0 = glm::vec3((x + 1) * scale, map[x + 1][z + 1] * smooth - 100, (z + 1) * scale);
-            v1 = glm::vec3((x + 1) * scale, map[x + 1][z] * smooth - 100, z * scale);
-            v2 = glm::vec3(x * scale, map[x][z + 1] * smooth - 100, (z + 1) * scale);
+            v0 = glm::vec3((x + nbIgnore) * scale, map[x + nbIgnore][z + nbIgnore] * smooth - 100, (z + nbIgnore) * scale);
+            v1 = glm::vec3((x + nbIgnore) * scale, map[x + nbIgnore][z] * smooth - 100, z * scale);
+            v2 = glm::vec3(x * scale, map[x][z + nbIgnore] * smooth - 100, (z + nbIgnore) * scale);
             _vertices.push_back(v0);
             _vertices.push_back(v1);
             _vertices.push_back(v2);
