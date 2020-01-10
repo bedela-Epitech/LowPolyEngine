@@ -3,10 +3,10 @@
 #ifndef _L_DIAMOND_HPP_
 #define _L_DIAMOND_HPP_
 
-#include <glm/gtc/matrix_transform.hpp>
+#include "Mountain.h"
+#include "Land.h"
 #include <iostream>
 #include <vector>
-#include <random>
 
 enum flag {NORMAL, RIGHT_END, BOTTOM_END};
 
@@ -28,8 +28,8 @@ private:
 public:
 	Diamond(const float &, const unsigned int &, const std::vector<std::vector<float>> &);
 
-    void	manageSquare(unsigned int , unsigned int , const unsigned int);
-    void	manageDiamond(unsigned int, unsigned int , const unsigned int, int);
+    void	manageSquare(unsigned int , unsigned int , const unsigned int, const std::shared_ptr<Biome> &);
+    void	manageDiamond(unsigned int, unsigned int , const unsigned int, int, const std::shared_ptr<Biome> &);
 	void	fillMap();
 	void	printMap() const;
 

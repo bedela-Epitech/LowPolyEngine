@@ -23,15 +23,15 @@ Diamond::Diamond(const float &height, const unsigned int &powPower, const std::v
     _map[_map.size() - 1][_map.size() - 1] = boundedRand(-height, height);
 }
 
-void    Diamond::manageSquare(unsigned int x, unsigned int y, const unsigned int size)
+void    Diamond::manageSquare(unsigned int x, unsigned int y, const unsigned int size, const std::shared_ptr<Biome> &biome)
 {
     _map[x + size / 2][y + size / 2] =
             ((_map[x][y] + _map[x + size][y] +
-                    _map[x][y + size] + _map[x + size][y + size]) / 4.f)
-            + boundedRand(-_height, _height);
+              _map[x][y + size] + _map[x + size][y + size]) / 4.f)
+            + biome->boundedRand(-_height, _height);
 }
 
-void    Diamond::manageDiamond(unsigned int x, unsigned int y, const unsigned int size, int flag)
+void    Diamond::manageDiamond(unsigned int x, unsigned int y, const unsigned int size, int flag, const std::shared_ptr<Biome> &biome)
 {
     float topDiamond = 0.f;
     float leftDiamond = 0.f;
@@ -52,20 +52,20 @@ void    Diamond::manageDiamond(unsigned int x, unsigned int y, const unsigned in
 
     _map[x + size / 2][y] = ((_map[x][y] + _map[x + size][y] +
                               _map[x + size / 2][y + size / 2] +
-                              topDiamond) / topDivider) + boundedRand(-_height, _height);
+                              topDiamond) / topDivider) + biome->boundedRand(-_height, _height);
 
     _map[x][y + size / 2] = ((_map[x][y] + _map[x][y + size] +
                               _map[x + size / 2][y + size / 2] +
-                              leftDiamond) / leftDivider) + boundedRand(-_height, _height);
+                              leftDiamond) / leftDivider) + biome->boundedRand(-_height, _height);
     if (flag & RIGHT_END)
     {
         _map[x + size][y + size / 2] = ((_map[x + size][y + size] + _map[x + size][y] +
-                                         _map[x + size / 2][y + size / 2]) / 3.f) + boundedRand(-_height, _height);
+                                         _map[x + size / 2][y + size / 2]) / 3.f) + biome->boundedRand(-_height, _height);
     }
     if (flag & BOTTOM_END)
     {
         _map[x + size / 2][y + size] = ((_map[x + size][y + size] + _map[x][y + size] +
-                                         _map[x + size / 2][y + size / 2]) / 3.f) + boundedRand(-_height, _height);
+                                         _map[x + size / 2][y + size / 2]) / 3.f) + biome->boundedRand(-_height, _height);
     }
 }
 
@@ -73,7 +73,12 @@ void    Diamond::fillMap()
 {
     unsigned int    nbSquare = (_size - 1) / 2;
     unsigned int    squareSize = _size - 1;
-    std::vector<std::vector<float>> heights = {{3.1, 0.1}, {0.1, 0.1}};
+    std::vector<std::vector<std::shared_ptr<Biome>>> biomes(2, std::vector<std::shared_ptr<Biome>>(2, nullptr));
+    biomes[0][0] = std::make_shared<Mountain>(Mountain());
+    biomes[0][1] = std::make_shared<Land>(Land());
+    biomes[1][0] = std::make_shared<Land>(Land());
+    biomes[1][1] = std::make_shared<Mountain>(Mountain());
+
     _height = 0.1;
     for (int i = 1; i <= nbSquare; i *= 2)
     {
@@ -83,21 +88,19 @@ void    Diamond::fillMap()
         {
             if (i > 1) {
                 line = (j / i) / (i / 2);
-                 column = (j % i) / (i / 2);
-                 _height = heights[line][column];
+                column = (j % i) / (i / 2);
+                _height = biomes[line][column]->_height;
             }
-            if (_height > 1)
-                std::cout << _height << " ";
             manageSquare(j % i * squareSize, j / i * squareSize,
-                         squareSize);// check if end of column + check if end of line
+                         squareSize, biomes[line][column]);// check if end of column + check if end of line
             manageDiamond(j % i * squareSize, j / i * squareSize, squareSize,
-                          (2 * (j / i == i - 1)) + (j % i == i - 1));
+                          (2 * (j / i == i - 1)) + (j % i == i - 1), biomes[line][column]);
         }
         squareSize /= 2;
         //_height /= 2.f;
-        for (auto &line : heights)
+        for (auto &line : biomes)
             for (auto &h : line)
-                h /= 2.f;
+                h->_height /= 2.f;
     }
 }
 
@@ -120,3 +123,11 @@ float	Diamond::boundedRand(float min, float max)
     std::uniform_real_distribution<> dis(min, max);
     return (static_cast<float>(dis(_gen)));
 }
+
+
+// L'art a besoin de digitalisation - alexis
+// ce n'est pas un petit marché - alexandre
+// donc appilcation web simple - clement
+// pivot , debut, meistertask, kanban - jean gab
+// problemes, environnement de travail, communictaion, outils
+// demo - maximme
