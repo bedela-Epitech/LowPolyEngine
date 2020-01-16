@@ -17,10 +17,12 @@ Diamond::Diamond(const float &height, const unsigned int &powPower, const std::v
     _size = (unsigned int)pow(2, powPower) + 1;
     _map = std::vector<std::vector<float>>(_size, std::vector<float>(_size, 0.0));
 
-    _map[0][0] = boundedRand(-height, height);
-    _map[_map.size() - 1][0] = boundedRand(-height, height);
-    _map[0][_map.size() - 1] = boundedRand(-height, height);
-    _map[_map.size() - 1][_map.size() - 1] = boundedRand(-height, height);
+    auto m = std::make_shared<Mountain>(Mountain());
+    auto l = std::make_shared<Land>(Land());
+    _map[0][0] = m->boundedRand(-4.f, 4.f);
+    _map[_map.size() - 1][0] = l->boundedRand(-1.f, 1.f);
+    _map[0][_map.size() - 1] = l->boundedRand(-1.f, 1.f);
+    _map[_map.size() - 1][_map.size() - 1] = m->boundedRand(-4.f, 4.f);
 }
 
 void    Diamond::manageSquare(unsigned int x, unsigned int y, const unsigned int size, const std::shared_ptr<Biome> &biome)
@@ -123,11 +125,3 @@ float	Diamond::boundedRand(float min, float max)
     std::uniform_real_distribution<> dis(min, max);
     return (static_cast<float>(dis(_gen)));
 }
-
-
-// L'art a besoin de digitalisation - alexis
-// ce n'est pas un petit marché - alexandre
-// donc appilcation web simple - clement
-// pivot , debut, meistertask, kanban - jean gab
-// problemes, environnement de travail, communictaion, outils
-// demo - maximme

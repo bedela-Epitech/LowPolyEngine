@@ -8,7 +8,7 @@ Mountain::Mountain()
 {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     _gen = std::mt19937(rd());
-    _height = 3.0f;
+    _height = 4.0f;
 }
 
 float   Mountain::boundedRand(float min, float max)

@@ -18,7 +18,7 @@ public:
     std::vector<glm::vec3>                  _colors;
 public:
     Chunk(int);
-
+    glm::vec3   getColor(float);
     void	updateVertices(float , float, std::vector<std::vector<float>> &);
 
 
