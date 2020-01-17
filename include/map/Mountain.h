@@ -12,7 +12,7 @@ class Mountain : public Biome
 public:
     Mountain();
 
-     float	boundedRand(float, float);
+     float	boundedRand();
 };
 
 #endif //INC_71K2LEDEB_MOUNTAIN_H

@@ -19,10 +19,11 @@ Diamond::Diamond(const float &height, const unsigned int &powPower, const std::v
 
     auto m = std::make_shared<Mountain>(Mountain());
     auto l = std::make_shared<Land>(Land());
-    _map[0][0] = m->boundedRand(-4.f, 4.f);
-    _map[_map.size() - 1][0] = l->boundedRand(-1.f, 1.f);
-    _map[0][_map.size() - 1] = l->boundedRand(-1.f, 1.f);
-    _map[_map.size() - 1][_map.size() - 1] = m->boundedRand(-4.f, 4.f);
+
+    _map[0][0] = m->boundedRand();
+    _map[_map.size() - 1][0] = l->boundedRand();
+    _map[0][_map.size() - 1] = l->boundedRand();
+    _map[_map.size() - 1][_map.size() - 1] = m->boundedRand();
 }
 
 void    Diamond::manageSquare(unsigned int x, unsigned int y, const unsigned int size, const std::shared_ptr<Biome> &biome)
@@ -30,7 +31,7 @@ void    Diamond::manageSquare(unsigned int x, unsigned int y, const unsigned int
     _map[x + size / 2][y + size / 2] =
             ((_map[x][y] + _map[x + size][y] +
               _map[x][y + size] + _map[x + size][y + size]) / 4.f)
-            + biome->boundedRand(-_height, _height);
+            + biome->boundedRand();
 }
 
 void    Diamond::manageDiamond(unsigned int x, unsigned int y, const unsigned int size, int flag, const std::shared_ptr<Biome> &biome)
@@ -54,20 +55,20 @@ void    Diamond::manageDiamond(unsigned int x, unsigned int y, const unsigned in
 
     _map[x + size / 2][y] = ((_map[x][y] + _map[x + size][y] +
                               _map[x + size / 2][y + size / 2] +
-                              topDiamond) / topDivider) + biome->boundedRand(-_height, _height);
+                              topDiamond) / topDivider) + biome->boundedRand();
 
     _map[x][y + size / 2] = ((_map[x][y] + _map[x][y + size] +
                               _map[x + size / 2][y + size / 2] +
-                              leftDiamond) / leftDivider) + biome->boundedRand(-_height, _height);
+                              leftDiamond) / leftDivider) + biome->boundedRand();
     if (flag & RIGHT_END)
     {
         _map[x + size][y + size / 2] = ((_map[x + size][y + size] + _map[x + size][y] +
-                                         _map[x + size / 2][y + size / 2]) / 3.f) + biome->boundedRand(-_height, _height);
+                                         _map[x + size / 2][y + size / 2]) / 3.f) + biome->boundedRand();
     }
     if (flag & BOTTOM_END)
     {
         _map[x + size / 2][y + size] = ((_map[x + size][y + size] + _map[x][y + size] +
-                                         _map[x + size / 2][y + size / 2]) / 3.f) + biome->boundedRand(-_height, _height);
+                                         _map[x + size / 2][y + size / 2]) / 3.f) + biome->boundedRand();
     }
 }
 
@@ -85,7 +86,7 @@ void    Diamond::fillMap()
     for (int i = 1; i <= nbSquare; i *= 2)
     {
         int line = 0;
-        int column = 0;
+        int column = 1;
         for (int j = 0; j < i * i; ++j)
         {
             if (i > 1) {

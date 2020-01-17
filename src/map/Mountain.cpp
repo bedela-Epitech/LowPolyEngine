@@ -11,9 +11,9 @@ Mountain::Mountain()
     _height = 4.0f;
 }
 
-float   Mountain::boundedRand(float min, float max)
+float   Mountain::boundedRand()
 {
-    std::uniform_real_distribution<> dis(min / 2.f, max);
+    std::uniform_real_distribution<> dis(-_height / 2.f, _height);
     return (static_cast<float>(dis(_gen)));
 }
 

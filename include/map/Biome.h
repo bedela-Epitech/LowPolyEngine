@@ -19,7 +19,7 @@ protected:
     float       _height;
     glm::vec3   _color;
 public:
-    virtual float   boundedRand(float, float) = 0;
+    virtual float   boundedRand() = 0;
 
     friend Diamond;
 };

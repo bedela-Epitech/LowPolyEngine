@@ -11,7 +11,7 @@ class Land : public Biome
 {
 public:
     Land();
-     float	boundedRand(float, float) ;
+     float	boundedRand() ;
 };
 
 #endif //INC_71K2LEDEB_LAND_H
