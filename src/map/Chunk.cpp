@@ -4,11 +4,17 @@
 
 #include "map/Chunk.h"
 
-Chunk::Chunk(int power)
+Chunk::Chunk(unsigned int power)
 {
-    Perlin p(power);
+    _power = power;
+}
+
+void        Chunk::generateMap(const std::vector<std::vector<float>> &northMap, const std::vector<std::vector<float>> &eastMap,
+                               const std::vector<std::vector<float>> &southMap, const std::vector<std::vector<float>> &westMap)
+{
+    Perlin p(_power);
     _chunkRelief = p._noiseMap;
-    Diamond diams(1.55f, power, p._noiseMap);
+    Diamond diams(1.55f, _power, p._noiseMap, northMap, eastMap, southMap, westMap);
     diams.fillMap();
     updateVertices(5, 250, diams._map);
 }

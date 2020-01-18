@@ -7,7 +7,7 @@
 #include <vector>
 #include "Shader.h"
 #include "Light.hpp"
-#include "map/Chunk.h"
+#include "map/QuadTree.h"
 
 class L_OpenGL
 {

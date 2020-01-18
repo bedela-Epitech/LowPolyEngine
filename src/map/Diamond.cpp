@@ -2,7 +2,12 @@
 
 #include "map/Diamond.hpp"
 
-Diamond::Diamond(const float &height, const unsigned int &powPower, const std::vector<std::vector<float>> &noiseMap)
+Diamond::Diamond(const float &height, const unsigned int &powPower, const std::vector<std::vector<float>> &noiseMap
+        , const std::vector<std::vector<float>> &northMap
+        , const std::vector<std::vector<float>> &eastMap
+        , const std::vector<std::vector<float>> &southMap
+        , const std::vector<std::vector<float>> &westMap)
+        : _northMap(northMap), _eastMap(eastMap), _southMap(southMap), _westMap(westMap)
 {
     _noiseMap = noiseMap;
     for (auto &line : _noiseMap)
@@ -38,17 +43,32 @@ void    Diamond::manageDiamond(unsigned int x, unsigned int y, const unsigned in
 {
     float topDiamond = 0.f;
     float leftDiamond = 0.f;
+    float rightDiamond = 0.f;
+    float bottomDiamond = 0.f;
     float topDivider = 4.f;
     float leftDivider = 4.f;
+    float rightDivider = 4.f;
+    float bottomDivider = 4.f;
+
 
     if (y < size / 2)
-        topDivider--;
+    {
+        if (_northMap.empty())
+            topDivider--;
+        else
+            topDiamond = _northMap[x + size / 2][_size - (y - size / 2)];
+    }
     else
         topDiamond = _map[x + size / 2][y - size / 2];
 
 
     if (x < size / 2)
-        leftDivider--;
+    {
+        if (_westMap.empty())
+            leftDivider--;
+        else
+            leftDiamond = _westMap[_size - (x - size / 2)][y + size / 2];
+    }
     else
         leftDiamond = _map[x - size / 2][y + size / 2];
 
@@ -62,13 +82,21 @@ void    Diamond::manageDiamond(unsigned int x, unsigned int y, const unsigned in
                               leftDiamond) / leftDivider) + biome->boundedRand();
     if (flag & RIGHT_END)
     {
+        if (_eastMap.empty())
+            rightDivider--;
+        else
+            rightDiamond = _eastMap[size / 2][y + size / 2];
         _map[x + size][y + size / 2] = ((_map[x + size][y + size] + _map[x + size][y] +
-                                         _map[x + size / 2][y + size / 2]) / 3.f) + biome->boundedRand();
+                                         _map[x + size / 2][y + size / 2] + rightDiamond) / rightDivider) + biome->boundedRand();
     }
     if (flag & BOTTOM_END)
     {
+        if (_southMap.empty())
+            bottomDivider--;
+        else
+            bottomDiamond = _southMap[x + size / 2][size / 2];
         _map[x + size / 2][y + size] = ((_map[x + size][y + size] + _map[x][y + size] +
-                                         _map[x + size / 2][y + size / 2]) / 3.f) + biome->boundedRand();
+                                         _map[x + size / 2][y + size / 2] + bottomDiamond) / bottomDivider) + biome->boundedRand();
     }
 }
 
@@ -100,7 +128,7 @@ void    Diamond::fillMap()
                           (2 * (j / i == i - 1)) + (j % i == i - 1), biomes[line][column]);
         }
         squareSize /= 2;
-        //_height /= 2.f;
+
         for (auto &line : biomes)
             for (auto &h : line)
                 h->_height /= 2.f;

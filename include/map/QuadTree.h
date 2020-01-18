@@ -7,19 +7,39 @@
 
 #include "map/Chunk.h"
 
+class QuadTreeNode
+{
+public:
+    unsigned int _size;
+    std::vector<std::vector<float>>	_map;
+    Chunk   _chunk;
+public:
+    std::shared_ptr<QuadTreeNode> _north = nullptr;
+    std::shared_ptr<QuadTreeNode> _east = nullptr;
+    std::shared_ptr<QuadTreeNode> _south = nullptr;
+    std::shared_ptr<QuadTreeNode> _west = nullptr;
+
+    std::shared_ptr<QuadTreeNode> _northEast = nullptr;
+    std::shared_ptr<QuadTreeNode> _northWest = nullptr;
+    std::shared_ptr<QuadTreeNode> _southEast = nullptr;
+    std::shared_ptr<QuadTreeNode> _southWest = nullptr;
+public:
+    QuadTreeNode(unsigned int size);
+};
+
 class QuadTree
 {
+public:
+    unsigned int                    _power;
+    std::vector<glm::vec3>                  _vertices;
+    std::vector<glm::vec3>                  _normals;
+    std::vector<glm::vec3>                  _colors;
 private:
-    Chunk   _chunk;
-    std::shared_ptr<QuadTree> _north;
-    std::shared_ptr<QuadTree> _east;
-    std::shared_ptr<QuadTree> _south;
-    std::shared_ptr<QuadTree> _west;
-
-    std::shared_ptr<QuadTree> _northEast;
-    std::shared_ptr<QuadTree> _northWest;
-    std::shared_ptr<QuadTree> _southEast;
-    std::shared_ptr<QuadTree> _southWest;
+    std::shared_ptr<QuadTreeNode>           _center;
+public:
+    QuadTree(unsigned int);
+    void    gatherChunks();
+    void    addEastChunk();
 };
 
 #endif //INC_71K2LEDEB_QUADTREE_H

@@ -9,16 +9,20 @@
 #include "map/Perlin.h"
 #include "map/Diamond.hpp"
 
+
 class Chunk
 {
 public:
+    unsigned int _power;
     std::vector<std::vector<float>>         _chunkRelief;
     std::vector<glm::vec3>                  _vertices;
     std::vector<glm::vec3>                  _normals;
     std::vector<glm::vec3>                  _colors;
 public:
-    Chunk(int);
+    Chunk(unsigned int);
     glm::vec3   getColor(float);
+    void    generateMap(const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &,
+                        const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &);
     void	updateVertices(float , float, std::vector<std::vector<float>> &);
 
 

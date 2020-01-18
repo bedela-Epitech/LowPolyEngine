@@ -12,8 +12,9 @@ L_OpenGL::L_OpenGL(const std::string &vertexShaderPath, const std::string &fragm
 {
     glEnable(GL_DEPTH_TEST);
 
-    Chunk chunk(10);
+    QuadTree qt(10);
 
+    qt.gatherChunks();
     _shader.use();
 
     _shader.setVec3("lightDir", _light._lightDir);
@@ -22,19 +23,19 @@ L_OpenGL::L_OpenGL(const std::string &vertexShaderPath, const std::string &fragm
     _shader.setFloat("specularStrength", _light._specularStrenght);
 
 
-    for (const auto &vertex : chunk._vertices)
+    for (const auto &vertex : qt._vertices)
     {
         _vertices.push_back(vertex.x);
         _vertices.push_back(vertex.y);
         _vertices.push_back(vertex.z);
     }
-    for (const auto &color : chunk._colors)
+    for (const auto &color : qt._colors)
     {
         _colours.push_back(color.x);
         _colours.push_back(color.y);
         _colours.push_back(color.z);
     }
-    for (const auto &normal : chunk._normals)
+    for (const auto &normal : qt._normals)
     {
         for (int i = 0; i < 3; i++)
         {
