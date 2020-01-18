@@ -31,7 +31,7 @@ void	Chunk::updateVertices(float scale, float smooth, std::vector<std::vector<fl
     {
         for (int z = 0; z < _chunkRelief.size(); z++)
         {
-            //map[x][z] += _chunkRelief[x][z];
+            map[x][z] += _chunkRelief[x][z];
         }
     }
     for (const auto &line : map)
