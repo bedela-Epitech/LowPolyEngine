@@ -20,6 +20,7 @@ Camera::Camera(float cameraX,  float cameraY, float cameraZ,
     _near = 0.1f;
     _far = 10240.f;
     _projection = glm::perspective(glm::radians(_fov), _screenRatio, _near, _far);
+    _projection = glm::scale(_projection, glm::vec3(-1, 1, 1));
 }
 
 /////////////////////
@@ -97,12 +98,12 @@ void	Camera::closeWindow(const float &speed)
 
 void	Camera::moveLeft(const float &deltaTime)
 {
-    _cameraPos += _translationCelerity * _cameraSpeed * deltaTime * glm::normalize(glm::cross(_cameraUp, _dirLook));
+    _cameraPos -= _translationCelerity * _cameraSpeed * deltaTime * glm::normalize(glm::cross(_cameraUp, _dirLook));
 }
 
 void	Camera::moveRight(const float &deltaTime)
 {
-    _cameraPos -= _translationCelerity * _cameraSpeed * deltaTime * glm::normalize(glm::cross(_cameraUp, _dirLook));
+    _cameraPos += _translationCelerity * _cameraSpeed * deltaTime * glm::normalize(glm::cross(_cameraUp, _dirLook));
 }
 
 void	Camera::moveBack(const float &deltaTime)
@@ -123,12 +124,12 @@ void	Camera::moveForward(const float &deltaTime)
 
 void	Camera::rotateLeft(const float &deltaTime)
 {
-    _rotateY += _translationCelerity * 40.f * deltaTime;
+    _rotateY -= _translationCelerity * 40.f * deltaTime;
 }
 
 void	Camera::rotateRight(const float &deltaTime)
 {
-    _rotateY -= _translationCelerity * 40.f * deltaTime;
+    _rotateY += _translationCelerity * 40.f * deltaTime;
 }
 
 void	Camera::rotateUp(const float &deltaTime)

@@ -13,7 +13,7 @@ L_OpenGL::L_OpenGL(const std::string &vertexShaderPath, const std::string &fragm
     glEnable(GL_DEPTH_TEST);
 
     QuadTree qt(10);
-    qt.addEastChunk();
+    //qt.addEastChunk();
     qt.gatherChunks();
     _shader.use();
 
