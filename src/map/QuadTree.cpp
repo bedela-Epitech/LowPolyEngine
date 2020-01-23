@@ -51,5 +51,5 @@ void QuadTree::gatherChunks()
 
 void    QuadTree::addEastChunk()
 {
-   _center->_east = std::make_shared<QuadTreeNode>(_power, glm::vec2(-1, 0), nullptr, nullptr, nullptr, _center);
+   _center->_east = std::make_shared<QuadTreeNode>(_power, glm::vec2(1, 0), nullptr, nullptr, nullptr, _center);
 }

@@ -27,20 +27,20 @@ Diamond::Diamond(const float &height, const unsigned int &powPower, const std::v
 
     if (!westMap.empty())
     {
-        _map[_map.size() - 1][0] = westMap[0][0];
+        _map[0][0] = westMap[westMap.size() - 1][0];
         std::cout << "oui" << std::endl;
     }
     else
-        _map[_map.size() - 1][0] = l->boundedRand();
+        _map[0][0] = m->boundedRand();
 
     if (!westMap.empty())
-        _map[_map.size() - 1][_map.size() - 1] = westMap[0][westMap.size() - 1];
+        _map[0][_map.size() - 1] = westMap[westMap.size() - 1][westMap.size() - 1];
     else
-        _map[_map.size() - 1][_map.size() - 1] = m->boundedRand();
+        _map[0][_map.size() - 1] = l->boundedRand();
 
 
-    _map[0][0] = m->boundedRand();
-    _map[0][_map.size() - 1] = l->boundedRand();
+    _map[_map.size() - 1][_map.size() - 1] = m->boundedRand();
+    _map[_map.size() - 1][0] = l->boundedRand();
 }
 
 void    Diamond::manageSquare(unsigned int x, unsigned int y, const unsigned int size, const std::shared_ptr<Biome> &biome)
