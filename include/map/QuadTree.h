@@ -24,7 +24,11 @@ public:
     std::shared_ptr<QuadTreeNode> _southEast = nullptr;
     std::shared_ptr<QuadTreeNode> _southWest = nullptr;
 public:
-    QuadTreeNode(unsigned int size);
+    QuadTreeNode(unsigned int size, const glm::vec2 &,
+                 const std::shared_ptr<QuadTreeNode> &,
+                 const std::shared_ptr<QuadTreeNode> &,
+                 const std::shared_ptr<QuadTreeNode> &,
+                 const std::shared_ptr<QuadTreeNode> &);
 };
 
 class QuadTree

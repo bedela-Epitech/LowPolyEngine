@@ -21,9 +21,9 @@ public:
 public:
     Chunk(unsigned int);
     glm::vec3   getColor(float);
-    void    generateMap(const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &,
+    std::vector<std::vector<float>>    generateMap(const glm::vec2 &, const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &,
                         const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &);
-    void	updateVertices(float , float, std::vector<std::vector<float>> &);
+    void	updateVertices(const glm::vec2 &, float , float, std::vector<std::vector<float>> &);
 
 
 };

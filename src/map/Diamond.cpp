@@ -25,10 +25,22 @@ Diamond::Diamond(const float &height, const unsigned int &powPower, const std::v
     auto m = std::make_shared<Mountain>(Mountain());
     auto l = std::make_shared<Land>(Land());
 
+    if (!westMap.empty())
+    {
+        _map[_map.size() - 1][0] = westMap[0][0];
+        std::cout << "oui" << std::endl;
+    }
+    else
+        _map[_map.size() - 1][0] = l->boundedRand();
+
+    if (!westMap.empty())
+        _map[_map.size() - 1][_map.size() - 1] = westMap[0][westMap.size() - 1];
+    else
+        _map[_map.size() - 1][_map.size() - 1] = m->boundedRand();
+
+
     _map[0][0] = m->boundedRand();
-    _map[_map.size() - 1][0] = l->boundedRand();
     _map[0][_map.size() - 1] = l->boundedRand();
-    _map[_map.size() - 1][_map.size() - 1] = m->boundedRand();
 }
 
 void    Diamond::manageSquare(unsigned int x, unsigned int y, const unsigned int size, const std::shared_ptr<Biome> &biome)
@@ -67,7 +79,7 @@ void    Diamond::manageDiamond(unsigned int x, unsigned int y, const unsigned in
         if (_westMap.empty())
             leftDivider--;
         else
-            leftDiamond = _westMap[_size - (x - size / 2)][y + size / 2];
+            leftDiamond = _westMap[_size + (x - size / 2)][y + size / 2];
     }
     else
         leftDiamond = _map[x - size / 2][y + size / 2];

@@ -4,7 +4,12 @@
 
 #include "map/QuadTree.h"
 
-QuadTreeNode::QuadTreeNode(unsigned int power) : _chunk(power)
+QuadTreeNode::QuadTreeNode(unsigned int power, const glm::vec2 &pos,
+                           const std::shared_ptr<QuadTreeNode> &north,
+                           const std::shared_ptr<QuadTreeNode> &east,
+                           const std::shared_ptr<QuadTreeNode> &south,
+                           const std::shared_ptr<QuadTreeNode> &west) :
+                           _north(north), _east(east), _south(south), _west(west), _chunk(power)
 {
     _size = (unsigned int)pow(2, power) + 1;
     _map = std::vector<std::vector<float>>(_size, std::vector<float>(_size, 0.0));
@@ -23,13 +28,13 @@ QuadTreeNode::QuadTreeNode(unsigned int power) : _chunk(power)
     if (_west != nullptr)
         westMap = _west->_map;
 
-    _chunk.generateMap(northMap, eastMap, southMap, westMap);
+    _map = _chunk.generateMap(glm::vec2(pos.x * _size * 5.f, pos.y * _size * 5.f), northMap, eastMap, southMap, westMap);
 }
 
 QuadTree::QuadTree(unsigned int power)
 {
     _power = power;
-    _center = std::make_shared<QuadTreeNode>(_power);
+    _center = std::make_shared<QuadTreeNode>(_power, glm::vec2(0, 0), nullptr, nullptr, nullptr, nullptr);
 }
 
 void QuadTree::gatherChunks()
@@ -46,6 +51,5 @@ void QuadTree::gatherChunks()
 
 void    QuadTree::addEastChunk()
 {
-   _center->_east = std::make_shared<QuadTreeNode>(_power);
-   _center->_east->_west = _center;
+   _center->_east = std::make_shared<QuadTreeNode>(_power, glm::vec2(-1, 0), nullptr, nullptr, nullptr, _center);
 }
