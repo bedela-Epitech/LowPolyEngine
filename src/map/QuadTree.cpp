@@ -28,7 +28,7 @@ QuadTreeNode::QuadTreeNode(unsigned int power, const glm::vec2 &pos,
     if (_west != nullptr)
         westMap = _west->_map;
 
-    _map = _chunk.generateMap(glm::vec2(pos.x * _size * 5.f, pos.y * _size * 5.f), northMap, eastMap, southMap, westMap);
+    _map = _chunk.generateMap(glm::vec2(pos.x * (_size - 1) * 5.f, pos.y * _size * 5.f), northMap, eastMap, southMap, westMap);
 }
 
 QuadTree::QuadTree(unsigned int power)
