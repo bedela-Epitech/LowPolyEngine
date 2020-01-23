@@ -4,11 +4,11 @@
 
 #include "map/Perlin.h"
 
-Perlin::Perlin(int power)
+Perlin::Perlin(const glm::vec2 &pos, int power)
 {
     PerlinNoise noise;
 
-    const uint32_t width = pow(2, power), height = pow(2, power);
+    const uint32_t width = pow(2, power) + 1, height = pow(2, power) + 1;
     float  *noiseMapPtr = new float[width * height];
     std::vector<float> lineMap;
 
@@ -19,7 +19,7 @@ Perlin::Perlin(int power)
         for (uint32_t i = 0; i < width; ++i) {
             float fractal = 0;
             float amplitude = 1;
-            glm::vec3 pt = glm::vec3(i, 0, j) * (1 / 128.f);
+            glm::vec3 pt = glm::vec3(i + pos.y, 0, j + pos.x) * (1 / 128.f);
             for (uint32_t k = 0; k < numLayers; ++k) {
                 fractal += (1 + noise.eval(pt)) * 0.5 * amplitude;
                 pt *= 2;

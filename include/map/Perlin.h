@@ -23,7 +23,7 @@ public:
     std::vector<std::vector<float>>         _noiseMap;
 
 public:
-    Perlin(int);
+    Perlin(const glm::vec2 &, int);
 
 };
 

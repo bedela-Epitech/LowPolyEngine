@@ -12,11 +12,11 @@ Chunk::Chunk(unsigned int power)
 std::vector<std::vector<float>>        Chunk::generateMap(const glm::vec2 &pos, const std::vector<std::vector<float>> &northMap, const std::vector<std::vector<float>> &eastMap,
                                const std::vector<std::vector<float>> &southMap, const std::vector<std::vector<float>> &westMap)
 {
-    Perlin p(_power);
+    Perlin p(pos, _power);
     _chunkRelief = p._noiseMap;
     Diamond diams(1.55f, _power, p._noiseMap, northMap, eastMap, southMap, westMap);
     diams.fillMap();
-    updateVertices(pos, 5, 250, diams._map);
+    updateVertices(pos * 5.f, 5, 250, diams._map);
     return diams._map;
 }
 
@@ -38,7 +38,7 @@ void	Chunk::updateVertices(const glm::vec2 &pos, float scale, float smooth, std:
     {
         for (int z = 0; z < _chunkRelief.size(); z++)
         {
-            //map[x][z] += _chunkRelief[x][z];
+            map[x][z] = _chunkRelief[x][z];
         }
     }
     for (const auto &line : map)

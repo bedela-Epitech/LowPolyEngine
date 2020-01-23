@@ -10,11 +10,6 @@ Diamond::Diamond(const float &height, const unsigned int &powPower, const std::v
         : _northMap(northMap), _eastMap(eastMap), _southMap(southMap), _westMap(westMap)
 {
     _noiseMap = noiseMap;
-    for (auto &line : _noiseMap)
-    {
-        line.push_back(line[line.size() - 1]);
-    }
-    _noiseMap.push_back(_noiseMap[_noiseMap.size() - 1]);
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     _gen = std::mt19937(rd());
 
