@@ -10,7 +10,7 @@ Chunk::Chunk(unsigned int power)
 }
 
 std::vector<std::vector<float>>        Chunk::generateMap(const glm::vec2 &pos, const std::vector<std::vector<float>> &northMap, const std::vector<std::vector<float>> &eastMap,
-                               const std::vector<std::vector<float>> &southMap, const std::vector<std::vector<float>> &westMap)
+                                                          const std::vector<std::vector<float>> &southMap, const std::vector<std::vector<float>> &westMap)
 {
     Perlin p(pos, _power);
     _chunkRelief = p._noiseMap;
@@ -25,7 +25,7 @@ glm::vec3   Chunk::getColor(float height)
     return (glm::vec3(1, .8, .5) * (height / 2.f) +  glm::vec3(.3, 1, .3) * ((1 - height) / 2.f));
 }
 
-void	Chunk::updateVertices(const glm::vec2 &pos, float scale, float smooth, std::vector<std::vector<float>> &map)
+void	Chunk::updateVertices(const glm::vec2 &pos, float scale, float smooth, std::vector<std::vector<float>> map)
 {
     int nbIgnore = 1;
     float inc = 0.5f / static_cast<float>(map.size() * map.size());
@@ -38,7 +38,7 @@ void	Chunk::updateVertices(const glm::vec2 &pos, float scale, float smooth, std:
     {
         for (int z = 0; z < _chunkRelief.size(); z++)
         {
-            map[x][z] = _chunkRelief[x][z];
+            map[x][z] += _chunkRelief[x][z];
         }
     }
     for (const auto &line : map)

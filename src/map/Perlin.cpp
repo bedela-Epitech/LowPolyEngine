@@ -30,8 +30,8 @@ Perlin::Perlin(const glm::vec2 &pos, int power)
         }
     }
 
-    for (uint32_t i = 0; i < width * height; ++i)
-        noiseMapPtr[i] /= maxVal;
+    /*for (uint32_t i = 0; i < width * height; ++i)
+        noiseMapPtr[i] /= maxVal;*/
 
     for (uint32_t j = 0; j < height; ++j) {
         for (uint32_t i = 0; i < width; ++i) {
