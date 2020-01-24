@@ -41,3 +41,4 @@ Perlin::Perlin(const glm::vec2 &pos, int power)
         lineMap.clear();
     }
 }
+
