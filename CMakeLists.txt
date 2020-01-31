@@ -50,7 +50,7 @@ set(71K2ledeb
 		include/map/Diamond.hpp
 		src/map/Diamond.cpp
 
-		include/encapsulation/Shader.h src/encapsulation/Shader.cpp src/encapsulation/Window.cpp include/map/Perlin.h src/map/Perlin.cpp src/map/Terrain.cpp src/map/Chunk.cpp include/map/Chunk.h include/map/Terrain.h src/out/WriteObj.cpp src/map/Land.cpp src/map/Mountain.cpp include/map/Land.h include/map/Mountain.h include/map/Biome.h src/map/QuadTree.cpp include/map/QuadTree.h)
+		include/encapsulation/Shader.h src/encapsulation/Shader.cpp src/encapsulation/Window.cpp include/map/Perlin.h src/map/Perlin.cpp src/map/Terrain.cpp src/map/Chunk.cpp include/map/Chunk.h include/map/Terrain.h src/out/WriteObj.cpp src/map/Land.cpp src/map/Mountain.cpp include/map/Land.h include/map/Mountain.h include/map/Biome.h src/map/QuadTree.cpp include/map/QuadTree.h include/out/WriteObj.h)
 
 
 add_executable(ledeb ${71K2ledeb})
