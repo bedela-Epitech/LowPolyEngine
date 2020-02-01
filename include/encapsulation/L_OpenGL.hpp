@@ -25,7 +25,7 @@ public:
     unsigned int        _textVBO;
     unsigned int        _textVAO;
 
-
+    bool                _isMapReady = false;
 
 public:
     L_OpenGL(const std::string &, const std::string &,

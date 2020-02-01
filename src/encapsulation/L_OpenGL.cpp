@@ -1,5 +1,6 @@
 
 #include "encapsulation/L_OpenGL.hpp"
+#include <future>
 
 /////////////////////
 //
@@ -13,6 +14,7 @@ L_OpenGL::L_OpenGL(const std::string &mapVsPath, const std::string &mapFsPath,
 {
     glEnable(GL_DEPTH_TEST);
 
+    //auto r = std::async(std::launch::async, &L_OpenGL::generateTerrain, this);
     generateTerrain();
     initTexture();
 }
@@ -58,6 +60,8 @@ void    L_OpenGL::generateTerrain()
         _mapVertices.push_back(qt._colors[i].y);
         _mapVertices.push_back(qt._colors[i].z);
     }
+    linkTerrainInfo();
+   _isMapReady = true;
 }
 
 void    L_OpenGL::initShader(const glm::mat4 &projection)
@@ -68,10 +72,14 @@ void    L_OpenGL::initShader(const glm::mat4 &projection)
 
 void    L_OpenGL::updateShader(const glm::vec3 &dirLook, const glm::mat4 &view)
 {
-    _textShader.use();
-    /*_mapShader.use();
-    _mapShader.setVec3("cameraDir", dirLook);
-    _mapShader.setMat4("view", view);*/
+    if (_isMapReady == false)
+        _textShader.use();
+    else
+    {
+        _mapShader.use();
+        _mapShader.setVec3("cameraDir", dirLook);
+        _mapShader.setMat4("view", view);
+    }
 }
 
 void    L_OpenGL::linkTextureInfo()
@@ -129,9 +137,17 @@ void    L_OpenGL::display()
 {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glBindVertexArray(_textVAO);
 
-    glDrawArrays(GL_TRIANGLES, 0, _textVertices.size() / 3);
+    if (_isMapReady == false)
+    {
+        glBindVertexArray(_textVAO);
+        glDrawArrays(GL_TRIANGLES, 0, _textVertices.size() / 3);
+    }
+    else
+    {
+        glBindVertexArray(_mapVAO);
+        glDrawArrays(GL_TRIANGLES, 0, _mapVertices.size() / 3);
+    }
 }
 
 void    L_OpenGL::cleanUp()

@@ -28,7 +28,7 @@ int main()
 
     opengl.setTexture(0); // textureID
 
-    opengl.linkTerrainInfo();
+    //opengl.linkTerrainInfo();
 
     opengl.initShader(camera->_projection);
 
