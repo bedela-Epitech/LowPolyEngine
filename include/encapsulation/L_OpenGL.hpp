@@ -38,6 +38,7 @@ public:
     void    display();
     void    cleanUp();
 
+    void setTexture(int);
     void setDir(const glm::vec3 &);
     void setColor(const glm::vec3 &);
     void setAmbient(float);

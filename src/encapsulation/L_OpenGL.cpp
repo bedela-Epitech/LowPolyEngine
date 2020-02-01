@@ -89,6 +89,11 @@ void    L_OpenGL::linkColors()
     glEnableVertexAttribArray(vcol_location);
 }
 
+void    L_OpenGL::setTexture(int textureID)
+{
+    _shader.setInt("u_Texture", textureID);
+}
+
 void    L_OpenGL::linkNormals()
 {
     unsigned int normalID;

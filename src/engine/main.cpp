@@ -3,6 +3,7 @@
 
 #include "encapsulation/Input.hpp"
 #include "encapsulation/L_OpenGL.hpp"
+#include "encapsulation/Texture.h"
 #include <iostream>
 
 const unsigned int SCR_WIDTH = 960;
@@ -20,6 +21,10 @@ int main()
     Input inputKeys(camera);
 
     L_OpenGL opengl("../7.1.camera.vs", "../7.1.camera.fs");
+    Texture texture("../ressources/background.jpg");
+    texture.bind();
+
+    opengl.setTexture(0); // textureID
 
     opengl.linkVertices();
     opengl.linkColors();
