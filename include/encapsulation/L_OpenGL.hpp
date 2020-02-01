@@ -16,13 +16,14 @@ public:
     Shader              _textShader;
     Light               _light;
 
-    std::vector<float>  _vertices;
-    std::vector<float>  _colours;
-    std::vector<float>  _normals;
+    std::vector<float>  _mapVertices;
+    std::vector<float>  _textVertices;
 
-    unsigned int        _VBO;
-    unsigned int        _VAO;
+    unsigned int        _mapVBO;
+    unsigned int        _mapVAO;
 
+    unsigned int        _textVBO;
+    unsigned int        _textVAO;
 
 
 
@@ -30,9 +31,8 @@ public:
     L_OpenGL(const std::string &, const std::string &,
              const std::string &, const std::string &);
 
-    void    linkVertices();
-    void    linkColors();
-    void    linkNormals();
+    void    linkTerrainInfo();
+    void    linkTextureInfo();
 
     void    generateTerrain();
     void    initTexture();
