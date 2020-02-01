@@ -14,6 +14,17 @@ L_OpenGL::L_OpenGL(const std::string &mapVsPath, const std::string &mapFsPath,
     glEnable(GL_DEPTH_TEST);
 
     generateTerrain();
+    initTexture();
+}
+
+void    L_OpenGL::initTexture()
+{
+    float positions[] = {
+            -0.5f, -0.5f, 0.f, 0.f,
+            0.5f, -0.5f, 1.f, 0.f,
+            0.5f, 0.5f, 1.f, 1.f,
+            -0.5f, 0.5f, 0.f, 1.f,
+    };
 }
 
 void    L_OpenGL::generateTerrain()

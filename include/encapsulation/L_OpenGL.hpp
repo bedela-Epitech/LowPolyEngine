@@ -35,6 +35,7 @@ public:
     void    linkNormals();
 
     void    generateTerrain();
+    void    initTexture();
 
     void    initShader(const glm::mat4 &);
     void    updateShader(const glm::vec3 &, const glm::mat4 &);
