@@ -12,7 +12,8 @@
 class L_OpenGL
 {
 public:
-    Shader              _shader;
+    Shader              _mapShader;
+    Shader              _textShader;
     Light               _light;
 
     std::vector<float>  _vertices;
@@ -26,11 +27,14 @@ public:
 
 
 public:
-    L_OpenGL(const std::string &, const std::string &);
+    L_OpenGL(const std::string &, const std::string &,
+             const std::string &, const std::string &);
 
     void    linkVertices();
     void    linkColors();
     void    linkNormals();
+
+    void    generateTerrain();
 
     void    initShader(const glm::mat4 &);
     void    updateShader(const glm::vec3 &, const glm::mat4 &);

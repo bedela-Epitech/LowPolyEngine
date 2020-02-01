@@ -7,20 +7,26 @@
 //
 /////////////////////
 
-L_OpenGL::L_OpenGL(const std::string &vertexShaderPath, const std::string &fragmentShaderPath)
-        : _shader(vertexShaderPath, fragmentShaderPath)
+L_OpenGL::L_OpenGL(const std::string &mapVsPath, const std::string &mapFsPath,
+                   const std::string &textVsPath, const std::string &textFsPath)
+        : _mapShader(mapVsPath, mapFsPath), _textShader(textVsPath, textFsPath)
 {
     glEnable(GL_DEPTH_TEST);
 
+    generateTerrain();
+}
+
+void    L_OpenGL::generateTerrain()
+{
     QuadTree qt(9);
     qt.addEastChunk();
     qt.gatherChunks();
-    _shader.use();
+    _mapShader.use();
 
-    _shader.setVec3("lightDir", _light._lightDir);
-    _shader.setFloat("ambiantCoeff", _light._ambiantCoeff);
-    _shader.setVec3("lightColor", _light._lightColor);
-    _shader.setFloat("specularStrength", _light._specularStrenght);
+    _mapShader.setVec3("lightDir", _light._lightDir);
+    _mapShader.setFloat("ambiantCoeff", _light._ambiantCoeff);
+    _mapShader.setVec3("lightColor", _light._lightColor);
+    _mapShader.setFloat("specularStrength", _light._specularStrenght);
 
 
     for (const auto &vertex : qt._vertices)
@@ -48,20 +54,20 @@ L_OpenGL::L_OpenGL(const std::string &vertexShaderPath, const std::string &fragm
 
 void    L_OpenGL::initShader(const glm::mat4 &projection)
 {
-    _shader.setMat4("projection", projection);
+    _mapShader.setMat4("projection", projection);
 
 }
 
 void    L_OpenGL::updateShader(const glm::vec3 &dirLook, const glm::mat4 &view)
 {
-    _shader.use();
-    _shader.setVec3("cameraDir", dirLook);
-    _shader.setMat4("view", view);
+    _mapShader.use();
+    _mapShader.setVec3("cameraDir", dirLook);
+    _mapShader.setMat4("view", view);
 }
 
 void    L_OpenGL::linkVertices()
 {
-    auto vpos_location = glGetAttribLocation(_shader.ID, "aPos");
+    auto vpos_location = glGetAttribLocation(_mapShader.ID, "aPos");
 
     glGenVertexArrays(1, &_VAO);
     glGenBuffers(1, &_VBO);
@@ -78,7 +84,7 @@ void    L_OpenGL::linkVertices()
 
 void    L_OpenGL::linkColors()
 {
-    auto vcol_location = glGetAttribLocation(_shader.ID, "in_Color");
+    auto vcol_location = glGetAttribLocation(_mapShader.ID, "in_Color");
 
     unsigned int vertexBufferObjID;
 
@@ -91,13 +97,13 @@ void    L_OpenGL::linkColors()
 
 void    L_OpenGL::setTexture(int textureID)
 {
-    _shader.setInt("u_Texture", textureID);
+    _mapShader.setInt("u_Texture", textureID);
 }
 
 void    L_OpenGL::linkNormals()
 {
     unsigned int normalID;
-    auto vnorm_location = glGetAttribLocation(_shader.ID, "normal");
+    auto vnorm_location = glGetAttribLocation(_mapShader.ID, "normal");
 
     glGenBuffers(1, &normalID);
     glBindBuffer(GL_ARRAY_BUFFER, normalID);
@@ -124,23 +130,23 @@ void    L_OpenGL::cleanUp()
 void L_OpenGL::setDir(const glm::vec3 &dir)
 {
     _light.setDir(dir);
-    _shader.setVec3("lightDir", _light._lightDir);
+    _mapShader.setVec3("lightDir", _light._lightDir);
 }
 
 void L_OpenGL::setColor(const glm::vec3 &color)
 {
     _light.setColor(color);
-    _shader.setVec3("lightColor", _light._lightColor);
+    _mapShader.setVec3("lightColor", _light._lightColor);
 }
 
 void L_OpenGL::setAmbient(float ambiant)
 {
     _light.setAmbient(ambiant);
-    _shader.setFloat("ambiantCoeff", _light._ambiantCoeff);
+    _mapShader.setFloat("ambiantCoeff", _light._ambiantCoeff);
 }
 
 void L_OpenGL::setSpecular(float specular)
 {
     _light.setSpecular(specular);
-    _shader.setFloat("specularStrength", _light._specularStrenght);
+    _mapShader.setFloat("specularStrength", _light._specularStrenght);
 }

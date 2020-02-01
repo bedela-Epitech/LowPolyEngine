@@ -20,7 +20,9 @@ int main()
                                                               0.0f, 0.0f, 1.0f); // eye look up direction
     Input inputKeys(camera);
 
-    L_OpenGL opengl("../7.1.camera.vs", "../7.1.camera.fs");
+    L_OpenGL opengl("../terrain.vs", "../terrain.fs",
+                    "../texture.vs", "../texture.fs");
+
     Texture texture("../ressources/background.jpg");
     texture.bind();
 
