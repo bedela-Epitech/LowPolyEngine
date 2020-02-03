@@ -6,6 +6,7 @@
 #include "encapsulation/Texture.h"
 #include <iostream>
 
+
 const unsigned int SCR_WIDTH = 960;
 const unsigned int SCR_HEIGHT = 540;
 
@@ -23,6 +24,7 @@ int main()
     L_OpenGL opengl("../terrain.vs", "../terrain.fs",
                     "../texture.vs", "../texture.fs");
 
+    std::thread thread(&L_OpenGL::generateTerrain, &opengl);
     Texture texture("../ressources/background.jpg");
     texture.bind();
 
@@ -38,7 +40,7 @@ int main()
 
         camera->updateCamera();
 
-        opengl.updateShader(camera->_dirLook, camera->_view);
+        opengl.updateShader(camera->_dirLook, camera->_view, thread);
 
         opengl.display();
 

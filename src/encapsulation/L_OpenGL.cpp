@@ -1,6 +1,5 @@
 
 #include "encapsulation/L_OpenGL.hpp"
-#include <future>
 
 /////////////////////
 //
@@ -14,8 +13,7 @@ L_OpenGL::L_OpenGL(const std::string &mapVsPath, const std::string &mapFsPath,
 {
     glEnable(GL_DEPTH_TEST);
 
-    //auto r = std::async(std::launch::async, &L_OpenGL::generateTerrain, this);
-    generateTerrain();
+    //generateTerrain();
     initTexture();
 }
 
@@ -38,13 +36,6 @@ void    L_OpenGL::generateTerrain()
     QuadTree qt(9);
     qt.addEastChunk();
     qt.gatherChunks();
-    _mapShader.use();
-
-    _mapShader.setVec3("lightDir", _light._lightDir);
-    _mapShader.setFloat("ambiantCoeff", _light._ambiantCoeff);
-    _mapShader.setVec3("lightColor", _light._lightColor);
-    _mapShader.setFloat("specularStrength", _light._specularStrenght);
-
 
     for (int i = 0; i < qt._vertices.size(); i++)
     {
@@ -60,23 +51,37 @@ void    L_OpenGL::generateTerrain()
         _mapVertices.push_back(qt._colors[i].y);
         _mapVertices.push_back(qt._colors[i].z);
     }
-    linkTerrainInfo();
+
    _isMapReady = true;
 }
 
 void    L_OpenGL::initShader(const glm::mat4 &projection)
 {
+    _mapShader.use();
     _mapShader.setMat4("projection", projection);
 
 }
 
-void    L_OpenGL::updateShader(const glm::vec3 &dirLook, const glm::mat4 &view)
+void    L_OpenGL::updateShader(const glm::vec3 &dirLook, const glm::mat4 &view, std::thread &thread)
 {
     if (_isMapReady == false)
-        _textShader.use();
+         _textShader.use();
     else
     {
-        _mapShader.use();
+        if (_linkDone == false)
+        {
+            thread.join();
+            _mapShader.use();
+
+            _mapShader.setVec3("lightDir", _light._lightDir);
+            _mapShader.setFloat("ambiantCoeff", _light._ambiantCoeff);
+            _mapShader.setVec3("lightColor", _light._lightColor);
+            _mapShader.setFloat("specularStrength", _light._specularStrenght);
+            linkTerrainInfo();
+            _linkDone = true;
+        }
+        else
+            _mapShader.use();
         _mapShader.setVec3("cameraDir", dirLook);
         _mapShader.setMat4("view", view);
     }
@@ -143,7 +148,7 @@ void    L_OpenGL::display()
         glBindVertexArray(_textVAO);
         glDrawArrays(GL_TRIANGLES, 0, _textVertices.size() / 3);
     }
-    else
+    else if (_linkDone == true)
     {
         glBindVertexArray(_mapVAO);
         glDrawArrays(GL_TRIANGLES, 0, _mapVertices.size() / 3);

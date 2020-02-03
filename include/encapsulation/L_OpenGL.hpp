@@ -8,6 +8,7 @@
 #include "Shader.h"
 #include "Light.hpp"
 #include "map/QuadTree.h"
+#include <future>
 
 class L_OpenGL
 {
@@ -26,6 +27,7 @@ public:
     unsigned int        _textVAO;
 
     bool                _isMapReady = false;
+    bool                _linkDone = false;
 
 public:
     L_OpenGL(const std::string &, const std::string &,
@@ -38,7 +40,7 @@ public:
     void    initTexture();
 
     void    initShader(const glm::mat4 &);
-    void    updateShader(const glm::vec3 &, const glm::mat4 &);
+    void    updateShader(const glm::vec3 &, const glm::mat4 &, std::thread &);
 
     void    display();
     void    cleanUp();
