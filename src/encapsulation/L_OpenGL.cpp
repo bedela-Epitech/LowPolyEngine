@@ -9,11 +9,11 @@
 
 L_OpenGL::L_OpenGL(const std::string &mapVsPath, const std::string &mapFsPath,
                    const std::string &textVsPath, const std::string &textFsPath)
-        : _mapShader(mapVsPath, mapFsPath), _textShader(textVsPath, textFsPath)
+        : _mapShader(mapVsPath, mapFsPath), _textShader(textVsPath, textFsPath),
+          _loadingThread(&L_OpenGL::generateTerrain, this)
 {
     glEnable(GL_DEPTH_TEST);
 
-    //generateTerrain();
     initTexture();
 }
 
@@ -52,7 +52,7 @@ void    L_OpenGL::generateTerrain()
         _mapVertices.push_back(qt._colors[i].z);
     }
 
-   _isMapReady = true;
+    _isMapReady = true;
 }
 
 void    L_OpenGL::initShader(const glm::mat4 &projection)
@@ -62,15 +62,15 @@ void    L_OpenGL::initShader(const glm::mat4 &projection)
 
 }
 
-void    L_OpenGL::updateShader(const glm::vec3 &dirLook, const glm::mat4 &view, std::thread &thread)
+void    L_OpenGL::updateShader(const glm::vec3 &dirLook, const glm::mat4 &view)
 {
-    if (_isMapReady == false)
-         _textShader.use();
-    else
+    if (_linkDone == false)
     {
-        if (_linkDone == false)
+        _textShader.use();
+        if (_isMapReady)
         {
-            thread.join();
+            _loadingThread.join();
+            std::cout << _mapVertices.size() << std::endl;
             _mapShader.use();
 
             _mapShader.setVec3("lightDir", _light._lightDir);
@@ -80,8 +80,10 @@ void    L_OpenGL::updateShader(const glm::vec3 &dirLook, const glm::mat4 &view, 
             linkTerrainInfo();
             _linkDone = true;
         }
-        else
-            _mapShader.use();
+    }
+    else
+    {
+        _mapShader.use();
         _mapShader.setVec3("cameraDir", dirLook);
         _mapShader.setMat4("view", view);
     }
@@ -143,7 +145,7 @@ void    L_OpenGL::display()
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if (_isMapReady == false)
+    if (_linkDone == false)
     {
         glBindVertexArray(_textVAO);
         glDrawArrays(GL_TRIANGLES, 0, _textVertices.size() / 3);

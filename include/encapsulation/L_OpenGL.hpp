@@ -13,6 +13,8 @@
 class L_OpenGL
 {
 public:
+    std::thread         _loadingThread;
+
     Shader              _mapShader;
     Shader              _textShader;
     Light               _light;
@@ -40,7 +42,7 @@ public:
     void    initTexture();
 
     void    initShader(const glm::mat4 &);
-    void    updateShader(const glm::vec3 &, const glm::mat4 &, std::thread &);
+    void    updateShader(const glm::vec3 &, const glm::mat4 &);
 
     void    display();
     void    cleanUp();

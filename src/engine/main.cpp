@@ -24,7 +24,6 @@ int main()
     L_OpenGL opengl("../terrain.vs", "../terrain.fs",
                     "../texture.vs", "../texture.fs");
 
-    std::thread thread(&L_OpenGL::generateTerrain, &opengl);
     Texture texture("../ressources/background.jpg");
     texture.bind();
 
@@ -40,7 +39,7 @@ int main()
 
         camera->updateCamera();
 
-        opengl.updateShader(camera->_dirLook, camera->_view, thread);
+        opengl.updateShader(camera->_dirLook, camera->_view);
 
         opengl.display();
 
