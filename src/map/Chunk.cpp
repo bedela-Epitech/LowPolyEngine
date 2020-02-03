@@ -27,7 +27,7 @@ glm::vec3   Chunk::getColor(float height)
 
 void	Chunk::updateVertices(const glm::vec2 &pos, float scale, float smooth, std::vector<std::vector<float>> map)
 {
-    int nbIgnore = 1;
+    int nbIgnore = (int)pow(2, std::max(0, (int)_power - 9));
     float inc = 0.5f / static_cast<float>(map.size() * map.size());
     float color = 0.f;
     float maxHeight = 0;

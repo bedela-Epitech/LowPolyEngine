@@ -33,7 +33,7 @@ void    L_OpenGL::initTexture()
 
 void    L_OpenGL::generateTerrain()
 {
-    QuadTree qt(9);
+    QuadTree qt(11);
     qt.addEastChunk();
     qt.gatherChunks();
 
@@ -70,7 +70,6 @@ void    L_OpenGL::updateShader(const glm::vec3 &dirLook, const glm::mat4 &view)
         if (_isMapReady)
         {
             _loadingThread.join();
-            std::cout << _mapVertices.size() << std::endl;
             _mapShader.use();
 
             _mapShader.setVec3("lightDir", _light._lightDir);
