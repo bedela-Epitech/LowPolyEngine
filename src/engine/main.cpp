@@ -24,7 +24,7 @@ int main()
     L_OpenGL opengl("../terrain.vs", "../terrain.fs",
                     "../texture.vs", "../texture.fs");
 
-    Texture texture("../ressources/background.jpg");
+    Texture texture("../ressources/backgroundloading.jpg");
     texture.bind();
 
     opengl.setTexture(0); // textureID
