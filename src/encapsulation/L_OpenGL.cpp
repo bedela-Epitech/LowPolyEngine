@@ -33,7 +33,7 @@ void    L_OpenGL::initTexture()
 
 void    L_OpenGL::generateTerrain()
 {
-    QuadTree qt(11);
+    QuadTree qt(9);
     qt.addEastChunk();
     qt.gatherChunks();
 
