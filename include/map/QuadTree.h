@@ -6,6 +6,7 @@
 #define INC_71K2LEDEB_QUADTREE_H
 
 #include "map/Chunk.h"
+#include "out/WriteObj.h"
 
 class QuadTreeNode
 {
