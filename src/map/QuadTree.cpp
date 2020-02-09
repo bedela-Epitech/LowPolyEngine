@@ -47,7 +47,7 @@ void QuadTree::gatherChunks()
         _colors.insert(_colors.end(), chunk->_chunk._colors.begin(), chunk->_chunk._colors.end());
         chunk = chunk->_east;
     }
-    WriteObj::exportToObj(_vertices, _normals);
+    //WriteObj::exportToObj(_vertices, _normals);
 }
 
 void    QuadTree::addEastChunk()

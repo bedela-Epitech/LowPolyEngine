@@ -41,6 +41,7 @@ public:
     void	manageSquare(unsigned int , unsigned int , const unsigned int, const std::shared_ptr<Biome> &);
     void	manageDiamond(unsigned int, unsigned int , const unsigned int, int, const std::shared_ptr<Biome> &);
 	void	fillMap();
+	float 	getDiff(int, int, unsigned int);
 	void	printMap() const;
 
 	float	boundedRand(float, float);

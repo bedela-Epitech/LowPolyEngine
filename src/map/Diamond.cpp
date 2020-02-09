@@ -20,17 +20,16 @@ Diamond::Diamond(const float &height, const unsigned int &powPower, const std::v
     auto m = std::make_shared<Mountain>(Mountain());
     auto l = std::make_shared<Land>(Land());
 
-    _map[0][0] = m->boundedRand();
-    _map[_map.size() - 1][_map.size() - 1] = m->boundedRand();
-    _map[_map.size() - 1][0] = l->boundedRand();
-    _map[0][_map.size() - 1] = l->boundedRand();
+    _map[0][0] = boundedRand(-_height, _height);
+    _map[_map.size() - 1][_map.size() - 1] = boundedRand(-_height, _height);
+    _map[_map.size() - 1][0] = boundedRand(-_height, _height);
+    _map[0][_map.size() - 1] = boundedRand(-_height, _height);
 
     if (!_westMap.empty())
     {
         for (int i = 0; i < _westMap.size(); i++)
             _map[0][i] = _westMap[_size - 1][i];
     }
-
 }
 
 void    Diamond::manageSquare(unsigned int x, unsigned int y, const unsigned int size, const std::shared_ptr<Biome> &biome)
@@ -86,12 +85,22 @@ void    Diamond::fillMap()
 {
     unsigned int    nbSquare = (_size - 1) / 2;
     unsigned int    squareSize = _size - 1;
-    std::vector<std::vector<std::shared_ptr<Biome>>> biomes(2, std::vector<std::shared_ptr<Biome>>(2, nullptr));
-    biomes[0][0] = std::make_shared<Mountain>(Mountain());
-    biomes[0][1] = std::make_shared<Land>(Land());
-    biomes[1][0] = std::make_shared<Land>(Land());
-    biomes[1][1] = std::make_shared<Mountain>(Mountain());
+    _map[squareSize / 2][squareSize / 2] = _map[0][0] +
+                                           _map[_map.size() - 1][_map.size() - 1] +
+                                           _map[_map.size() - 1][0] +
+                                           _map[0][_map.size() - 1] + boundedRand(-_height, _height);
 
+    std::vector<std::vector<std::shared_ptr<Biome>>> biomes(2, std::vector<std::shared_ptr<Biome>>(2, nullptr));
+    for (int i = 0; i < 2; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            if (getDiff(i, j, squareSize / 2) > 3.f)
+                biomes[i][j] = std::make_shared<Mountain>(Mountain());
+            else
+                biomes[i][j] = std::make_shared<Land>(Land());
+        }
+    }
     _height = 0.1;
     for (int i = 1; i <= nbSquare; i *= 2)
     {
@@ -104,8 +113,10 @@ void    Diamond::fillMap()
                 column = (j % i) / (i / 2);
                 _height = biomes[line][column]->_height;
             }
-            manageSquare(j % i * squareSize, j / i * squareSize,
-                         squareSize, biomes[line][column]);// check if end of column + check if end of line
+            if (i != 1) {
+                manageSquare(j % i * squareSize, j / i * squareSize,
+                             squareSize, biomes[line][column]);// check if end of column + check if end of line
+            }
             manageDiamond(j % i * squareSize, j / i * squareSize, squareSize,
                           (2 * (j / i == i - 1)) + (j % i == i - 1), biomes[line][column]);
         }
@@ -115,6 +126,22 @@ void    Diamond::fillMap()
             for (auto &h : line)
                 h->_height /= 2.f;
     }
+}
+
+float   Diamond::getDiff(int x, int y, unsigned int size)
+{
+    float max = _map[size][size];
+    float min = _map[size][size];
+
+    for (int i = x * size; i <= x * size + size; i++)
+    {
+        for (int j = y * size; j <= y * size + size; j++)
+        {
+            max = std::max(_map[i][j], max);
+            min = std::min(_map[i][j], min);
+        }
+    }
+    return max - min;
 }
 
 void	Diamond::printMap() const

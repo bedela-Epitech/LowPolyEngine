@@ -6,7 +6,6 @@
 #include "encapsulation/Texture.h"
 #include <iostream>
 
-
 const unsigned int SCR_WIDTH = 960;
 const unsigned int SCR_HEIGHT = 540;
 
@@ -52,4 +51,3 @@ int main()
 
     return 0;
 }
-
