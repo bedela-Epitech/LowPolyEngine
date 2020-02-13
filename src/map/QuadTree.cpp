@@ -9,7 +9,7 @@ QuadTreeNode::QuadTreeNode(unsigned int power, const glm::vec2 &pos,
                            const std::shared_ptr<QuadTreeNode> &east,
                            const std::shared_ptr<QuadTreeNode> &south,
                            const std::shared_ptr<QuadTreeNode> &west) :
-                           _north(north), _east(east), _south(south), _west(west), _chunk(power)
+                           _north(north), _east(east), _south(south), _west(west), _chunk(power), _pos(pos)
 {
     _size = (unsigned int)pow(2, power) + 1;
     _map = std::vector<std::vector<float>>(_size, std::vector<float>(_size, 0.0));
@@ -28,7 +28,7 @@ QuadTreeNode::QuadTreeNode(unsigned int power, const glm::vec2 &pos,
     if (_west != nullptr)
         westMap = _west->_map;
 
-    _map = _chunk.generateMap(glm::vec2(pos.x * (_size - 1), pos.y * (_size - 1)), northMap, eastMap, southMap, westMap);
+    _map = _chunk.generateMap(glm::vec2(_pos.x * (_size - 1), _pos.y * (_size - 1)), northMap, eastMap, southMap, westMap);
 }
 
 QuadTree::QuadTree(unsigned int power)
@@ -39,13 +39,29 @@ QuadTree::QuadTree(unsigned int power)
 
 void QuadTree::gatherChunks()
 {
-    auto chunk = _center;
-    while (chunk != nullptr)
+    auto quad = _center;
+    float maxHeight = std::numeric_limits<float>::lowest();
+    float minHeight = std::numeric_limits<float>::max();
+    while (quad != nullptr)
     {
-        _vertices.insert(_vertices.end(), chunk->_chunk._vertices.begin(), chunk->_chunk._vertices.end());
-        _normals.insert(_normals.end(), chunk->_chunk._normals.begin(), chunk->_chunk._normals.end());
-        _colors.insert(_colors.end(), chunk->_chunk._colors.begin(), chunk->_chunk._colors.end());
-        chunk = chunk->_east;
+        for (const auto &line : quad->_map)
+        {
+            for (const auto &height : line)
+            {
+                maxHeight = std::max(height, maxHeight);
+                minHeight = std::min(height, minHeight);
+            }
+        }
+        quad = quad->_east;
+    }
+    quad = _center;
+    while (quad != nullptr)
+    {
+        quad->_chunk.updateVertices(5, 250, quad->_map, maxHeight, minHeight);
+        _vertices.insert(_vertices.end(), quad->_chunk._vertices.begin(), quad->_chunk._vertices.end());
+        _normals.insert(_normals.end(), quad->_chunk._normals.begin(), quad->_chunk._normals.end());
+        _colors.insert(_colors.end(), quad->_chunk._colors.begin(), quad->_chunk._colors.end());
+        quad = quad->_east;
     }
     //WriteObj::exportToObj(_vertices, _normals);
 }

@@ -14,6 +14,7 @@ public:
     unsigned int _size;
     std::vector<std::vector<float>>	_map;
     Chunk   _chunk;
+    glm::vec2   _pos;
 public:
     std::shared_ptr<QuadTreeNode> _north = nullptr;
     std::shared_ptr<QuadTreeNode> _east = nullptr;

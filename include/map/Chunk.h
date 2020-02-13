@@ -13,6 +13,7 @@
 class Chunk
 {
 public:
+    glm::vec2 _pos;
     unsigned int _power;
     std::vector<std::vector<float>>         _chunkRelief;
     std::vector<glm::vec3>                  _vertices;
@@ -23,7 +24,7 @@ public:
     glm::vec3   getColor(float);
     std::vector<std::vector<float>>    generateMap(const glm::vec2 &, const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &,
                         const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &);
-    void	updateVertices(const glm::vec2 &, float , float, std::vector<std::vector<float>> );
+    void	updateVertices(float , float, std::vector<std::vector<float>> &, float, float);
 
 
 };
