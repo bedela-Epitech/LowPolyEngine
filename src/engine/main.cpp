@@ -34,8 +34,10 @@ int main()
 
     while (window.isOpen())
     {
-        inputKeys.KeyManager();
-
+        inputKeys.keyManager();
+        double xpos, ypos;
+        glfwGetCursorPos(Window::_window, &xpos, &ypos);
+        std::cout << xpos << " " << ypos << std::endl;
         camera->updateCamera();
 
         opengl.updateShader(camera->_dirLook, camera->_view);

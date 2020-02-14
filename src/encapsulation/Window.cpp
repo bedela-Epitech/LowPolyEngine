@@ -17,16 +17,22 @@ Window::Window(int sizeX, int sizeY)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+    // active cursor
+
     // glfw window creation
     // --------------------
     _window = glfwCreateWindow(_windowSize.x, _windowSize.y, "LowPolyEngine", NULL, NULL);
+
     if (_window == nullptr)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
     }
     glfwMakeContextCurrent(_window);
+
     glfwSetFramebufferSizeCallback(_window, framebufferSizeCallback);
+    glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    _cursor = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
 }
 
 float   Window::getScreenRatio()

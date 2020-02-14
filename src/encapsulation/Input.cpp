@@ -18,7 +18,7 @@ Input::Input(const std::shared_ptr<Camera> &camera)
 	_cameraFunctions[GLFW_KEY_DOWN] = std::bind(&Camera::rotateDown, camera, std::placeholders::_1);
 }
 
-void	Input::KeyManager()
+void	Input::keyManager()
 {
 	auto currentFrame = static_cast<float>(Window::getTime());
 	_deltaTime = currentFrame - _lastFrame;
@@ -29,5 +29,8 @@ void	Input::KeyManager()
 		if (Window::getKey(key) == GLFW_PRESS)
 			_cameraFunctions[key](_deltaTime);
 	}
+}
 
+void	Input::mouseManger()
+{
 }

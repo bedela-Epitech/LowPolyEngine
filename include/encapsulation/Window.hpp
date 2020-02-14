@@ -14,7 +14,8 @@
 class Window
 {
 public:
-    static GLFWwindow * _window;
+    static GLFWwindow   *_window;
+    inline static GLFWcursor   *_cursor = nullptr;
     static glm::ivec2   _windowSize;
 
 private:

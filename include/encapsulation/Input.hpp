@@ -19,7 +19,8 @@ private:
 public:
 	Input(const std::shared_ptr<Camera> &);
 
-	void	KeyManager();
+	void	keyManager();
+	void	mouseManger();
 };
 
 
