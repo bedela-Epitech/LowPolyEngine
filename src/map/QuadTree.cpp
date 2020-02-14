@@ -69,4 +69,12 @@ void QuadTree::gatherChunks()
 void    QuadTree::addEastChunk()
 {
    _center->_east = std::make_shared<QuadTreeNode>(_power, glm::vec2(1, 0), nullptr, nullptr, nullptr, _center);
+   float height;
+   auto size = _center->_map.size();
+   for (int i = 0; i < size; i++)
+   {
+       height = (_center->_map[size - 2][i] + _center->_east->_map[1][i]) / 2.f + ((rand() % 10) / 750.f) - (5.f / 750.f);
+       _center->_map[size - 1][i] = height;
+       _center->_east->_map[0][i] = height;
+   }
 }
