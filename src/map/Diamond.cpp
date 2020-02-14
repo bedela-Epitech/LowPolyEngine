@@ -85,23 +85,23 @@ void    Diamond::fillMap()
 {
     unsigned int    nbSquare = (_size - 1) / 2;
     unsigned int    squareSize = _size - 1;
+    _height = 0.1;
     _map[squareSize / 2][squareSize / 2] = _map[0][0] +
                                            _map[_map.size() - 1][_map.size() - 1] +
                                            _map[_map.size() - 1][0] +
-                                           _map[0][_map.size() - 1] + boundedRand(-_height, _height);
+                                           _map[0][_map.size() - 1]/* + boundedRand(-_height, _height)*/;
 
     std::vector<std::vector<std::shared_ptr<Biome>>> biomes(2, std::vector<std::shared_ptr<Biome>>(2, nullptr));
     for (int i = 0; i < 2; i++)
     {
         for (int j = 0; j < 2; j++)
         {
-            if (getDiff(i, j, squareSize / 2) > 3.f)
+            if (getDiff(i, j, squareSize / 2) > 1.f)
                 biomes[i][j] = std::make_shared<Mountain>(Mountain());
             else
                 biomes[i][j] = std::make_shared<Land>(Land());
         }
     }
-    _height = 0.1;
     for (int i = 1; i <= nbSquare; i *= 2)
     {
         int line = 0;
@@ -141,6 +141,7 @@ float   Diamond::getDiff(int x, int y, unsigned int size)
             min = std::min(_map[i][j], min);
         }
     }
+    std::cout << max - min << std::endl;
     return max - min;
 }
 

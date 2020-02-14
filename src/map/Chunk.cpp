@@ -15,7 +15,7 @@ std::vector<std::vector<float>>        Chunk::generateMap(const glm::vec2 &pos, 
     _pos = pos;
     Perlin p(_pos, _power);
     _chunkRelief = p._noiseMap;
-    Diamond diams(1.55f, _power, p._noiseMap, northMap, eastMap, southMap, westMap);
+    Diamond diams(0.55f, _power, p._noiseMap, northMap, eastMap, southMap, westMap);
     diams.fillMap();
     _pos *= 5.f;
     return diams._map;
@@ -23,7 +23,7 @@ std::vector<std::vector<float>>        Chunk::generateMap(const glm::vec2 &pos, 
 
 glm::vec3   Chunk::getColor(float height)
 {
-    return (glm::vec3(1, .8, .5) * (height / 2.f) +  glm::vec3(.3, 1, .3) * ((1 - height) / 2.f));
+    return ((glm::vec3(.4, .3, .1) * (height / 1.5f) +  glm::vec3(.3, .4, .2) * ((1 - height))) * 1.5f);
 }
 
 void	Chunk::updateVertices(float scale, float smooth, std::vector<std::vector<float>> &map, float maxHeight, float minHeight)
