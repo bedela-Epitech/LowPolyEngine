@@ -1,11 +1,11 @@
 
 #include "encapsulation/Input.hpp"
 
-Input::Input(const std::shared_ptr<Camera> &camera)
+Input::Input(const std::shared_ptr<Camera> &camera, const std::shared_ptr<Menu> &menu)
 {
-	keys = std::vector<int>{GLFW_KEY_ESCAPE, GLFW_KEY_W, GLFW_KEY_S,
-							GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_RIGHT,
-							GLFW_KEY_LEFT, GLFW_KEY_UP, GLFW_KEY_DOWN};
+	_keys = {GLFW_KEY_ESCAPE, GLFW_KEY_W, GLFW_KEY_S,
+			 GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_RIGHT,
+			 GLFW_KEY_LEFT, GLFW_KEY_UP, GLFW_KEY_DOWN};
 
 	_cameraFunctions[GLFW_KEY_ESCAPE] = std::bind(&Camera::closeWindow, camera, std::placeholders::_1);
 	_cameraFunctions[GLFW_KEY_W] = std::bind(&Camera::moveForward, camera, std::placeholders::_1);
@@ -16,6 +16,10 @@ Input::Input(const std::shared_ptr<Camera> &camera)
 	_cameraFunctions[GLFW_KEY_LEFT] = std::bind(&Camera::rotateLeft, camera, std::placeholders::_1);
 	_cameraFunctions[GLFW_KEY_UP] = std::bind(&Camera::rotateUp, camera, std::placeholders::_1);
 	_cameraFunctions[GLFW_KEY_DOWN] = std::bind(&Camera::rotateDown, camera, std::placeholders::_1);
+
+	_mouseButtons = { GLFW_MOUSE_BUTTON_LEFT };
+
+	_menuFunctions[GLFW_MOUSE_BUTTON_LEFT] = std::bind(&Menu::click, menu, std::placeholders::_1);
 }
 
 void	Input::keyManager()
@@ -24,7 +28,7 @@ void	Input::keyManager()
 	_deltaTime = currentFrame - _lastFrame;
 	_lastFrame = currentFrame;
 
-	for (const auto &key : keys)
+	for (const auto &key : _keys)
 	{
 		if (Window::getKey(key) == GLFW_PRESS)
 			_cameraFunctions[key](_deltaTime);
@@ -33,4 +37,13 @@ void	Input::keyManager()
 
 void	Input::mouseManger()
 {
+	for (const auto &mouseButton : _mouseButtons)
+	{
+		if (Window::getMouseClick(mouseButton) == GLFW_PRESS)
+		{
+			double xpos, ypos;
+			glfwGetCursorPos(Window::_window, &xpos, &ypos);
+			_menuFunctions[mouseButton](glm::vec2(xpos, ypos));
+		}
+	}
 }

@@ -6,6 +6,7 @@
 #include <map>
 #include <utility>
 
+#include "encapsulation/Menu.h"
 #include "engine/Camera.hpp"
 
 class Input
@@ -13,11 +14,14 @@ class Input
 private:
     float               _deltaTime = 0.f;
     float               _lastFrame = 0.f;
-	std::vector<int>	keys;
-	std::map<int, std::function<void(const float &)>> _cameraFunctions;
+    std::vector<int>	_keys;
+    std::vector<int>	_mouseButtons;
+    std::map<int, std::function<void(float)>>       _cameraFunctions;
+    std::map<int, std::function<void(const glm::vec2 &)>>    _menuFunctions;
 
 public:
-	Input(const std::shared_ptr<Camera> &);
+	Input(const std::shared_ptr<Camera> &,
+		  const std::shared_ptr<Menu> &);
 
 	void	keyManager();
 	void	mouseManger();

@@ -85,7 +85,7 @@ void    Camera::updateProjection()
 //
 /////////////////////
 
-void	Camera::closeWindow(const float &speed)
+void	Camera::closeWindow(float speed)
 {
     glfwSetWindowShouldClose(Window::_window, true);
 }
@@ -96,22 +96,22 @@ void	Camera::closeWindow(const float &speed)
 //
 /////////////////////
 
-void	Camera::moveLeft(const float &deltaTime)
+void	Camera::moveLeft(float deltaTime)
 {
     _cameraPos -= _translationCelerity * _cameraSpeed * deltaTime * glm::normalize(glm::cross(_cameraUp, _dirLook));
 }
 
-void	Camera::moveRight(const float &deltaTime)
+void	Camera::moveRight(float deltaTime)
 {
     _cameraPos += _translationCelerity * _cameraSpeed * deltaTime * glm::normalize(glm::cross(_cameraUp, _dirLook));
 }
 
-void	Camera::moveBack(const float &deltaTime)
+void	Camera::moveBack(float deltaTime)
 {
     _cameraPos -= _translationCelerity * _cameraSpeed * deltaTime * _dirLook;
 }
 
-void	Camera::moveForward(const float &deltaTime)
+void	Camera::moveForward(float deltaTime)
 {
     _cameraPos += _translationCelerity * _cameraSpeed * deltaTime * _dirLook;
 }
@@ -122,23 +122,23 @@ void	Camera::moveForward(const float &deltaTime)
 //
 /////////////////////
 
-void	Camera::rotateLeft(const float &deltaTime)
+void	Camera::rotateLeft(float deltaTime)
 {
     _rotateY -= _translationCelerity * 40.f * deltaTime;
 }
 
-void	Camera::rotateRight(const float &deltaTime)
+void	Camera::rotateRight(float deltaTime)
 {
     _rotateY += _translationCelerity * 40.f * deltaTime;
 }
 
-void	Camera::rotateUp(const float &deltaTime)
+void	Camera::rotateUp(float deltaTime)
 {
     _rotateX += _translationCelerity * 40.f * deltaTime;
     _rotateX = std::min(std::max(_downAngleLimit, _rotateX), _upAngleLimit);
 }
 
-void	Camera::rotateDown(const float &deltaTime)
+void	Camera::rotateDown(float deltaTime)
 {
     _rotateX -= _translationCelerity * 40.f * deltaTime;
     _rotateX = std::min(std::max(_downAngleLimit, _rotateX), _upAngleLimit);

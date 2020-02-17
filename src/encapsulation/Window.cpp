@@ -8,11 +8,14 @@
 GLFWwindow * Window::_window;
 glm::ivec2   Window::_windowSize;
 
-Window::Window(int sizeX, int sizeY)
+Window::Window(int sizeX, int sizeY, bool fullScreen)
 {
     _windowSize = glm::ivec2(sizeX, sizeY);
+    _width = sizeX;
+    _height = sizeY;
 
     glfwInit();
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -21,7 +24,11 @@ Window::Window(int sizeX, int sizeY)
 
     // glfw window creation
     // --------------------
-    _window = glfwCreateWindow(_windowSize.x, _windowSize.y, "LowPolyEngine", NULL, NULL);
+    if (fullScreen)
+        _window = glfwCreateWindow(_windowSize.x, _windowSize.y, "LowPolyEngine", glfwGetPrimaryMonitor(), NULL);
+    else
+        _window = glfwCreateWindow(_windowSize.x, _windowSize.y, "LowPolyEngine", NULL, NULL);
+
 
     if (_window == nullptr)
     {
@@ -30,7 +37,8 @@ Window::Window(int sizeX, int sizeY)
     }
     glfwMakeContextCurrent(_window);
 
-    glfwSetFramebufferSizeCallback(_window, framebufferSizeCallback);
+
+
     glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     _cursor = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
 }
@@ -66,15 +74,15 @@ int     Window::getKey(int key)
     return (glfwGetKey(_window, key));
 }
 
+int     Window::getMouseClick(int key)
+{
+    return (glfwGetMouseButton(_window, key));
+}
+
 void    Window::loadFunctions()
 {
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
     }
-}
-
-void Window::framebufferSizeCallback(GLFWwindow* window, int width, int height)
-{
-    glViewport(0, 0, width, height);
 }

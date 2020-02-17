@@ -33,17 +33,17 @@ public:
 public:
 	Camera(float, float, float, float, float, float, float, float, float);
 
-    void	closeWindow(const float &speed);
+    void	closeWindow(float);
 
-    void	moveLeft(const float &speed);
-	void	moveRight(const float &speed);
-	void	moveForward(const float &speed);
-	void	moveBack(const float &speed);
+    void	moveLeft(float);
+	void	moveRight(float);
+	void	moveForward(float);
+	void	moveBack(float);
 
-	void	rotateLeft(const float &speed);
-	void	rotateRight(const float &speed);
-	void	rotateUp(const float &speed);
-	void	rotateDown(const float &speed);
+	void	rotateLeft(float);
+	void	rotateRight(float);
+	void	rotateUp(float);
+	void	rotateDown(float);
 
     void    setFov(float);
     void    setScreenRatio(float);

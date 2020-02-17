@@ -11,14 +11,15 @@ const unsigned int SCR_HEIGHT = 540;
 
 int main()
 {
-    Window window(SCR_WIDTH, SCR_HEIGHT);
+    Window window(SCR_WIDTH, SCR_HEIGHT, false);
 
     window.loadFunctions();
 
-    std::shared_ptr<Camera> camera = std::make_shared<Camera>(0.f, 0.0f, -3.f, // eye position
+    std::shared_ptr<Camera> camera = std::make_shared<Camera>(1000.f, 1000.0f, -3.f, // eye position
                                                               0.0f, 1.0f, 0.0f, // eye look at direction
                                                               0.0f, 0.0f, 1.0f); // eye look up direction
-    Input inputKeys(camera);
+    std::shared_ptr<Menu> menu = std::make_shared<Menu>();
+    Input inputKeys(camera, menu);
 
     L_OpenGL opengl("../terrain.vs", "../terrain.fs",
                     "../texture.vs", "../texture.fs");
@@ -35,9 +36,8 @@ int main()
     while (window.isOpen())
     {
         inputKeys.keyManager();
-        double xpos, ypos;
-        glfwGetCursorPos(Window::_window, &xpos, &ypos);
-        std::cout << xpos << " " << ypos << std::endl;
+        inputKeys.mouseManger();
+
         camera->updateCamera();
 
         opengl.updateShader(camera->_dirLook, camera->_view);
