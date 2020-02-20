@@ -14,11 +14,14 @@ class Terrain
 {
 private:
     std::vector<float>  _vertices;
+    Layout              _bufferLayout;
     std::vector<Element> _elements;
     Shader              _shader;
 
 public:
     Terrain(const std::string &, const std::string &);
+
+    void    bindTerrain();
 };
 
 #endif //INC_71K2LEDEB_TERRAIN_H

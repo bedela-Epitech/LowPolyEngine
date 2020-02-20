@@ -6,7 +6,7 @@
 
 // Path to Vertex Shader and Fragment Shader
 Terrain::Terrain(const std::string &vsPath, const std::string &fsPath)
-: _shader(vsPath, fsPath)
+: _shader(vsPath, fsPath), _bufferLayout(_shader.ID)
 {
     QuadTree qt(9);
     qt.addEastChunk();
@@ -29,8 +29,13 @@ Terrain::Terrain(const std::string &vsPath, const std::string &fsPath)
         _vertices.push_back(qt._colors[i].z);
 
     }
-    _elements.push_back({glGetAttribLocation(_shader.ID, "aPos"), 3, GL_FLOAT, GL_FALSE});
-    _elements.push_back({glGetAttribLocation(_shader.ID, "in_Color"), 3, GL_FLOAT, GL_FALSE});
-    _elements.push_back({glGetAttribLocation(_shader.ID, "normal"), 3, GL_FLOAT, GL_FALSE});
+
+    _bufferLayout.addElement<float>("aPos", 3, GL_FALSE);
+    _bufferLayout.addElement<float>("in_Color", 3, GL_FALSE);
+    _bufferLayout.addElement<float>("normal", 3, GL_FALSE);
+}
+
+void Terrain::bindTerrain()
+{
 
 }

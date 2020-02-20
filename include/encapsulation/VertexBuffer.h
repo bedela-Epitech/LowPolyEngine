@@ -6,6 +6,11 @@
 #define INC_71K2LEDEB_VERTEXBUFFER_H
 
 #include <glad/glad.h>
+#include <vector>
+#include <iostream>
+#include <type_traits>
+
+class VertexArray;
 
 struct Element
 {
@@ -13,6 +18,22 @@ struct Element
     unsigned int    count;
     int             type;
     bool            normalized;
+};
+
+class Layout
+{
+private:
+    std::vector<Element>    _elements;
+    unsigned int            _size;
+    unsigned int            _shaderID;
+
+public:
+    Layout(unsigned int);
+
+    friend VertexArray;
+
+    template <typename T>
+    void addElement(const char *, unsigned int, bool);
 };
 
 class VertexBuffer
