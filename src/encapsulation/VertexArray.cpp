@@ -6,6 +6,12 @@
 
 VertexArray::VertexArray()
 {
+    glGenVertexArrays(1, &_vArrayId);
+}
+
+VertexArray::~VertexArray()
+{
+    glDeleteVertexArrays(1, &_vArrayId);
 }
 
 void VertexArray::addVertexBuffer(const void *data, unsigned int size, const Layout &layout)
@@ -20,4 +26,14 @@ void VertexArray::addVertexBuffer(const void *data, unsigned int size, const Lay
         glVertexAttribPointer(element.location, element.count, element.type, element.normalized, layout._size, &offset);
         offset += element.count * sizeof(element.type);
     }
+}
+
+void VertexArray::bind()
+{
+    glBindVertexArray(_vArrayId);
+}
+
+void VertexArray::unbind()
+{
+    glBindVertexArray(0);
 }

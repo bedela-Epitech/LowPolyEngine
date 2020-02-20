@@ -10,11 +10,16 @@
 class VertexArray
 {
 private:
+    unsigned int                _vArrayId;
     std::vector<VertexBuffer>   _vBuffers;
 
 public:
     VertexArray();
+    ~VertexArray();
+
     void addVertexBuffer(const void *, unsigned int , const Layout &);
+    void bind();
+    void unbind();
 };
 
 #endif //INC_71K2LEDEB_VERTEXARRAY_H
