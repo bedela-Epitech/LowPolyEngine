@@ -53,7 +53,7 @@ set(71K2ledeb
 		include/out/WriteObj.h
 		src/out/WriteObj.cpp
 
-		include/encapsulation/Shader.h src/encapsulation/Shader.cpp src/encapsulation/Window.cpp include/map/Perlin.h src/map/Perlin.cpp src/map/Terrain.cpp src/map/Chunk.cpp include/map/Chunk.h include/map/Terrain.h src/out/WriteObj.cpp src/map/Land.cpp src/map/Mountain.cpp include/map/Land.h include/map/Mountain.h include/map/Biome.h src/map/QuadTree.cpp include/map/QuadTree.h include/encapsulation/Texture.h src/encapsulation/Texture.cpp src/encapsulation/stb_image.cpp include/encapsulation/Menu.h src/encapsulation/Menu.cpp include/encapsulation/VertexBuffer.h src/encapsulation/VertexBuffer.cpp include/encapsulation/VertexArray.h src/encapsulation/VertexArray.cpp src/encapsulation/Layout.cpp)
+		include/encapsulation/Shader.h src/encapsulation/Shader.cpp src/encapsulation/Window.cpp include/map/Perlin.h src/map/Perlin.cpp src/map/Terrain.cpp src/map/Chunk.cpp include/map/Chunk.h include/map/Terrain.h src/out/WriteObj.cpp src/map/Land.cpp src/map/Mountain.cpp include/map/Land.h include/map/Mountain.h include/map/Biome.h src/map/QuadTree.cpp include/map/QuadTree.h include/encapsulation/Texture.h src/encapsulation/Texture.cpp src/encapsulation/stb_image.cpp include/encapsulation/Menu.h src/encapsulation/Menu.cpp include/encapsulation/VertexBuffer.h src/encapsulation/VertexBuffer.cpp include/encapsulation/VertexArray.h src/encapsulation/VertexArray.cpp src/encapsulation/Layout.cpp include/encapsulation/ErrorManager.h src/encapsulation/ErrorManager.cpp)
 
 SET(PLATFORM_SPECIFIC_LIBS "-lpthread")
 

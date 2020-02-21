@@ -8,6 +8,14 @@
 Terrain::Terrain(const std::string &vsPath, const std::string &fsPath)
 : _shader(vsPath, fsPath), _bufferLayout(_shader.ID)
 {
+    _shader.use();
+    _bufferLayout.addElement<float>("aPos", 3, GL_FALSE);
+    _bufferLayout.addElement<float>("normal", 3, GL_FALSE);
+    _bufferLayout.addElement<float>("in_Color", 3, GL_FALSE);
+}
+
+void Terrain::generateTerrain()
+{
     QuadTree qt(9);
     qt.addEastChunk();
     qt.gatherChunks();
@@ -30,12 +38,49 @@ Terrain::Terrain(const std::string &vsPath, const std::string &fsPath)
 
     }
 
-    _bufferLayout.addElement<float>("aPos", 3, GL_FALSE);
-    _bufferLayout.addElement<float>("in_Color", 3, GL_FALSE);
-    _bufferLayout.addElement<float>("normal", 3, GL_FALSE);
+    _vertexNb = _vertices.size() / 3;
+
+    _isTerrainReady = true;
 }
 
 void Terrain::bindTerrain()
 {
+    _shader.use();
 
+    _shader.setVec3("lightDir", _sun._lightDir);
+    _shader.setFloat("ambiantCoeff", _sun._ambiantCoeff);
+    _shader.setVec3("lightColor", _sun._lightColor);
+    _shader.setFloat("specularStrength", _sun._specularStrenght);
+
+    _vArray.addVertexBuffer(_vertices.data(), sizeof(float) * _vertices.size(), _bufferLayout);
+}
+
+//////////////////
+//
+//      SUN
+//
+//////////////////
+
+void Terrain::setDir(const glm::vec3 &dir)
+{
+    _sun.setDir(dir);
+    _shader.setVec3("lightDir", _sun._lightDir);
+}
+
+void Terrain::setColor(const glm::vec3 &color)
+{
+    _sun.setColor(color);
+    _shader.setVec3("lightColor", _sun._lightColor);
+}
+
+void Terrain::setAmbient(float ambiant)
+{
+    _sun.setAmbient(ambiant);
+    _shader.setFloat("ambiantCoeff", _sun._ambiantCoeff);
+}
+
+void Terrain::setSpecular(float specular)
+{
+    _sun.setSpecular(specular);
+    _shader.setFloat("specularStrength", _sun._specularStrenght);
 }

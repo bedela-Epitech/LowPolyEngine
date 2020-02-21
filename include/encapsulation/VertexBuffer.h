@@ -9,6 +9,7 @@
 #include <vector>
 #include <iostream>
 #include <type_traits>
+#include "encapsulation/ErrorManager.h"
 
 class VertexArray;
 
@@ -24,8 +25,8 @@ class Layout
 {
 private:
     std::vector<Element>    _elements;
-    unsigned int            _size;
-    unsigned int            _shaderID;
+    unsigned int            _size = 0;
+    unsigned int            _shaderId;
 
 public:
     Layout(unsigned int);

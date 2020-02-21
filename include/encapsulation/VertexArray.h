@@ -10,8 +10,10 @@
 class VertexArray
 {
 private:
-    unsigned int                _vArrayId;
     std::vector<VertexBuffer>   _vBuffers;
+public:
+    unsigned int                _vArrayId;
+    unsigned int                _vBufferId;
 
 public:
     VertexArray();
