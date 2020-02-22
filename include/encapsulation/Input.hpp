@@ -17,7 +17,7 @@ private:
     std::vector<int>	_keys;
     std::vector<int>	_mouseButtons;
     std::map<int, std::function<void(float)>>       _cameraFunctions;
-    std::map<int, std::function<void(const glm::vec2 &)>>    _menuFunctions;
+    std::map<int, std::function<void(void)>>    _menuFunctions;
 
 public:
 	Input(const std::shared_ptr<Camera> &,

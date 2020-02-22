@@ -23,11 +23,10 @@ int main()
 
     L_OpenGL opengl("../terrain.vs", "../terrain.fs", menu);
 
-    Texture texture("../ressources/backgroundloading.jpg");
+    Texture texture("../ressources/maxresdefault960x540.jpg");
     texture.bind();
 
     opengl.setTexture(0); // textureID
-    //opengl.linkTerrainInfo();
 
     opengl.initShader(camera->_projection);
 
@@ -47,7 +46,7 @@ int main()
 
     opengl.cleanUp();
 
-    window.close();
+    Window::close();
 
     return 0;
 }

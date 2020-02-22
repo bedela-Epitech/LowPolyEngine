@@ -6,7 +6,7 @@
 
 Menu::Menu(const std::string &textVsPath, const std::string &testFsPath)
         : _textShader(textVsPath, testFsPath), _bufferLayout(_textShader.ID),
-            _start(glm::vec2(200, 200), 200), _quit(glm::vec2(200, 200), 200)
+            _start(glm::vec2(142, 85), glm::vec2(670, 140)), _quit(glm::vec2(145, 305), glm::vec2(670, 140))
 {
     _textShader.use();
     _bufferLayout.addElement<float>("aPos", 2, GL_FALSE);
@@ -40,12 +40,16 @@ void    Menu::initTexture()
 }
 
 
-void Menu::click(const glm::vec2 &mousePos)
+void Menu::click()
 {
+    auto mousePos = Window::getCursorPos();
     if (_start.isInside(mousePos))
-        std::cout << "start" << std::endl;
+    {
+        _linkDone = true;
+        Window::hideCursor();
+    }
     if (_quit.isInside(mousePos))
-        std::cout << "quit" << std::endl;
+        Window::close();
 }
 
 /////////////////
@@ -54,13 +58,13 @@ void Menu::click(const glm::vec2 &mousePos)
 //
 /////////////////
 
-Box::Box(const glm::vec2 &leftBotCorner, unsigned int size)
+Box::Box(const glm::vec2 &leftBotCorner, const glm::vec2 &size)
         : _leftBotCorner(leftBotCorner), _size(size)
 { }
 
 bool Box::isInside(const glm::vec2 &pos)
 {
     return  (pos.x >= _leftBotCorner.x && pos.y >= _leftBotCorner.y &&
-             pos.x <= _leftBotCorner.x + _size && pos.y <= _leftBotCorner.y + _size);
+             pos.x <= _leftBotCorner.x + _size.x && pos.y <= _leftBotCorner.y + _size.y);
 
 }

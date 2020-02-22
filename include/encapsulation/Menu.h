@@ -7,14 +7,15 @@
 
 #include "encapsulation/VertexArray.h"
 #include "encapsulation/Shader.h"
+#include "encapsulation/Window.hpp"
 
 class Box
 {
 private:
     glm::vec2       _leftBotCorner;
-    unsigned int    _size;
+    glm::vec2       _size;
 public:
-    Box(const glm::vec2 &, unsigned int);
+    Box(const glm::vec2 &, const glm::vec2 &);
 
     bool isInside(const glm::vec2 &);
 };
@@ -29,6 +30,8 @@ public:
     std::vector<float>  _textVertices;
     unsigned int        _vertexNb;
 
+    bool                _linkDone = false;
+
     // GUI
     Box     _start;
     Box     _quit;
@@ -37,7 +40,7 @@ public:
     Menu(const std::string &, const std::string &);
     void    linkTextureInfo();
     void    initTexture();
-    void click(const glm::vec2 &);
+    void click();
 };
 
 #endif //INC_71K2LEDEB_MENU_H

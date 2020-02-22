@@ -15,13 +15,7 @@ class Window
 {
 public:
     static GLFWwindow   *_window;
-    inline static GLFWcursor   *_cursor = nullptr;
     static glm::ivec2   _windowSize;
-    inline static int                 _width;
-    inline static int                 _height;
-
-private:
-    static void mouseButtonCallback(GLFWwindow* , int , int , int );
 
 public:
     Window() = delete;
@@ -29,9 +23,11 @@ public:
 
     void update();
     bool isOpen();
-    void close();
     void loadFunctions();
 
+    static void close();
+    static void hideCursor();
+    static glm::dvec2 getCursorPos();
     static double getTime();
     static int getKey(int);
     static int getMouseClick(int);

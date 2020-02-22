@@ -28,14 +28,14 @@ void    L_OpenGL::initShader(const glm::mat4 &projection)
 
 void    L_OpenGL::updateShader(const glm::vec3 &dirLook, const glm::mat4 &view)
 {
-    if (!_linkDone)
+    if (!_menu->_linkDone)
     {
         _menu->_textShader.use();
         if (_terrain._isTerrainReady)
         {
             _loadingThread.join();
             _terrain.bindTerrain();
-            _linkDone = true;
+            _terrain._isTerrainReady = false;
         }
     }
     else
@@ -57,12 +57,12 @@ void    L_OpenGL::display()
     GLCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
-    if (!_linkDone)
+    if (!_menu->_linkDone)
     {
         GLCall(glBindVertexArray(_menu->_vArray._vArrayId));
         GLCall(glDrawArrays(GL_TRIANGLES, 0, _menu->_vertexNb));
     }
-    else if (_linkDone)
+    else if (_menu->_linkDone)
     {
         GLCall(glBindVertexArray(_terrain._vArray._vArrayId));
         GLCall(glDrawArrays(GL_TRIANGLES, 0, _terrain._vertexNb));

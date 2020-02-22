@@ -10,13 +10,9 @@
 class L_OpenGL
 {
 public:
-    std::thread         _loadingThread;
-    Terrain             _terrain;
-    std::shared_ptr<Menu>                _menu;
-
-
-
-    bool                _linkDone = false;
+    std::thread             _loadingThread;
+    Terrain                 _terrain;
+    std::shared_ptr<Menu>   _menu;
 
 public:
     L_OpenGL(const std::string &, const std::string &,

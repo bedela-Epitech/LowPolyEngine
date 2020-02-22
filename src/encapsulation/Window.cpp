@@ -11,8 +11,6 @@ glm::ivec2   Window::_windowSize;
 Window::Window(int sizeX, int sizeY, bool fullScreen)
 {
     _windowSize = glm::ivec2(sizeX, sizeY);
-    _width = sizeX;
-    _height = sizeY;
 
     glfwInit();
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
@@ -37,10 +35,7 @@ Window::Window(int sizeX, int sizeY, bool fullScreen)
     }
     glfwMakeContextCurrent(_window);
 
-
-
     glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-    _cursor = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
 }
 
 float   Window::getScreenRatio()
@@ -74,9 +69,21 @@ int     Window::getKey(int key)
     return (glfwGetKey(_window, key));
 }
 
+void    Window::hideCursor()
+{
+    glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+}
+
 int     Window::getMouseClick(int key)
 {
     return (glfwGetMouseButton(_window, key));
+}
+
+glm::dvec2 Window::getCursorPos()
+{
+    glm::dvec2 pos;
+    glfwGetCursorPos(_window, &pos.x, &pos.y);
+    return pos;
 }
 
 void    Window::loadFunctions()
