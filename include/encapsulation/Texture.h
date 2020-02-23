@@ -9,6 +9,7 @@
 #include "GL/gl.h"
 #include "stb_image.h"
 
+
 class Texture
 {
 private:
@@ -18,12 +19,13 @@ private:
     int             _width;
     int             _height;
     int             _bitsPerPixel;
+    inline static unsigned int    _textureId = 0;
 
 public:
     Texture(const std::string &);
     ~Texture();
 
-    void bind(unsigned int slot = 0) const;
+    unsigned int bind();
     void unbind() const;
 };
 

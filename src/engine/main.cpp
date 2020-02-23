@@ -18,15 +18,10 @@ int main()
     std::shared_ptr<Camera> camera = std::make_shared<Camera>(1000.f, 1000.0f, -3.f, // eye position
                                                               0.0f, 1.0f, 0.0f, // eye look at direction
                                                               0.0f, 0.0f, 1.0f); // eye look up direction
-    std::shared_ptr<Menu> menu = std::make_shared<Menu>("../texture.vs", "../texture.fs");
+    std::shared_ptr<Menu> menu = std::make_shared<Menu>("../texture.vs", "../texture.fs", "../ressources/maxresdefault960x540.jpg", "../ressources/backgroundloading.jpg");
     Input inputKeys(camera, menu);
 
     L_OpenGL opengl("../terrain.vs", "../terrain.fs", menu);
-
-    Texture texture("../ressources/maxresdefault960x540.jpg");
-    texture.bind();
-
-    opengl.setTexture(0); // textureID
 
     opengl.initShader(camera->_projection);
 

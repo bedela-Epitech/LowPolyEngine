@@ -15,6 +15,7 @@ class Terrain
 public:
     Shader              _shader;
     bool                _isTerrainReady = false;
+    bool                _isTerrainLinked = false;
     VertexArray         _vArray;
     unsigned int        _vertexNb;
 private:

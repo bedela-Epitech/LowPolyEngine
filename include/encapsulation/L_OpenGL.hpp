@@ -23,8 +23,6 @@ public:
 
     void    display();
     void    cleanUp();
-
-    void setTexture(int);
 };
 
 #endif // _L_OPENGL_HPP_
