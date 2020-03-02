@@ -87,7 +87,7 @@ void    Camera::updateProjection()
 
 void	Camera::closeWindow(float speed)
 {
-    glfwSetWindowShouldClose(Window::_window, true);
+    Window::close();
 }
 
 /////////////////////

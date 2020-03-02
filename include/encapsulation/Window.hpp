@@ -32,6 +32,7 @@ public:
     static int getKey(int);
     static int getMouseClick(int);
     static float getScreenRatio();
+    static void terminate();
 };
 
 #endif // !_LEDEB_WINDOW_HPP_

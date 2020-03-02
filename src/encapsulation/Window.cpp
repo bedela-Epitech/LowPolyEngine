@@ -50,6 +50,11 @@ bool    Window::isOpen()
 
 void    Window::close()
 {
+    glfwSetWindowShouldClose(_window, true);
+}
+
+void    Window::terminate()
+{
     glfwTerminate();
 }
 
