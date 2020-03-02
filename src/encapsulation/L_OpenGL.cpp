@@ -23,7 +23,6 @@ void    L_OpenGL::initShader(const glm::mat4 &projection)
     _terrain._shader.setMat4("projection", projection);
 }
 
-
 void    L_OpenGL::updateShader(const glm::vec3 &dirLook, const glm::mat4 &view)
 {
     if (!(_menu->_linkDone && _terrain._isTerrainLinked))

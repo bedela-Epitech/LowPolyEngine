@@ -11,7 +11,6 @@ Layout::Layout(unsigned int shaderID)
 template <typename T>
 void Layout::addElement(const char *name, unsigned int count, bool normalized)
 {
-    std::cout << _shaderId << std::endl;
     auto pos = glGetAttribLocation(_shaderId, name);
     if (pos < 0)
         throw ("unvalid location");
