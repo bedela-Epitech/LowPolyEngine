@@ -33,16 +33,19 @@ QuadTreeNode::QuadTreeNode(unsigned int power, const glm::vec2 &pos,
 
 QuadTree::QuadTree(unsigned int power)
 {
+    _currentPos = {0, 0};
     _power = power;
-    _center = std::make_shared<QuadTreeNode>(_power, glm::vec2(0, 0), nullptr, nullptr, nullptr, nullptr);
+    _pos.emplace(_currentPos.x, _currentPos.y);
+    _current = std::make_shared<QuadTreeNode>(_power, glm::vec2(0, 0), nullptr, nullptr, nullptr, nullptr);
+    _current->_next = _current;
 }
 
 void QuadTree::gatherChunks()
 {
-    auto quad = _center;
+    auto quad = _current;
     float maxHeight = std::numeric_limits<float>::lowest();
     float minHeight = std::numeric_limits<float>::max();
-    while (quad != nullptr)
+    for (const auto pos : _pos)
     {
         for (const auto &line : quad->_map)
         {
@@ -52,29 +55,34 @@ void QuadTree::gatherChunks()
                 minHeight = std::min(height, minHeight);
             }
         }
-        quad = quad->_east;
+        quad = quad->_next;
     }
-    quad = _center;
-    while (quad != nullptr)
+    for (const auto pos : _pos)
     {
         quad->_chunk.updateVertices(5, 250, quad->_map, maxHeight, minHeight);
         _vertices.insert(_vertices.end(), quad->_chunk._vertices.begin(), quad->_chunk._vertices.end());
         _normals.insert(_normals.end(), quad->_chunk._normals.begin(), quad->_chunk._normals.end());
         _colors.insert(_colors.end(), quad->_chunk._colors.begin(), quad->_chunk._colors.end());
-        quad = quad->_east;
+        quad = quad->_next;
     }
     //WriteObj::exportToObj(_vertices, _normals);
 }
 
 void    QuadTree::addEastChunk()
 {
-   _center->_east = std::make_shared<QuadTreeNode>(_power, glm::vec2(1, 0), nullptr, nullptr, nullptr, _center);
+    _currentPos.x++;
+    _pos.emplace(_currentPos.x, _currentPos.y);
+   _current->_east = std::make_shared<QuadTreeNode>(_power, _currentPos, nullptr, nullptr, nullptr, _current);
+   _current->_east->_next = _current->_next;
+   _current->_next = _current->_east;
+   // smooth transition
    float height;
-   auto size = _center->_map.size();
+   auto size = _current->_map.size();
    for (int i = 0; i < size; i++)
    {
-       height = (_center->_map[size - 2][i] + _center->_east->_map[1][i]) / 2.f + ((rand() % 10) / 750.f) - (5.f / 750.f);
-       _center->_map[size - 1][i] = height;
-       _center->_east->_map[0][i] = height;
+       height = (_current->_map[size - 2][i] + _current->_east->_map[1][i]) / 2.f + ((rand() % 10) / 750.f) - (5.f / 750.f);
+       _current->_map[size - 1][i] = height;
+       _current->_east->_map[0][i] = height;
    }
+   _current = _current->_next;
 }
