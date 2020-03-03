@@ -35,7 +35,7 @@ QuadTree::QuadTree(unsigned int power)
 {
     _currentPos = {0, 0};
     _power = power;
-    _pos.emplace(_currentPos.x, _currentPos.y);
+    _pos.push_back(_currentPos);
     _current = std::make_shared<QuadTreeNode>(_power, glm::vec2(0, 0), nullptr, nullptr, nullptr, nullptr);
     _current->_next = _current;
 }
@@ -71,18 +71,48 @@ void QuadTree::gatherChunks()
 void    QuadTree::addEastChunk()
 {
     _currentPos.x++;
-    _pos.emplace(_currentPos.x, _currentPos.y);
+    _pos.push_back(_currentPos);
    _current->_east = std::make_shared<QuadTreeNode>(_power, _currentPos, nullptr, nullptr, nullptr, _current);
    _current->_east->_next = _current->_next;
    _current->_next = _current->_east;
    // smooth transition
-   float height;
+   /*float height;
    auto size = _current->_map.size();
    for (int i = 0; i < size; i++)
    {
        height = (_current->_map[size - 2][i] + _current->_east->_map[1][i]) / 2.f + ((rand() % 10) / 750.f) - (5.f / 750.f);
        _current->_map[size - 1][i] = height;
        _current->_east->_map[0][i] = height;
-   }
+   }*/
    _current = _current->_next;
+}
+
+void    QuadTree::addWestChunk()
+{
+    _currentPos.x--;
+    _pos.push_back(_currentPos);
+    _current->_west = std::make_shared<QuadTreeNode>(_power, _currentPos, nullptr, _current, nullptr, nullptr);
+    _current->_west->_next = _current->_next;
+    _current->_next = _current->_west;
+    _current = _current->_next;
+}
+
+void    QuadTree::addNorthChunk()
+{
+    _currentPos.y++;
+    _pos.push_back(_currentPos);
+    _current->_north = std::make_shared<QuadTreeNode>(_power, _currentPos, nullptr, nullptr, _current, nullptr);
+    _current->_north->_next = _current->_next;
+    _current->_next = _current->_north;
+    _current = _current->_next;
+}
+
+void    QuadTree::addSouthChunk()
+{
+    _currentPos.y--;
+    _pos.push_back(_currentPos);
+    _current->_south = std::make_shared<QuadTreeNode>(_power, _currentPos, _current, nullptr, nullptr, nullptr);
+    _current->_south->_next = _current->_next;
+    _current->_next = _current->_south;
+    _current = _current->_next;
 }

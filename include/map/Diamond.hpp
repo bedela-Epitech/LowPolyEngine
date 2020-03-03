@@ -8,7 +8,7 @@
 #include <iostream>
 #include <vector>
 
-enum flag {NORMAL, RIGHT_END, BOTTOM_END};
+enum flag {NORMAL, RIGHT_END, TOP_END};
 
 
 class Diamond

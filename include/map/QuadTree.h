@@ -39,7 +39,7 @@ public:
 class QuadTree
 {
 public:
-    std::map<int, int>              _pos;
+    std::vector<glm::ivec2>         _pos;
     glm::ivec2                      _currentPos;
     unsigned int                    _power;
     std::vector<glm::vec3>                  _vertices;
@@ -51,6 +51,9 @@ public:
     QuadTree(unsigned int);
     void    gatherChunks();
     void    addEastChunk();
+    void    addWestChunk();
+    void    addNorthChunk();
+    void    addSouthChunk();
 };
 
 #endif //INC_71K2LEDEB_QUADTREE_H

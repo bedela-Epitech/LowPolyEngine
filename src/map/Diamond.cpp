@@ -26,9 +26,21 @@ Diamond::Diamond(const float &height, const unsigned int &powPower, const std::v
     _map[0][_map.size() - 1] = boundedRand(-_height, _height);
 
     if (!_westMap.empty())
-    {
         for (int i = 0; i < _westMap.size(); i++)
             _map[0][i] = _westMap[_size - 1][i];
+
+    if (!_eastMap.empty())
+        for (int i = 0; i < _eastMap.size(); i++)
+            _map[_size - 1][i] = _eastMap[0][i];
+
+    if (!_northMap.empty())
+        for (int i = 0; i < _northMap.size(); i++)
+            _map[i][_size - 1] = _northMap[i][0];
+
+    if (!_southMap.empty())
+    {
+        for (int i = 0; i < _southMap.size(); i++)
+            _map[i][0] = _southMap[i][_size - 1];
     }
 }
 
@@ -47,7 +59,7 @@ void    Diamond::manageDiamond(unsigned int x, unsigned int y, const unsigned in
     float topDivider = 3.f;
     float leftDivider = 3.f;
 
-    if (_northMap.empty() || y >= size / 2)
+    if (_southMap.empty() || y >= size / 2)
     {
         if (y >= size / 2)
         {
@@ -74,7 +86,7 @@ void    Diamond::manageDiamond(unsigned int x, unsigned int y, const unsigned in
         _map[x + size][y + size / 2] = ((_map[x + size][y + size] + _map[x + size][y] +
                                          _map[x + size / 2][y + size / 2]) / 3.f) + biome->boundedRand();
     }
-    if (flag & BOTTOM_END && _southMap.empty())
+    if (flag & TOP_END && _northMap.empty())
     {
         _map[x + size / 2][y + size] = ((_map[x + size][y + size] + _map[x][y + size] +
                                          _map[x + size / 2][y + size / 2]) / 3.f) + biome->boundedRand();
