@@ -11,7 +11,7 @@ const unsigned int SCR_HEIGHT = 540;
 
 int main()
 {
-    Window window(SCR_WIDTH, SCR_HEIGHT, true);
+    Window window(SCR_WIDTH, SCR_HEIGHT, false);
 
     window.loadFunctions();
 

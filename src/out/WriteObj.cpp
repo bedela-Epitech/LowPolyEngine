@@ -12,6 +12,7 @@ void WriteObj::exportToObj(const std::vector<glm::vec3> &vertices, const std::ve
     ofs.open("./polyMesh.obj", std::ios_base::out);
 
     ofs << "# polymesh.obj" << std::endl;
+    _nbFace = std::min(_nbFace, (unsigned int)vertices.size() / 3);
     float maxX = 0;
     float maxY = 0;
     float maxZ = 0;
