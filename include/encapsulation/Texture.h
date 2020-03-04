@@ -6,6 +6,7 @@
 #define INC_71K2LEDEB_TEXTURE_H
 
 #include <iostream>
+#include "glad.h"
 #include "GL/gl.h"
 #include "stb_image.h"
 

@@ -59,7 +59,3 @@ void    L_OpenGL::display()
         GLCall(glDrawArrays(GL_TRIANGLES, 0, _terrain._vertexNb));
     }
 }
-
-void    L_OpenGL::cleanUp()
-{
-}

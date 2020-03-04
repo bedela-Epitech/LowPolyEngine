@@ -22,7 +22,6 @@ public:
     void    updateShader(const glm::vec3 &, const glm::mat4 &);
 
     void    display();
-    void    cleanUp();
 };
 
 #endif // _L_OPENGL_HPP_
