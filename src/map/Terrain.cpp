@@ -16,11 +16,15 @@ Terrain::Terrain(const std::string &vsPath, const std::string &fsPath)
 
 void Terrain::generateTerrain()
 {
-    QuadTree qt(8);
-    qt.addEastChunk();
-    //qt.addEastChunk();
-    qt.addNorthChunk();
-    qt.addWestChunk();
+    QuadTree qt(9);
+    qt.addChunk(glm::ivec2(1, 0));
+    qt.addChunk(glm::ivec2(0, 1));
+    qt.addChunk(glm::ivec2(-1, 0));
+    qt.addChunk(glm::ivec2(-1, 0));
+    qt.addChunk(glm::ivec2(0, -1));
+    qt.addChunk(glm::ivec2(0, -1));
+    qt.addChunk(glm::ivec2(1, 0));
+    qt.addChunk(glm::ivec2(1, 0));
     qt.gatherChunks();
 
     for (int i = 0; i < qt._vertices.size(); i++)
