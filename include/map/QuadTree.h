@@ -7,6 +7,7 @@
 
 #include "map/Chunk.h"
 #include "out/WriteObj.h"
+#include <map>
 
 class QuadTreeNode
 {
@@ -20,6 +21,8 @@ public:
     std::shared_ptr<QuadTreeNode> _east = nullptr;
     std::shared_ptr<QuadTreeNode> _south = nullptr;
     std::shared_ptr<QuadTreeNode> _west = nullptr;
+
+    std::shared_ptr<QuadTreeNode> _next = nullptr;
 
     std::shared_ptr<QuadTreeNode> _northEast = nullptr;
     std::shared_ptr<QuadTreeNode> _northWest = nullptr;
@@ -36,16 +39,21 @@ public:
 class QuadTree
 {
 public:
+    std::vector<glm::ivec2>         _pos;
+    glm::ivec2                      _currentPos;
     unsigned int                    _power;
     std::vector<glm::vec3>                  _vertices;
     std::vector<glm::vec3>                  _normals;
     std::vector<glm::vec3>                  _colors;
 private:
-    std::shared_ptr<QuadTreeNode>           _center;
+    std::shared_ptr<QuadTreeNode>           _current;
 public:
     QuadTree(unsigned int);
     void    gatherChunks();
     void    addEastChunk();
+    void    addWestChunk();
+    void    addNorthChunk();
+    void    addSouthChunk();
 };
 
 #endif //INC_71K2LEDEB_QUADTREE_H
