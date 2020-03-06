@@ -9,6 +9,7 @@ set(GLFW_DIR "/usr/local/include/GLFW")
 SET(PLATFORM_SPECIFIC_LIBS "-lpthread")
 
 include_directories(include)
+include_directories(lib)
 
 # SET SOURCES
 SET(GLAD_SOURCES ${GLAD_DIR}/src/glad.c)
@@ -26,7 +27,8 @@ set(LPE_SOURCES src/engine/main.cpp
 				include/map/Terrain.h src/map/Terrain.cpp
 				src/out/WriteObj.cpp src/map/Land.cpp
 				src/map/Mountain.cpp include/map/Land.h
-				include/map/Mountain.h include/map/Biome.h src/map/QuadTree.cpp include/map/QuadTree.h include/encapsulation/Texture.h src/encapsulation/Texture.cpp src/encapsulation/stb_image.cpp include/encapsulation/Menu.h src/encapsulation/Menu.cpp include/encapsulation/VertexBuffer.h src/encapsulation/VertexBuffer.cpp include/encapsulation/VertexArray.h src/encapsulation/VertexArray.cpp src/encapsulation/Layout.cpp include/encapsulation/ErrorManager.h src/encapsulation/ErrorManager.cpp)
+				include/map/Mountain.h include/map/Biome.h src/map/QuadTree.cpp include/map/QuadTree.h include/encapsulation/Texture.h src/encapsulation/Texture.cpp src/encapsulation/stb_image.cpp include/encapsulation/Menu.h src/encapsulation/Menu.cpp include/encapsulation/VertexBuffer.h src/encapsulation/VertexBuffer.cpp include/encapsulation/VertexArray.h src/encapsulation/VertexArray.cpp src/encapsulation/Layout.cpp include/encapsulation/ErrorManager.h src/encapsulation/ErrorManager.cpp
+				)
 
 # add exec with sources
 add_executable(LowPolyEngine ${LPE_SOURCES} ${GLAD_SOURCES})

@@ -30,27 +30,37 @@ void	Chunk::updateVertices(float scale, float smooth, std::vector<std::vector<fl
 {
     int nbIgnore = (int)pow(2, std::max(0, (int)_power - 8));
     float range  = maxHeight - minHeight;
-
-    for (int x = 0; x < _chunkRelief.size(); x++)
-        for (int z = 0; z < _chunkRelief.size(); z++)
-            map[x][z] += _chunkRelief[x][z];
-
-    for (int x = 0; x < map.size() - nbIgnore; x += nbIgnore)
-    {
-        for (int z = 0; z < map.size() - nbIgnore; z += nbIgnore)
+    std::vector<double> coords;
+    for (int x = 0; x < _chunkRelief.size(); x += nbIgnore)
+        for (int z = 0; z < _chunkRelief.size(); z += nbIgnore)
         {
-            glm::vec3 v0(_pos.x + x * scale, map[x][z + nbIgnore] * smooth - 100, _pos.y + (z + nbIgnore) * scale);
-            glm::vec3 v1(_pos.x + (x + nbIgnore) * scale, map[x + nbIgnore][z] * smooth - 100, _pos.y + z * scale);
-            glm::vec3 v2(_pos.x + x * scale, map[x][z] * smooth - 100, _pos.y + z * scale);
+                map[x][z] += _chunkRelief[x][z];
+                coords.push_back(x);
+                coords.push_back(z);
+        }
+    delaunator::Delaunator d(coords);
+
+    for(std::size_t i = 0; i < d.triangles.size(); i+=3)
+        {
+            auto x0 = d.coords[2 * d.triangles[i]];
+            auto z0 = d.coords[2 * d.triangles[i] + 1];
+            auto x1 = d.coords[2 * d.triangles[i + 1]];
+            auto z1 = d.coords[2 * d.triangles[i + 1] + 1];
+            auto x2 = d.coords[2 * d.triangles[i + 2]];
+            auto z2 = d.coords[2 * d.triangles[i + 2] + 1];
+
+            glm::vec3 v0(_pos.x + x1 * scale, map[x1][z1] * smooth - 100, _pos.y + z1 * scale);
+            glm::vec3 v1(_pos.x + x2 * scale, map[x2][z2] * smooth - 100, _pos.y + z2 * scale);
+            glm::vec3 v2(_pos.x + x0 * scale, map[x0][z0] * smooth - 100, _pos.y + z0 * scale);
             _vertices.push_back(v0);
             _vertices.push_back(v1);
             _vertices.push_back(v2);
-            _colors.emplace_back(getColor((((map[x][z + nbIgnore] + map[x + nbIgnore][z] + map[x][z]) / 3.f) - minHeight) / range));
-            _colors.emplace_back(getColor((((map[x][z + nbIgnore] + map[x + nbIgnore][z] + map[x][z]) / 3.f) - minHeight) / range));
-            _colors.emplace_back(getColor((((map[x][z + nbIgnore] + map[x + nbIgnore][z] + map[x][z]) / 3.f) - minHeight) / range));
+            _colors.emplace_back(getColor((((map[x0][z0] + map[x1][z1] + map[x2][z2]) / 3.f) - minHeight) / range));
+            _colors.emplace_back(getColor((((map[x0][z0] + map[x1][z1] + map[x2][z2]) / 3.f) - minHeight) / range));
+            _colors.emplace_back(getColor((((map[x0][z0] + map[x1][z1] + map[x2][z2]) / 3.f) - minHeight) / range));
             _normals.push_back(glm::normalize(glm::cross(v1 - v0, v2 - v0)));
 
-            v0 = glm::vec3(_pos.x + (x + nbIgnore) * scale, map[x + nbIgnore][z + nbIgnore] * smooth - 100, _pos.y + (z + nbIgnore) * scale);
+            /*v0 = glm::vec3(_pos.x + (x + nbIgnore) * scale, map[x + nbIgnore][z + nbIgnore] * smooth - 100, _pos.y + (z + nbIgnore) * scale);
             v1 = glm::vec3(_pos.x + (x + nbIgnore) * scale, map[x + nbIgnore][z] * smooth - 100, _pos.y + z * scale);
             v2 = glm::vec3(_pos.x + x * scale, map[x][z + nbIgnore] * smooth - 100, _pos.y + (z + nbIgnore) * scale);
             _vertices.push_back(v0);
@@ -59,7 +69,6 @@ void	Chunk::updateVertices(float scale, float smooth, std::vector<std::vector<fl
             _colors.emplace_back(getColor((((map[x][z + nbIgnore] + map[x + nbIgnore][z] + map[x + nbIgnore][z + nbIgnore]) / 3.f) - minHeight) / range));
             _colors.emplace_back(getColor((((map[x][z + nbIgnore] + map[x + nbIgnore][z] + map[x + nbIgnore][z + nbIgnore]) / 3.f) - minHeight) / range));
             _colors.emplace_back(getColor((((map[x][z + nbIgnore] + map[x + nbIgnore][z] + map[x + nbIgnore][z + nbIgnore]) / 3.f) - minHeight) / range));
-            _normals.push_back(glm::normalize(glm::cross(v1 - v0, v2 - v0)));
-        }
+            _normals.push_back(glm::normalize(glm::cross(v1 - v0, v2 - v0)));*/
     }
 }

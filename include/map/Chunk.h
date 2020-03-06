@@ -6,9 +6,9 @@
 #define INC_71K2LEDEB_CHUNK_H
 
 
+#include "delaunator.hpp"
 #include "map/Perlin.h"
 #include "map/Diamond.hpp"
-
 
 class Chunk
 {
