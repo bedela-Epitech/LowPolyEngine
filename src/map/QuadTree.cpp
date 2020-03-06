@@ -35,8 +35,6 @@ QuadTree::QuadTree(unsigned int power)
     std::vector<std::vector<float>> noMap;
     auto ptr = std::make_shared<QuadTreeNode>(_power, glm::vec2(0, 0), noMap, noMap, noMap, noMap);
     _miniMap.emplace(std::make_pair(_currentPos.x, _currentPos.y), ptr);
-
-    _size = ptr->_map.size();
 }
 
 void QuadTree::gatherChunks()
@@ -84,52 +82,4 @@ void    QuadTree::addChunk(const glm::ivec2 &adder)
 
     auto ptr = std::make_shared<QuadTreeNode>(_power, _currentPos, northMap, eastMap, southMap, westMap);
     _miniMap.emplace(std::make_pair(_currentPos.x, _currentPos.y), ptr);
-
-    //mergeChunks(ptr, east, north, south, west);
-}
-
-
-// rude merge between chunks, might need a change
-void QuadTree::mergeChunks(std::shared_ptr<QuadTreeNode> ptr, std::shared_ptr<QuadTreeNode> east,
-                           std::shared_ptr<QuadTreeNode> north, std::shared_ptr<QuadTreeNode> south,
-                           std::shared_ptr<QuadTreeNode> west)
-{
-
-    float height;
-    if (east != nullptr)
-    {
-        for (int i = 1; i < _size - 1; i++)
-        {
-            height = (ptr->_map[_size - 2][i] + east->_map[1][i]) / 2.f + ((rand() % 10) / 750.f) - (5.f / 750.f);
-            ptr->_map[_size - 1][i] = height;
-            east->_map[0][i] = height;
-        }
-    }
-    if (north != nullptr)
-    {
-        for (int i = 1; i < _size - 1; i++)
-        {
-            height = (ptr->_map[i][_size - 2] + north->_map[i][1]) / 2.f + ((rand() % 10) / 750.f) - (5.f / 750.f);
-            ptr->_map[i][_size - 1] = height;
-            north->_map[i][0] = height;
-        }
-    }
-    if (south != nullptr)
-    {
-        for (int i = 1; i < _size - 1; i++)
-        {
-            height = (ptr->_map[i][1] + south->_map[i][_size - 2]) / 2.f + ((rand() % 10) / 750.f) - (5.f / 750.f);
-            ptr->_map[i][0] = height;
-            south->_map[i][_size - 1] = height;
-        }
-    }
-    if (west != nullptr)
-    {
-        for (int i = 1; i < _size - 1; i++)
-        {
-            height = (ptr->_map[1][i] + west->_map[_size - 2][i]) / 2.f + ((rand() % 10) / 750.f) - (5.f / 750.f);
-            ptr->_map[0][i] = height;
-            west->_map[_size - 1][i] = height;
-        }
-    }
 }
