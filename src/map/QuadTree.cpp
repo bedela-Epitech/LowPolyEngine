@@ -11,28 +11,13 @@
 /////////////////////
 
 QuadTreeNode::QuadTreeNode(unsigned int power, const glm::vec2 &pos,
-                           std::shared_ptr<QuadTreeNode> north,
-                           std::shared_ptr<QuadTreeNode> east,
-                           std::shared_ptr<QuadTreeNode> south,
-                           std::shared_ptr<QuadTreeNode> west) :
+                           const std::vector<std::vector<float>> &northMap,
+                           const std::vector<std::vector<float>> &eastMap,
+                           const std::vector<std::vector<float>> &southMap,
+                           const std::vector<std::vector<float>> &westMap) :
         _chunk(power), _pos(pos)
 {
     _size = (unsigned int)pow(2, power) + 1;
-
-    std::vector<std::vector<float>> northMap;
-    std::vector<std::vector<float>> eastMap;
-    std::vector<std::vector<float>> southMap;
-    std::vector<std::vector<float>> westMap;
-
-    if (north != nullptr)
-        northMap = north->_map;
-    if (east != nullptr)
-        eastMap = east->_map;
-    if (south != nullptr)
-        southMap = south->_map;
-    if (west != nullptr)
-        westMap = west->_map;
-
     _map = _chunk.generateMap(glm::vec2(_pos.x * (_size - 1), _pos.y * (_size - 1)), northMap, eastMap, southMap, westMap);
 }
 
@@ -47,7 +32,8 @@ QuadTree::QuadTree(unsigned int power)
     _currentPos = {0, 0};
     _power = power;
 
-    auto ptr = std::make_shared<QuadTreeNode>(_power, glm::vec2(0, 0), nullptr, nullptr, nullptr, nullptr);
+    std::vector<std::vector<float>> noMap;
+    auto ptr = std::make_shared<QuadTreeNode>(_power, glm::vec2(0, 0), noMap, noMap, noMap, noMap);
     _miniMap.emplace(std::make_pair(_currentPos.x, _currentPos.y), ptr);
 
     _size = ptr->_map.size();
@@ -82,24 +68,24 @@ void    QuadTree::addChunk(const glm::ivec2 &adder)
 {
     _currentPos += adder;
 
-    std::shared_ptr<QuadTreeNode> north = nullptr;
-    std::shared_ptr<QuadTreeNode> east = nullptr;
-    std::shared_ptr<QuadTreeNode> south = nullptr;
-    std::shared_ptr<QuadTreeNode> west = nullptr;
+    std::vector<std::vector<float>> northMap;
+    std::vector<std::vector<float>> eastMap;
+    std::vector<std::vector<float>> southMap;
+    std::vector<std::vector<float>> westMap;
 
     if (auto it = _miniMap.find({_currentPos.x, _currentPos.y + 1}); it != _miniMap.end())
-        north = it->second;
+        northMap = it->second->_map;
     if (auto it = _miniMap.find({_currentPos.x + 1, _currentPos.y}); it != _miniMap.end())
-        east = it->second;
+        eastMap = it->second->_map;
     if (auto it = _miniMap.find({_currentPos.x, _currentPos.y - 1}); it != _miniMap.end())
-        south = it->second;
+        southMap = it->second->_map;
     if (auto it = _miniMap.find({_currentPos.x - 1, _currentPos.y}); it != _miniMap.end())
-        west = it->second;
+        westMap = it->second->_map;
 
-    auto ptr = std::make_shared<QuadTreeNode>(_power, _currentPos, north, east, south, west);
+    auto ptr = std::make_shared<QuadTreeNode>(_power, _currentPos, northMap, eastMap, southMap, westMap);
     _miniMap.emplace(std::make_pair(_currentPos.x, _currentPos.y), ptr);
 
-    mergeChunks(ptr, east, north, south, west);
+    //mergeChunks(ptr, east, north, south, west);
 }
 
 

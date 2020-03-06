@@ -19,10 +19,10 @@ public:
 
 public:
     QuadTreeNode(unsigned int size, const glm::vec2 &,
-                 std::shared_ptr<QuadTreeNode> ,
-                 std::shared_ptr<QuadTreeNode> ,
-                 std::shared_ptr<QuadTreeNode> ,
-                 std::shared_ptr<QuadTreeNode> );
+                 const std::vector<std::vector<float>> & ,
+                 const std::vector<std::vector<float>> & ,
+                 const std::vector<std::vector<float>> & ,
+                 const std::vector<std::vector<float>> & );
 };
 
 class QuadTree
