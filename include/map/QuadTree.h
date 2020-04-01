@@ -13,6 +13,7 @@ class QuadTreeNode
 {
 public:
     std::vector<std::vector<float>>	_map;
+    std::vector<std::vector<bool>>	_activationMap;
     unsigned int                    _size;
     Chunk                           _chunk;
     glm::vec2                       _pos;
@@ -29,7 +30,7 @@ class QuadTree
 {
 public:
     std::map<std::pair<int, int>, std::shared_ptr<QuadTreeNode>> _miniMap;
-
+    unsigned int                    _size;
     glm::ivec2                      _currentPos;
     unsigned int                    _power;
     std::vector<glm::vec3>          _vertices;

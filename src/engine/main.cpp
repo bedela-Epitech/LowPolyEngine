@@ -25,6 +25,7 @@ int main()
 
         L_OpenGL opengl("../terrain.vs", "../terrain.fs", menu);
 
+
         opengl.initShader(camera->_projection);
 
         while (window.isOpen()) {
@@ -39,7 +40,6 @@ int main()
 
             window.update();
         }
-
     }
     Window::terminate();
 

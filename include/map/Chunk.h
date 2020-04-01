@@ -28,9 +28,11 @@ public:
     Chunk(unsigned int);
     glm::vec3   getColor(float);
     std::vector<std::vector<float>>    generateMap(const glm::vec2 &, const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &,
-                        const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &);
-    void	updateVertices(float , float, std::vector<std::vector<float>> &, float, float);
+                                                   const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &);
+    void	updateVertices(double , double, std::vector<std::vector<float>> &, float, float);
     void    mapSimplify(const std::vector<std::vector<float>> &);
+    void    simplifyBorder(const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &,const std::vector<std::vector<float>> &,
+                           const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &);
     float   calculateFlat(float, float, float, float);
     float   calculatePyramid(float, float, float, float, float);
 
