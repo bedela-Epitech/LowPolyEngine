@@ -57,7 +57,7 @@ void QuadTree::gatherChunks()
         {
             for (int j = 1; j < _size - 1; ++j)
             {
-                if (quad->_activationMap[i][j]/* && xMap >= 0 && zMap >= 0*/)
+                if (quad->_activationMap[i][j])
                 {
                     maxHeight = std::max(map[i][j] * 250.f - 100, maxHeight);
                     minHeight = std::min(map[i][j] * 250.f - 100, minHeight);
@@ -67,12 +67,12 @@ void QuadTree::gatherChunks()
             }
         }
     }
-    std::cout << "before range" << std::endl;
     float range = maxHeight - minHeight;
-    std::cout << "after range" << std::endl;
     delaunator::Delaunator d(coords);
-    std::cout << "after range" << std::endl;
-    for(std::size_t i = 0; i < d.triangles.size(); i+=3)
+    Perlin p;
+    float ultraMax = -1000;
+    float ultraMin = 1000;
+    for(std::size_t i = 0; i < d.triangles.size(); i += 3)
     {
         int x[3];
         int z[3];
@@ -85,18 +85,26 @@ void QuadTree::gatherChunks()
         z[2] = d.coords[2 * d.triangles[i + 2] + 1];
         for (int j = 0; j < 3; ++j)
         {
+            // know in which chunk we are
             int xFind = x[j] / (int)_size;
             int zFind = z[j] / (int)_size;
-            if (x[j] < 0)
-                xFind--;
-            if (z[j] < 0)
-                zFind--;
+            // if a chunk is size 10 and the xPosition is 5 :
+            // 5 / 10 = 0, chunk X position is 0
+            // but -5 /10 = 0, which is false, we are actually
+            // in the chunk X position -1. So we decrement to patch this
+            xFind -= (x[j] < 0);
+            zFind -= (z[j] < 0);
 
-            auto [pos, map] = *_miniMap.find({xFind, zFind});
+            // get the chunk with the help of its position
+            auto [pos, quad] = *_miniMap.find({xFind, zFind});
             auto [xPos, zPos] = pos;
-            h[j] = map->_map[x[j] - (int)_size * xPos][z[j] - (int)_size * zPos] * 250.f - 100.f;
+            // shift the absolute position to the map position
+            xPos  = x[j] - (int)_size * xPos;
+            zPos = z[j] - (int)_size * zPos;
+            h[j] = (quad->_map[xPos][zPos] + p.getHeight(x[j], z[j])) * 250.f - 100.f;
         }
-
+        ultraMax = std::max(ultraMax, h[1]);
+        ultraMin = std::min(ultraMin, h[1]);
         glm::vec3 v0(x[1] * 5.0, h[1], z[1] * 5.0);
         glm::vec3 v1(x[2] * 5.0, h[2], z[2] * 5.0);
         glm::vec3 v2(x[0] * 5.0, h[0], z[0] * 5.0);
@@ -108,33 +116,9 @@ void QuadTree::gatherChunks()
         _colors.emplace_back(getColor((((h[0], h[1], h[2]) / 3.f) - minHeight) / range));
         _colors.emplace_back(getColor((((h[0], h[1], h[2]) / 3.f) - minHeight) / range));
         _normals.push_back(glm::normalize(glm::cross(v1 - v0, v2 - v0)));
-
-        /*glm::vec3 v0(i * 5, 0, i * 5);
-        glm::vec3 v1((i + 1) * 5, 0, i * 5);
-        glm::vec3 v2(i * 5, 0, (i + 1) * 5);
-
-        _vertices.push_back(v0);
-        _vertices.push_back(v1);
-        _vertices.push_back(v2);
-
-        _colors.emplace_back(glm::vec3(1, 0, 0));
-        _colors.emplace_back(glm::vec3(1, 0, 0));
-        _colors.emplace_back(glm::vec3(1, 0, 0));
-
-        _normals.emplace_back(glm::vec3(1, 0, 0));*/
     }
+    std::cout << ultraMax << " " << ultraMin << std::endl;
 
-    /*v0 = glm::vec3(_pos.x + (x + nbIgnore) * scale, map[x + nbIgnore][z + nbIgnore] * smooth - 100, _pos.y + (z + nbIgnore) * scale);
-    v1 = glm::vec3(_pos.x + (x + nbIgnore) * scale, map[x + nbIgnore][z] * smooth - 100, _pos.y + z * scale);
-    v2 = glm::vec3(_pos.x + x * scale, map[x][z + nbIgnore] * smooth - 100, _pos.y + (z + nbIgnore) * scale);
-    _vertices.push_back(v0);
-    _vertices.push_back(v1);
-    _vertices.push_back(v2);
-    _colors.emplace_back(getColor((((map[x][z + nbIgnore] + map[x + nbIgnore][z] + map[x + nbIgnore][z + nbIgnore]) / 3.f) - minHeight) / range));
-    _colors.emplace_back(getColor((((map[x][z + nbIgnore] + map[x + nbIgnore][z] + map[x + nbIgnore][z + nbIgnore]) / 3.f) - minHeight) / range));
-    _colors.emplace_back(getColor((((map[x][z + nbIgnore] + map[x + nbIgnore][z] + map[x + nbIgnore][z + nbIgnore]) / 3.f) - minHeight) / range));
-    _normals.push_back(glm::normalize(glm::cross(v1 - v0, v2 - v0)));*/
-    //WriteObj::exportToObj(_vertices, _normals);
 }
 
 void    QuadTree::addChunk(const glm::ivec2 &adder)

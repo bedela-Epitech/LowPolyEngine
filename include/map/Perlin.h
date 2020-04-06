@@ -17,15 +17,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-class Perlin
-{
-public:
-    std::vector<std::vector<float>>         _noiseMap;
 
-public:
-    Perlin(const glm::vec2 &, int);
-
-};
 
 inline
 float quintic(const float &t)
@@ -163,6 +155,17 @@ private:
     static const unsigned tableSizeMask = tableSize - 1;
     glm::vec3 gradients[tableSize];
     unsigned permutationTable[tableSize * 2];
+};
+
+class Perlin
+{
+public:
+    PerlinNoise _noise;
+
+public:
+    Perlin();
+    float getHeight(int, int);
+
 };
 
 #endif //INC_71K2LEDEB_PERLIN_H

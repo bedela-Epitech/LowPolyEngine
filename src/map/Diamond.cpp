@@ -2,14 +2,13 @@
 
 #include "map/Diamond.hpp"
 
-Diamond::Diamond(const float &height, const unsigned int &powPower, const std::vector<std::vector<float>> &noiseMap
+Diamond::Diamond(const float &height, const unsigned int &powPower
         , const std::vector<std::vector<float>> &northMap
         , const std::vector<std::vector<float>> &eastMap
         , const std::vector<std::vector<float>> &southMap
         , const std::vector<std::vector<float>> &westMap)
         : _northMap(northMap), _eastMap(eastMap), _southMap(southMap), _westMap(westMap)
 {
-    _noiseMap = noiseMap;
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     _gen = std::mt19937(rd());
 
