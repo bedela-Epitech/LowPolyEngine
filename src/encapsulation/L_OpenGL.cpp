@@ -33,6 +33,7 @@ void    L_OpenGL::updateShader(const glm::vec3 &dirLook, const glm::mat4 &view)
             _loadingThread.join();
             _terrain.bindTerrain();
             _terrain._isTerrainLinked = true;
+            _menu->_textShader.use();
         }
     }
     else
@@ -45,8 +46,8 @@ void    L_OpenGL::updateShader(const glm::vec3 &dirLook, const glm::mat4 &view)
 
 void    L_OpenGL::display()
 {
-    GLCall(glClear(GL_DEPTH_BUFFER_BIT));
     GLCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
+    GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
     if (!(_menu->_linkDone && _terrain._isTerrainLinked))
     {
