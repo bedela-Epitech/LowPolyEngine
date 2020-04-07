@@ -22,8 +22,8 @@ public:
     std::vector<std::vector<float>>    generateMap(const glm::vec2 &, const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &,
                                                    const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &);
     void    mapSimplify(const std::vector<std::vector<float>> &);
-    float   calculateFlat(float, float, float, float);
-    float   calculatePyramid(float, float, float, float, float);
+    float   calculateFlat(float, float, float, float, float, float, float, float);
+    float   calculatePyramid(float, float, float, float, float, float, float, float, float);
 
 };
 

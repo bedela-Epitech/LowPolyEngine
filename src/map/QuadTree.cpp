@@ -68,6 +68,8 @@ void QuadTree::gatherChunks()
         }
     }
     float range = maxHeight - minHeight;
+    if (coords.empty())
+        return ;
     delaunator::Delaunator d(coords);
     Perlin p;
     float ultraMax = -1000;

@@ -20,15 +20,26 @@ std::vector<std::vector<float>>        Chunk::generateMap(const glm::vec2 &pos, 
     return diams._map;
 }
 
-float Chunk::calculateFlat(float A, float B, float C, float D)
+float Chunk::calculateFlat(float A, float B, float C, float D, float E, float F, float G, float H)
 {
-    return (abs(A - B) + abs(B - C) + abs(C - D) + abs(D - A) + std::max(abs(B - D), abs(A - C)));
+    return ((sqrt(1.0 + pow(A - B, 2)) * sqrt(1.0 + pow(A - H, 2))) +
+            (sqrt(1.0 + pow(C - B, 2)) * sqrt(1.0 + pow(C - D, 2))) +
+            (sqrt(1.0 + pow(E - D, 2)) * sqrt(1.0 + pow(E - F, 2))) +
+            (sqrt(1.0 + pow(G - H, 2)) * sqrt(1.0 + pow(G - F, 2))) +
+            (sqrt(2.0 + pow(D - B, 2)) * sqrt(2.0 + pow(D - F, 2))) +
+            (sqrt(2.0 + pow(H - B, 2)) * sqrt(2.0 + pow(H - F, 2))));
 }
 
-float Chunk::calculatePyramid(float A, float B, float C, float D, float H)
+float Chunk::calculatePyramid(float A, float B, float C, float D, float E, float F, float G, float H, float P)
 {
-    return (abs(A - B) + abs(B - C) + abs(C - D) + abs(D - A) +
-            abs(A - H) + abs(B - H) + abs(C - H) + abs(D - H));
+    return ((sqrt(1.0 + pow(B - P, 2)) * sqrt(1.0 + pow(B - A, 2))) +
+            (sqrt(1.0 + pow(B - P, 2)) * sqrt(1.0 + pow(B - C, 2))) +
+            (sqrt(1.0 + pow(D - P, 2)) * sqrt(1.0 + pow(D - C, 2))) +
+            (sqrt(1.0 + pow(D - P, 2)) * sqrt(1.0 + pow(D - E, 2))) +
+            (sqrt(1.0 + pow(F - P, 2)) * sqrt(1.0 + pow(F - E, 2))) +
+            (sqrt(1.0 + pow(F - P, 2)) * sqrt(1.0 + pow(F - G, 2))) +
+            (sqrt(1.0 + pow(H - P, 2)) * sqrt(1.0 + pow(H - G, 2))) +
+            (sqrt(1.0 + pow(H - P, 2)) * sqrt(1.0 + pow(H - A, 2))));
 }
 
 void Chunk::mapSimplify(const std::vector<std::vector<float>> &map)
@@ -41,13 +52,16 @@ void Chunk::mapSimplify(const std::vector<std::vector<float>> &map)
     _activationMap.emplace_back(map.size(), true);
     for (int i = 1; i < map.size() - 1; ++i)
     {
-
         for (int j = 1; j < map[i].size() - 1; ++j)
         {
-            fScore = calculateFlat(map[i - 1][j], map[i][j + 1], map[i + 1][j], map[i][j - 1]);
-            pScore = calculatePyramid(map[i - 1][j], map[i][j + 1], map[i + 1][j], map[i][j - 1], map[i][j]);
+            fScore = calculateFlat(map[i - 1][j - 1], map[i - 1][j], map[i - 1][j + 1],
+                                   map[i][j + 1], map[i + 1][j + 1], map[i + 1][j],
+                                   map[i + 1][j - 1], map[i][j - 1]);
+            pScore = calculatePyramid(map[i - 1][j - 1], map[i - 1][j], map[i - 1][j + 1],
+                                      map[i][j + 1], map[i + 1][j + 1], map[i + 1][j],
+                                      map[i + 1][j - 1], map[i][j - 1], map[i][j]);
             ratio = fScore / pScore;
-            line[j] = ratio <= 0.6f;
+            line[j] = ratio <= 0.999985;
         }
         _activationMap.push_back(line);
     }
