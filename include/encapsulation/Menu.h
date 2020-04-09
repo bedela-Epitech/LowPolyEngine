@@ -7,7 +7,7 @@
 
 #include "encapsulation/VertexArray.h"
 #include "encapsulation/Shader.h"
-#include "encapsulation/Window.hpp"
+#include "encapsulation/Window.h"
 #include "encapsulation/Texture.h"
 
 class Box

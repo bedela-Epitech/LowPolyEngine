@@ -1,8 +1,8 @@
 
 //#include <stb_image.h>
 
-#include "encapsulation/Input.hpp"
-#include "encapsulation/L_OpenGL.hpp"
+#include "encapsulation/Input.h"
+#include "encapsulation/L_OpenGL.h"
 #include "encapsulation/Texture.h"
 #include <iostream>
 

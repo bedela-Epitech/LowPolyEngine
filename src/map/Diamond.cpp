@@ -1,6 +1,6 @@
 
 
-#include "map/Diamond.hpp"
+#include "map/Diamond.h"
 
 Diamond::Diamond(unsigned int size,
                  const std::vector<std::vector<float>> &northMap,

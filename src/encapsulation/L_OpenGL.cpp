@@ -1,5 +1,5 @@
 
-#include "encapsulation/L_OpenGL.hpp"
+#include "encapsulation/L_OpenGL.h"
 
 /////////////////////
 //

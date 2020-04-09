@@ -1,8 +1,8 @@
 
-#ifndef		_LEDEB_CAMERA_HPP_
-#define		_LEDEB_CAMERA_HPP_
+#ifndef		_LEDEB_CAMERA_H_
+#define		_LEDEB_CAMERA_H_
 
-#include "encapsulation/Window.hpp"
+#include "encapsulation/Window.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -26,9 +26,9 @@ public:
     float       _rotateY = 0.f;
     float       _upAngleLimit = 89.9f;
     float       _downAngleLimit = -89.9f;
-    float       _cameraSpeed = 500.f;
 
-    float       _translationCelerity = 1.5f;
+    float       _translationCelerity = 750.f;
+    float       _rotationCelerity = 60.f;
 
 public:
 	Camera(float, float, float, float, float, float, float, float, float);
@@ -59,6 +59,6 @@ private:
 
 };
 
-#endif		// !_LEDEB_CAMERA_HPP_
+#endif		// !_LEDEB_CAMERA_H_
 
 

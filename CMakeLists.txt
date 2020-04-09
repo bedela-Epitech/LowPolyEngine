@@ -14,12 +14,12 @@ include_directories(lib)
 # SET SOURCES
 SET(GLAD_SOURCES ${GLAD_DIR}/src/glad.c)
 set(LPE_SOURCES src/engine/main.cpp
-				include/encapsulation/L_OpenGL.hpp src/encapsulation/L_OpenGL.cpp
-				include/engine/Camera.hpp src/engine/Camera.cpp
+		include/encapsulation/L_OpenGL.h src/encapsulation/L_OpenGL.cpp
+        include/engine/Camera.h src/engine/Camera.cpp
 				include/Light.hpp src/Light.cpp
-				include/encapsulation/Window.hpp src/encapsulation/Window.cpp
-				include/encapsulation/Input.hpp src/encapsulation/Input.cpp
-				include/map/Diamond.hpp src/map/Diamond.cpp
+		include/encapsulation/Window.h src/encapsulation/Window.cpp
+		include/encapsulation/Input.h src/encapsulation/Input.cpp
+		include/map/Diamond.h src/map/Diamond.cpp
 				include/out/WriteObj.h src/out/WriteObj.cpp
 				include/encapsulation/Shader.h src/encapsulation/Shader.cpp
 	 			include/map/Perlin.h src/map/Perlin.cpp

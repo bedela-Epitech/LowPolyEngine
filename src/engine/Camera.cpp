@@ -1,5 +1,5 @@
 
-#include "engine/Camera.hpp"
+#include "engine/Camera.h"
 #include <iostream>
 
 /////////////////////
@@ -31,7 +31,6 @@ Camera::Camera(float cameraX,  float cameraY, float cameraZ,
 
 void    Camera::updateCamera()
 {
-
     _dirLook = glm::vec3(sin(glm::radians(_rotateY)) * cos(glm::radians(_rotateX)),
                          sin(glm::radians(_rotateX)),
                          cos(glm::radians(_rotateY)) * cos(glm::radians(_rotateX)));
@@ -98,22 +97,22 @@ void	Camera::closeWindow(float speed)
 
 void	Camera::moveLeft(float deltaTime)
 {
-    _cameraPos -= _translationCelerity * _cameraSpeed * deltaTime * glm::normalize(glm::cross(_cameraUp, _dirLook));
+    _cameraPos -= _translationCelerity * deltaTime * glm::normalize(glm::cross(_cameraUp, _dirLook));
 }
 
 void	Camera::moveRight(float deltaTime)
 {
-    _cameraPos += _translationCelerity * _cameraSpeed * deltaTime * glm::normalize(glm::cross(_cameraUp, _dirLook));
+    _cameraPos += _translationCelerity * deltaTime * glm::normalize(glm::cross(_cameraUp, _dirLook));
 }
 
 void	Camera::moveBack(float deltaTime)
 {
-    _cameraPos -= _translationCelerity * _cameraSpeed * deltaTime * _dirLook;
+    _cameraPos -= _translationCelerity * deltaTime * _dirLook;
 }
 
 void	Camera::moveForward(float deltaTime)
 {
-    _cameraPos += _translationCelerity * _cameraSpeed * deltaTime * _dirLook;
+    _cameraPos += _translationCelerity * deltaTime * _dirLook;
 }
 
 /////////////////////
@@ -124,22 +123,22 @@ void	Camera::moveForward(float deltaTime)
 
 void	Camera::rotateLeft(float deltaTime)
 {
-    _rotateY -= _translationCelerity * 40.f * deltaTime;
+    _rotateY -= _rotationCelerity * deltaTime;
 }
 
 void	Camera::rotateRight(float deltaTime)
 {
-    _rotateY += _translationCelerity * 40.f * deltaTime;
+    _rotateY += _rotationCelerity * deltaTime;
 }
 
 void	Camera::rotateUp(float deltaTime)
 {
-    _rotateX += _translationCelerity * 40.f * deltaTime;
+    _rotateX += _rotationCelerity * deltaTime;
     _rotateX = std::min(std::max(_downAngleLimit, _rotateX), _upAngleLimit);
 }
 
 void	Camera::rotateDown(float deltaTime)
 {
-    _rotateX -= _translationCelerity * 40.f * deltaTime;
+    _rotateX -= _rotationCelerity * deltaTime;
     _rotateX = std::min(std::max(_downAngleLimit, _rotateX), _upAngleLimit);
 }

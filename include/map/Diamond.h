@@ -2,8 +2,8 @@
 // Created by adrien on 03/01/20.
 //
 
-#ifndef _L_DIAMOND_HPP_
-#define _L_DIAMOND_HPP_
+#ifndef _L_DIAMOND_H_
+#define _L_DIAMOND_H_
 
 #include "Mountain.h"
 #include "Land.h"
@@ -42,4 +42,4 @@ private:
 
 };
 
-#endif // _L_DIAMOND_HPP_
+#endif // _L_DIAMOND_H_

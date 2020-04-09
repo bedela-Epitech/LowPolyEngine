@@ -7,7 +7,7 @@
 
 #include "delaunator.hpp"
 #include "map/Perlin.h"
-#include "map/Diamond.hpp"
+#include "map/Diamond.h"
 
 class Chunk
 {

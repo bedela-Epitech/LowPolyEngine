@@ -2,9 +2,9 @@
 // Created by adrien on 03/01/20.
 //
 
-#ifndef _L_OPENGL_HPP_
+#ifndef _L_OPENGL_H_
 
-#define _L_OPENGL_HPP_
+#define _L_OPENGL_H_
 
 #include <future>
 #include "map/Terrain.h"
@@ -23,8 +23,7 @@ public:
 
     void    initShader(const glm::mat4 &);
     void    updateShader(const glm::vec3 &, const glm::mat4 &);
-
     void    display();
 };
 
-#endif // _L_OPENGL_HPP_
+#endif // _L_OPENGL_H_

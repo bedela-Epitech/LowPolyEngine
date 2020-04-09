@@ -2,7 +2,7 @@
 // Created by adrien on 21/11/19.
 //
 
-#include "encapsulation/Window.hpp"
+#include "encapsulation/Window.h"
 
 // Declare static members
 GLFWwindow * Window::_window;

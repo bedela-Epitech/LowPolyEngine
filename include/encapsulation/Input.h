@@ -1,13 +1,16 @@
+//
+// Created by adrien on 03/01/20.
+//
 
-#ifndef		_LEDEB_INPUT_HPP_
-#define		_LEDEB_INPUT_HPP_
+#ifndef		_LEDEB_INPUT_H_
+#define		_LEDEB_INPUT_H_
 
 #include <functional>
 #include <map>
 #include <utility>
 
 #include "encapsulation/Menu.h"
-#include "engine/Camera.hpp"
+#include "engine/Camera.h"
 
 class Input
 {
@@ -28,5 +31,4 @@ public:
 	void	mouseManger();
 };
 
-
-#endif		// !_LEDEB_INPUT_HPP_
+#endif		// !_LEDEB_INPUT_H_

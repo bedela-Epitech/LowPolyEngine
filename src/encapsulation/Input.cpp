@@ -1,5 +1,5 @@
 
-#include "encapsulation/Input.hpp"
+#include "encapsulation/Input.h"
 
 using namespace std::placeholders;
 
