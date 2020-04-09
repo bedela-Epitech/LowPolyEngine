@@ -10,39 +10,33 @@
 
 enum flag {NORMAL, RIGHT_END, TOP_END};
 
-
 class Diamond
 {
-
 public:
-    std::vector<glm::vec3>                  _vertices;
-    std::vector<glm::vec3>                  _normals;
-    std::vector<glm::vec3>                  _colors;
-    unsigned int							_size;
-    float							        _depth = 0;
-    std::vector<std::vector<float>>	_map;
-
-    std::vector<std::vector<float>>	_northMap;
-    std::vector<std::vector<float>>	_eastMap;
-    std::vector<std::vector<float>>	_southMap;
-    std::vector<std::vector<float>>	_westMap;
-
+    std::vector<std::vector<float>> _map;
 
 private:
-	float		    _height;
+	float		    _height = 0.55f;
+    unsigned int    _size;
     std::mt19937    _gen;
+
+    bool    _northMapEmpty;
+    bool    _eastMapEmpty;
+    bool    _southMapEmpty;
+    bool    _westMapEmpty;
+
 public:
-	Diamond(const float &, const unsigned int &,
+	Diamond(const unsigned int &,
 	        const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &,
 	        const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &);
+    void	fillMap();
+    void	printMap() const;
 
-    void	manageSquare(unsigned int , unsigned int , const unsigned int, const std::shared_ptr<Biome> &);
-    void	manageDiamond(unsigned int, unsigned int , const unsigned int, int, const std::shared_ptr<Biome> &);
-	void	fillMap();
-	float 	getDiff(int, int, unsigned int);
-	void	printMap() const;
-
-	float	boundedRand(float, float);
+private:
+    void	manageSquare(unsigned int , unsigned int , unsigned int, const std::shared_ptr<Biome> &);
+    void	manageDiamond(unsigned int, unsigned int , unsigned int, int, const std::shared_ptr<Biome> &);
+	[[nodiscard]] float 	getDiff(int, int, unsigned int) const;
+	[[nodiscard]] float	boundedRand(float, float);
 
 };
 

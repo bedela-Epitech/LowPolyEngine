@@ -13,18 +13,18 @@
 class Chunk
 {
 public:
-    glm::vec2 _pos;
-    unsigned int _power;
-    std::vector<std::vector<bool>>          _activationMap;
+    double          _phi = 0.999985;
+    unsigned int    _power;
 
 public:
     Chunk(unsigned int);
     std::vector<std::vector<float>>    generateMap(const glm::vec2 &, const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &,
                                                    const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &);
-    void    mapSimplify(const std::vector<std::vector<float>> &);
-    float   calculateFlat(float, float, float, float, float, float, float, float);
-    float   calculatePyramid(float, float, float, float, float, float, float, float, float);
+    std::vector<std::vector<bool>>    mapSimplify(const std::vector<std::vector<float>> &) const;
 
+private:
+    double   calculateFlat(double, double, double, double, double, double, double, double) const;
+    double   calculatePyramid(double, double, double, double, double, double, double, double, double) const;
 };
 
 #endif //INC_71K2LEDEB_CHUNK_H

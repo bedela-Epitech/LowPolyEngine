@@ -4,23 +4,18 @@
 
 #include "map/Chunk.h"
 
-Chunk::Chunk(unsigned int power)
-{
-    _power = power;
-}
+Chunk::Chunk(unsigned int power) : _power(power)
+{ }
 
 std::vector<std::vector<float>>        Chunk::generateMap(const glm::vec2 &pos, const std::vector<std::vector<float>> &northMap, const std::vector<std::vector<float>> &eastMap,
                                                           const std::vector<std::vector<float>> &southMap, const std::vector<std::vector<float>> &westMap)
 {
-    _pos = pos;
-    Diamond diams(0.55f, _power, northMap, eastMap, southMap, westMap);
+    Diamond diams(_power, northMap, eastMap, southMap, westMap);
     diams.fillMap();
-    _pos *= 5.f;
-    mapSimplify(diams._map);
     return diams._map;
 }
 
-float Chunk::calculateFlat(float A, float B, float C, float D, float E, float F, float G, float H)
+double Chunk::calculateFlat(double A, double B, double C, double D, double E, double F, double G, double H) const
 {
     return ((sqrt(1.0 + pow(A - B, 2)) * sqrt(1.0 + pow(A - H, 2))) +
             (sqrt(1.0 + pow(C - B, 2)) * sqrt(1.0 + pow(C - D, 2))) +
@@ -30,7 +25,7 @@ float Chunk::calculateFlat(float A, float B, float C, float D, float E, float F,
             (sqrt(2.0 + pow(H - B, 2)) * sqrt(2.0 + pow(H - F, 2))));
 }
 
-float Chunk::calculatePyramid(float A, float B, float C, float D, float E, float F, float G, float H, float P)
+double Chunk::calculatePyramid(double A, double B, double C, double D, double E, double F, double G, double H, double P) const
 {
     return ((sqrt(1.0 + pow(B - P, 2)) * sqrt(1.0 + pow(B - A, 2))) +
             (sqrt(1.0 + pow(B - P, 2)) * sqrt(1.0 + pow(B - C, 2))) +
@@ -42,14 +37,15 @@ float Chunk::calculatePyramid(float A, float B, float C, float D, float E, float
             (sqrt(1.0 + pow(H - P, 2)) * sqrt(1.0 + pow(H - A, 2))));
 }
 
-void Chunk::mapSimplify(const std::vector<std::vector<float>> &map)
+std::vector<std::vector<bool>> Chunk::mapSimplify(const std::vector<std::vector<float>> &map) const
 {
-    float pScore;
-    float fScore;
-    float ratio;
+    double pScore;
+    double fScore;
+    double ratio;
+    std::vector<std::vector<bool>> activationMap;
     std::vector<bool> line = std::vector<bool>(map.size(), true);
 
-    _activationMap.emplace_back(map.size(), true);
+    activationMap.emplace_back(map.size(), true);
     for (int i = 1; i < map.size() - 1; ++i)
     {
         for (int j = 1; j < map[i].size() - 1; ++j)
@@ -61,9 +57,10 @@ void Chunk::mapSimplify(const std::vector<std::vector<float>> &map)
                                       map[i][j + 1], map[i + 1][j + 1], map[i + 1][j],
                                       map[i + 1][j - 1], map[i][j - 1], map[i][j]);
             ratio = fScore / pScore;
-            line[j] = ratio <= 0.999985;
+            line[j] = ratio <= _phi;
         }
-        _activationMap.push_back(line);
+        activationMap.push_back(line);
     }
-    _activationMap.emplace_back(map.size(), true);
+    activationMap.emplace_back(map.size(), true);
+    return (activationMap);
 }

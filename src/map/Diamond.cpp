@@ -2,45 +2,43 @@
 
 #include "map/Diamond.hpp"
 
-Diamond::Diamond(const float &height, const unsigned int &powPower
+Diamond::Diamond(const unsigned int &powPower
         , const std::vector<std::vector<float>> &northMap
         , const std::vector<std::vector<float>> &eastMap
         , const std::vector<std::vector<float>> &southMap
         , const std::vector<std::vector<float>> &westMap)
-        : _northMap(northMap), _eastMap(eastMap), _southMap(southMap), _westMap(westMap)
+        : _northMapEmpty(northMap.empty()), _eastMapEmpty(eastMap.empty()),
+          _southMapEmpty(southMap.empty()), _westMapEmpty(westMap.empty())
 {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     _gen = std::mt19937(rd());
 
-    _height = height;
     _size = (unsigned int)pow(2, powPower) + 1;
-    _map = std::vector<std::vector<float>>(_size, std::vector<float>(_size, 0.0));
+    _map = std::vector<std::vector<float>>(_size, std::vector<float>(_size, 0.f));
 
-    auto m = std::make_shared<Mountain>(Mountain());
-    auto l = std::make_shared<Land>(Land());
-
+    // init map corners
     _map[0][0] = boundedRand(-_height, _height);
     _map[_map.size() - 1][_map.size() - 1] = boundedRand(-_height, _height);
     _map[_map.size() - 1][0] = boundedRand(-_height, _height);
     _map[0][_map.size() - 1] = boundedRand(-_height, _height);
 
-    if (!_westMap.empty())
-        for (int i = 0; i < _westMap.size(); i++)
-            _map[0][i] = _westMap[_size - 1][i];
+    // If this chunk is surrounded by other chunks
+    // we use the neighbours to init the sides of the map
+    if (!_westMapEmpty)
+        for (int i = 0; i < westMap.size(); i++)
+            _map[0][i] = westMap[_size - 1][i];
 
-    if (!_eastMap.empty())
-        for (int i = 0; i < _eastMap.size(); i++)
-            _map[_size - 1][i] = _eastMap[0][i];
+    if (!_eastMapEmpty)
+        for (int i = 0; i < eastMap.size(); i++)
+            _map[_size - 1][i] = eastMap[0][i];
 
-    if (!_northMap.empty())
-        for (int i = 0; i < _northMap.size(); i++)
-            _map[i][_size - 1] = _northMap[i][0];
+    if (!_northMapEmpty)
+        for (int i = 0; i < northMap.size(); i++)
+            _map[i][_size - 1] = northMap[i][0];
 
-    if (!_southMap.empty())
-    {
-        for (int i = 0; i < _southMap.size(); i++)
-            _map[i][0] = _southMap[i][_size - 1];
-    }
+    if (!_southMapEmpty)
+        for (int i = 0; i < southMap.size(); i++)
+            _map[i][0] = southMap[i][_size - 1];
 }
 
 void    Diamond::manageSquare(unsigned int x, unsigned int y, const unsigned int size, const std::shared_ptr<Biome> &biome)
@@ -58,7 +56,7 @@ void    Diamond::manageDiamond(unsigned int x, unsigned int y, const unsigned in
     float topDivider = 3.f;
     float leftDivider = 3.f;
 
-    if (_southMap.empty() || y >= size / 2)
+    if (_southMapEmpty || y >= size / 2)
     {
         if (y >= size / 2)
         {
@@ -69,7 +67,7 @@ void    Diamond::manageDiamond(unsigned int x, unsigned int y, const unsigned in
                                   _map[x + size / 2][y + size / 2] +
                                   topDiamond) / topDivider) + biome->boundedRand();
     }
-    if (_westMap.empty() || x >= size / 2)
+    if (_westMapEmpty || x >= size / 2)
     {
         if (x >= size / 2)
         {
@@ -80,12 +78,12 @@ void    Diamond::manageDiamond(unsigned int x, unsigned int y, const unsigned in
                                   _map[x + size / 2][y + size / 2] +
                                   leftDiamond) / leftDivider) + biome->boundedRand();
     }
-    if (flag & RIGHT_END && _eastMap.empty())
+    if (flag & RIGHT_END && _eastMapEmpty)
     {
         _map[x + size][y + size / 2] = ((_map[x + size][y + size] + _map[x + size][y] +
                                          _map[x + size / 2][y + size / 2]) / 3.f) + biome->boundedRand();
     }
-    if (flag & TOP_END && _northMap.empty())
+    if (flag & TOP_END && _northMapEmpty)
     {
         _map[x + size / 2][y + size] = ((_map[x + size][y + size] + _map[x][y + size] +
                                          _map[x + size / 2][y + size / 2]) / 3.f) + biome->boundedRand();
@@ -139,7 +137,7 @@ void    Diamond::fillMap()
     }
 }
 
-float   Diamond::getDiff(int x, int y, unsigned int size)
+float   Diamond::getDiff(int x, int y, unsigned int size) const
 {
     float max = _map[size][size];
     float min = _map[size][size];
@@ -156,6 +154,12 @@ float   Diamond::getDiff(int x, int y, unsigned int size)
     return max - min;
 }
 
+float	Diamond::boundedRand(float min, float max)
+{
+    std::uniform_real_distribution<> dis(min, max);
+    return (static_cast<float>(dis(_gen)));
+}
+
 void	Diamond::printMap() const
 {
     for (const auto &vec : _map)
@@ -166,12 +170,4 @@ void	Diamond::printMap() const
         }
         std::cout << std::endl;
     }
-}
-
-
-
-float	Diamond::boundedRand(float min, float max)
-{
-    std::uniform_real_distribution<> dis(min, max);
-    return (static_cast<float>(dis(_gen)));
 }

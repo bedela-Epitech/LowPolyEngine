@@ -14,8 +14,6 @@ class QuadTreeNode
 public:
     std::vector<std::vector<float>>	_map;
     std::vector<std::vector<bool>>	_activationMap;
-    unsigned int                    _size;
-    Chunk                           _chunk;
     glm::vec2                       _pos;
 
 public:
