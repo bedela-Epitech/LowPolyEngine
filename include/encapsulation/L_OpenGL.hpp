@@ -1,4 +1,6 @@
-
+//
+// Created by adrien on 03/01/20.
+//
 
 #ifndef _L_OPENGL_HPP_
 
@@ -7,6 +9,7 @@
 #include <future>
 #include "map/Terrain.h"
 #include "encapsulation/Menu.h"
+
 class L_OpenGL
 {
 public:

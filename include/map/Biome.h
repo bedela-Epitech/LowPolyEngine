@@ -9,18 +9,16 @@
 #include <memory>
 #include <random>
 
-
 class Diamond;
 
 class Biome
 {
 protected:
     std::mt19937    _gen;
-    float       _height;
-    glm::vec3   _color;
+    float           _height;
+
 public:
     virtual float   boundedRand() = 0;
-
     friend Diamond;
 };
 

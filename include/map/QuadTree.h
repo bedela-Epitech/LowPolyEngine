@@ -18,10 +18,10 @@ public:
 
 public:
     QuadTreeNode(unsigned int size, const glm::vec2 &,
-                 const std::vector<std::vector<float>> & ,
-                 const std::vector<std::vector<float>> & ,
-                 const std::vector<std::vector<float>> & ,
-                 const std::vector<std::vector<float>> & );
+                 const std::vector<std::vector<float>> &,
+                 const std::vector<std::vector<float>> &,
+                 const std::vector<std::vector<float>> &,
+                 const std::vector<std::vector<float>> &);
 };
 
 class QuadTree
@@ -30,13 +30,13 @@ public:
     std::map<std::pair<int, int>, std::shared_ptr<QuadTreeNode>> _miniMap;
     unsigned int                    _size;
     glm::ivec2                      _currentPos;
-    unsigned int                    _power;
+
     std::vector<glm::vec3>          _vertices;
     std::vector<glm::vec3>          _normals;
     std::vector<glm::vec3>          _colors;
 
 public:
-    QuadTree(unsigned int);
+    explicit QuadTree(unsigned int);
     void    gatherChunks();
     void    addChunk(const glm::ivec2 &);
 };

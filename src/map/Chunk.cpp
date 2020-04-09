@@ -4,13 +4,13 @@
 
 #include "map/Chunk.h"
 
-Chunk::Chunk(unsigned int power) : _power(power)
+Chunk::Chunk(unsigned int size) : _size(size)
 { }
 
 std::vector<std::vector<float>>        Chunk::generateMap(const glm::vec2 &pos, const std::vector<std::vector<float>> &northMap, const std::vector<std::vector<float>> &eastMap,
                                                           const std::vector<std::vector<float>> &southMap, const std::vector<std::vector<float>> &westMap)
 {
-    Diamond diams(_power, northMap, eastMap, southMap, westMap);
+    Diamond diams(_size, northMap, eastMap, southMap, westMap);
     diams.fillMap();
     return diams._map;
 }

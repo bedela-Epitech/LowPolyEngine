@@ -1,4 +1,6 @@
-
+//
+// Created by adrien on 03/01/20.
+//
 
 #ifndef _L_DIAMOND_HPP_
 #define _L_DIAMOND_HPP_
@@ -26,7 +28,7 @@ private:
     bool    _westMapEmpty;
 
 public:
-	Diamond(const unsigned int &,
+	Diamond(unsigned int,
 	        const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &,
 	        const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &);
     void	fillMap();
@@ -35,10 +37,9 @@ public:
 private:
     void	manageSquare(unsigned int , unsigned int , unsigned int, const std::shared_ptr<Biome> &);
     void	manageDiamond(unsigned int, unsigned int , unsigned int, int, const std::shared_ptr<Biome> &);
-	[[nodiscard]] float 	getDiff(int, int, unsigned int) const;
+	[[nodiscard]] float getDiff(int, int, unsigned int) const;
 	[[nodiscard]] float	boundedRand(float, float);
 
 };
-
 
 #endif // _L_DIAMOND_HPP_

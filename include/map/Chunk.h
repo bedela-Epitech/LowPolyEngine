@@ -5,7 +5,6 @@
 #ifndef INC_71K2LEDEB_CHUNK_H
 #define INC_71K2LEDEB_CHUNK_H
 
-
 #include "delaunator.hpp"
 #include "map/Perlin.h"
 #include "map/Diamond.hpp"
@@ -14,17 +13,18 @@ class Chunk
 {
 public:
     double          _phi = 0.999985;
-    unsigned int    _power;
+    unsigned int    _size;
 
 public:
-    Chunk(unsigned int);
-    std::vector<std::vector<float>>    generateMap(const glm::vec2 &, const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &,
+    explicit Chunk(unsigned int);
+    std::vector<std::vector<float>>    generateMap(const glm::vec2 &,
+                                                   const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &,
                                                    const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &);
-    std::vector<std::vector<bool>>    mapSimplify(const std::vector<std::vector<float>> &) const;
+    [[nodiscard]] std::vector<std::vector<bool>>    mapSimplify(const std::vector<std::vector<float>> &) const;
 
 private:
-    double   calculateFlat(double, double, double, double, double, double, double, double) const;
-    double   calculatePyramid(double, double, double, double, double, double, double, double, double) const;
+    [[nodiscard]] double   calculateFlat(double, double, double, double, double, double, double, double) const;
+    [[nodiscard]] double   calculatePyramid(double, double, double, double, double, double, double, double, double) const;
 };
 
 #endif //INC_71K2LEDEB_CHUNK_H

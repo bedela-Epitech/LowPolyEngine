@@ -10,15 +10,14 @@
 //
 /////////////////////
 
-QuadTreeNode::QuadTreeNode(unsigned int power, const glm::vec2 &pos,
+QuadTreeNode::QuadTreeNode(unsigned int size, const glm::vec2 &pos,
                            const std::vector<std::vector<float>> &northMap,
                            const std::vector<std::vector<float>> &eastMap,
                            const std::vector<std::vector<float>> &southMap,
                            const std::vector<std::vector<float>> &westMap)
                            : _pos(pos)
 {
-    Chunk chunk(power);
-    unsigned int size = (unsigned int)pow(2, power) + 1;
+    Chunk chunk(size);
     _map = chunk.generateMap(glm::vec2(_pos.x * (size - 1), _pos.y * (size - 1)), northMap, eastMap, southMap, westMap);
     _activationMap = chunk.mapSimplify(_map);
 }
@@ -32,12 +31,11 @@ QuadTreeNode::QuadTreeNode(unsigned int power, const glm::vec2 &pos,
 QuadTree::QuadTree(unsigned int power)
 {
     _currentPos = {0, 0};
-    _power = power;
+    _size = (unsigned int)pow(2, power) + 1;
 
     std::vector<std::vector<float>> noMap;
-    auto ptr = std::make_shared<QuadTreeNode>(_power, glm::vec2(0, 0), noMap, noMap, noMap, noMap);
+    auto ptr = std::make_shared<QuadTreeNode>(_size, glm::vec2(0, 0), noMap, noMap, noMap, noMap);
     _miniMap.emplace(std::make_pair(_currentPos.x, _currentPos.y), ptr);
-    _size = (unsigned int)pow(2, power) + 1;
 }
 
 glm::vec3   getColor(float height)
@@ -142,6 +140,6 @@ void    QuadTree::addChunk(const glm::ivec2 &adder)
     if (auto it = _miniMap.find({_currentPos.x - 1, _currentPos.y}); it != _miniMap.end())
         westMap = it->second->_map;
 
-    auto ptr = std::make_shared<QuadTreeNode>(_power, _currentPos, northMap, eastMap, southMap, westMap);
+    auto ptr = std::make_shared<QuadTreeNode>(_size, _currentPos, northMap, eastMap, southMap, westMap);
     _miniMap.emplace(std::make_pair(_currentPos.x, _currentPos.y), ptr);
 }

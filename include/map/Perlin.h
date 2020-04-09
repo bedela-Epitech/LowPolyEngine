@@ -17,14 +17,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-
-
 inline
 float quintic(const float &t)
 {
     return t * t * t * (t * (t * 6 - 15) + 10);
 }
-
 
 class PerlinNoise
 {

@@ -16,7 +16,8 @@ private:
     float               _lastFrame = 0.f;
     std::vector<int>	_keys;
     std::vector<int>	_mouseButtons;
-    std::map<int, std::function<void(float)>>       _cameraFunctions;
+
+    std::map<int, std::function<void(float)>>   _cameraFunctions;
     std::map<int, std::function<void(void)>>    _menuFunctions;
 
 public:

@@ -11,8 +11,7 @@ class Mountain : public Biome
 {
 public:
     Mountain();
-
-     float	boundedRand();
+    float	boundedRand() override;
 };
 
 #endif //INC_71K2LEDEB_MOUNTAIN_H

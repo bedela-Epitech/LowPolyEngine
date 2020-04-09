@@ -10,7 +10,6 @@
 #include "GL/gl.h"
 #include "stb_image.h"
 
-
 class Texture
 {
 private:
@@ -23,7 +22,7 @@ private:
     inline static unsigned int    _textureId = 0;
 
 public:
-    Texture(const std::string &);
+    explicit Texture(const std::string &);
     ~Texture();
 
     unsigned int bind();

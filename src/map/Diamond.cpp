@@ -2,18 +2,18 @@
 
 #include "map/Diamond.hpp"
 
-Diamond::Diamond(const unsigned int &powPower
-        , const std::vector<std::vector<float>> &northMap
-        , const std::vector<std::vector<float>> &eastMap
-        , const std::vector<std::vector<float>> &southMap
-        , const std::vector<std::vector<float>> &westMap)
+Diamond::Diamond(unsigned int size,
+                 const std::vector<std::vector<float>> &northMap,
+                 const std::vector<std::vector<float>> &eastMap,
+                 const std::vector<std::vector<float>> &southMap,
+                 const std::vector<std::vector<float>> &westMap)
         : _northMapEmpty(northMap.empty()), _eastMapEmpty(eastMap.empty()),
           _southMapEmpty(southMap.empty()), _westMapEmpty(westMap.empty())
 {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     _gen = std::mt19937(rd());
 
-    _size = (unsigned int)pow(2, powPower) + 1;
+    _size = size;
     _map = std::vector<std::vector<float>>(_size, std::vector<float>(_size, 0.f));
 
     // init map corners
