@@ -6,7 +6,7 @@
 
 // Path to Vertex Shader and Fragment Shader
 Terrain::Terrain(const std::string &vsPath, const std::string &fsPath)
-: _shader(vsPath, fsPath), _bufferLayout(_shader.ID)
+        : _shader(vsPath, fsPath), _bufferLayout(_shader.ID)
 {
     _shader.use();
     _bufferLayout.addElement<float>("aPos", 3, GL_FALSE);
