@@ -1,3 +1,7 @@
+//
+// rights goes to
+// https://github.com/delfrrr/delaunator-cpp
+//
 
 #ifndef _DELAUNATOR_HPP_
 #define _DELAUNATOR_HPP_

@@ -13,7 +13,7 @@ include_directories(lib)
 
 # SET SOURCES
 SET(GLAD_SOURCES ${GLAD_DIR}/src/glad.c)
-set(LPE_SOURCES src/engine/main.cpp
+set(LPE_SOURCES src/main.cpp
 		include/encapsulation/L_OpenGL.h src/encapsulation/L_OpenGL.cpp
         include/engine/Camera.h src/engine/Camera.cpp
 		include/encapsulation/Light.h src/encapsulation/Light.cpp
