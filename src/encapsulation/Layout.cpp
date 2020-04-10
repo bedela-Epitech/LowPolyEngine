@@ -13,7 +13,7 @@ void Layout::addElement(const char *name, unsigned int count, bool normalized)
 {
     auto pos = glGetAttribLocation(_shaderId, name);
     if (pos < 0)
-        throw ("unvalid location");
+        throw std::invalid_argument("unvalid location");
 
     if constexpr (std::is_same<T, float>::value)
         _elements.push_back({pos, count, GL_FLOAT, normalized});

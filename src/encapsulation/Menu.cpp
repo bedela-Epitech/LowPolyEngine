@@ -9,8 +9,14 @@ Menu::Menu(const std::string &textVsPath, const std::string &testFsPath, const s
           _start(glm::vec2(142, 85), glm::vec2(670, 140)), _quit(glm::vec2(145, 305), glm::vec2(670, 140))
 {
     _textShader.use();
+
+    try {
     _bufferLayout.addElement<float>("aPos", 2, GL_FALSE);
     _bufferLayout.addElement<float>("textCoord", 2, GL_FALSE);
+    }
+    catch (const std::invalid_argument &error) {
+        throw std::invalid_argument("in Menu, invalid shader variable name");
+    }
 
     initTexture();
     bindTexture(_menuTexture);

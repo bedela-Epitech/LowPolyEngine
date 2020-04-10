@@ -15,6 +15,7 @@ L_OpenGL::L_OpenGL(const std::string &mapVsPath, const std::string &mapFsPath,
     GLCall(glEnable(GL_DEPTH_TEST));
 
     _loadingThread = std::thread(&Terrain::generateTerrain, &_terrain);
+
 }
 
 void    L_OpenGL::initShader(const glm::mat4 &projection)

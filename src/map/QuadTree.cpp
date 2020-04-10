@@ -67,8 +67,10 @@ void QuadTree::gatherChunks()
         }
     }
     float range = maxHeight - minHeight;
-    if (coords.empty())
-        return ;
+    if (coords.empty()) {
+        std::cout << "Warning : no map" << std::endl;
+        return;
+    }
     delaunator::Delaunator d(coords);
     Perlin p;
     float ultraMax = -1000;

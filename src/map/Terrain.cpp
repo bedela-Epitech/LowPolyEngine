@@ -9,9 +9,15 @@ Terrain::Terrain(const std::string &vsPath, const std::string &fsPath)
         : _shader(vsPath, fsPath), _bufferLayout(_shader.ID)
 {
     _shader.use();
-    _bufferLayout.addElement<float>("aPos", 3, GL_FALSE);
-    _bufferLayout.addElement<float>("normal", 3, GL_FALSE);
-    _bufferLayout.addElement<float>("in_Color", 3, GL_FALSE);
+
+    try {
+        _bufferLayout.addElement<float>("aPos", 3, GL_FALSE);
+        _bufferLayout.addElement<float>("normal", 3, GL_FALSE);
+        _bufferLayout.addElement<float>("in_Color", 3, GL_FALSE);
+    }
+    catch (const std::invalid_argument &error) {
+        throw std::invalid_argument("in Terrain, invalid shader variable name");
+    }
 }
 
 void Terrain::generateTerrain()

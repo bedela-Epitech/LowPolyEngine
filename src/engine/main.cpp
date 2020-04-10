@@ -1,10 +1,10 @@
 
-//#include <stb_image.h>
 
 #include "encapsulation/Input.h"
 #include "encapsulation/L_OpenGL.h"
 #include "encapsulation/Texture.h"
 #include <iostream>
+#include <exception>
 
 const unsigned int SCR_WIDTH = 960;
 const unsigned int SCR_HEIGHT = 540;
@@ -12,6 +12,7 @@ const unsigned int SCR_HEIGHT = 540;
 int main()
 {
     Window window(SCR_WIDTH, SCR_HEIGHT, false);
+    try
     {
         window.loadFunctions();
 
@@ -22,6 +23,7 @@ int main()
                                                             "../ressources/maxresdefault960x540.jpg",
                                                             "../ressources/backgroundloading.jpg");
         Input inputKeys(camera, menu);
+
 
         L_OpenGL opengl("../terrain.vs", "../terrain.fs", menu);
 
@@ -40,6 +42,10 @@ int main()
 
             window.update();
         }
+    }
+    catch (const std::exception &error)
+    {
+        std::cout << "Error : " << error.what() << std::endl;
     }
     Window::terminate();
 

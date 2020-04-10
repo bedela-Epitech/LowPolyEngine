@@ -10,6 +10,8 @@
 #include "GL/gl.h"
 #include "stb_image.h"
 
+#define MAX_TEXTURE 32
+
 class Texture
 {
 private:

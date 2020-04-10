@@ -33,8 +33,12 @@ Texture::~Texture()
 
 unsigned int    Texture::bind()
 {
+    if (_textureId >= MAX_TEXTURE)
+        throw std::out_of_range("too much textures");
+
     glActiveTexture(GL_TEXTURE0 + _textureId);
     glBindTexture(GL_TEXTURE_2D, _mRenderer);
+
     _textureId++;
     return _textureId - 1;
 }
