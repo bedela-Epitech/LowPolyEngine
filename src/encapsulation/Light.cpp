@@ -1,5 +1,5 @@
 
-#include "Light.hpp"
+#include "encapsulation/Light.h"
 
 void Light::setDir(const glm::vec3 &dir)
 {

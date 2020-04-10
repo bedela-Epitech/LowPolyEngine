@@ -6,7 +6,7 @@
 #define INC_71K2LEDEB_TERRAIN_H
 
 #include "encapsulation/Shader.h"
-#include "Light.hpp"
+#include "encapsulation/Light.h"
 #include "map/QuadTree.h"
 #include "encapsulation/VertexArray.h"
 

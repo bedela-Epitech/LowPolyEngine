@@ -16,7 +16,7 @@ SET(GLAD_SOURCES ${GLAD_DIR}/src/glad.c)
 set(LPE_SOURCES src/engine/main.cpp
 		include/encapsulation/L_OpenGL.h src/encapsulation/L_OpenGL.cpp
         include/engine/Camera.h src/engine/Camera.cpp
-				include/Light.hpp src/Light.cpp
+		include/encapsulation/Light.h src/encapsulation/Light.cpp
 		include/encapsulation/Window.h src/encapsulation/Window.cpp
 		include/encapsulation/Input.h src/encapsulation/Input.cpp
 		include/map/Diamond.h src/map/Diamond.cpp

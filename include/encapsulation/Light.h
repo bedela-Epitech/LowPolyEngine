@@ -2,8 +2,8 @@
 // Created by adrien on 03/01/20.
 //
 
-#ifndef _LEDEB_LIGHT_HPP_
-#define _LEDEB_LIGHT_HPP_
+#ifndef _LEDEB_LIGHT_H_
+#define _LEDEB_LIGHT_H_
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -28,4 +28,4 @@ public:
 
 };
 
-#endif // !_LEDEB_LIGHT_HPP_
+#endif // !_LEDEB_LIGHT_H_
