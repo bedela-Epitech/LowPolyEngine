@@ -22,12 +22,6 @@ Menu::Menu(const std::string &textVsPath, const std::string &testFsPath, const s
     bindTexture(_menuTexture);
 }
 
-void    Menu::linkTextureInfo()
-{
-    _textShader.use();
-    _vArray.addVertexBuffer(_textVertices.data(), sizeof(float) * _textVertices.size(), _bufferLayout);
-}
-
 void    Menu::initTexture()
 {
 
@@ -44,6 +38,12 @@ void    Menu::initTexture()
     _vertexNb = _textVertices.size() / 2;
 
     linkTextureInfo();
+}
+
+void    Menu::linkTextureInfo()
+{
+    _textShader.use();
+    _vArray.addVertexBuffer(_textVertices.data(), sizeof(float) * _textVertices.size(), _bufferLayout);
 }
 
 void Menu::bindTexture(Texture &texture)

@@ -7,8 +7,9 @@
 Chunk::Chunk(unsigned int size) : _size(size)
 { }
 
-std::vector<std::vector<float>>        Chunk::generateMap(const glm::vec2 &pos, const std::vector<std::vector<float>> &northMap, const std::vector<std::vector<float>> &eastMap,
-                                                          const std::vector<std::vector<float>> &southMap, const std::vector<std::vector<float>> &westMap)
+Matrix<float>        Chunk::generateMap(const glm::vec2 &pos,
+                                        const Matrix<float> &northMap, const Matrix<float> &eastMap,
+                                        const Matrix<float> &southMap, const Matrix<float> &westMap)
 {
     Diamond diams(_size, northMap, eastMap, southMap, westMap);
     diams.fillMap();
@@ -37,30 +38,30 @@ double Chunk::calculatePyramid(double A, double B, double C, double D, double E,
             (sqrt(1.0 + pow(H - P, 2)) * sqrt(1.0 + pow(H - A, 2))));
 }
 
-std::vector<std::vector<bool>> Chunk::mapSimplify(const std::vector<std::vector<float>> &map) const
+std::vector<std::vector<bool>> Chunk::mapSimplify(const Matrix<float> &map) const
 {
     double pScore;
     double fScore;
     double ratio;
     std::vector<std::vector<bool>> activationMap;
-    std::vector<bool> line = std::vector<bool>(map.size(), true);
+    std::vector<bool> line = std::vector<bool>(map.rows(), true);
 
-    activationMap.emplace_back(map.size(), true);
-    for (int i = 1; i < map.size() - 1; ++i)
+    activationMap.emplace_back(map.rows(), true);
+    for (int i = 1; i < map.rows() - 1; ++i)
     {
-        for (int j = 1; j < map[i].size() - 1; ++j)
+        for (int j = 1; j < map.cols() - 1; ++j)
         {
-            fScore = calculateFlat(map[i - 1][j - 1], map[i - 1][j], map[i - 1][j + 1],
-                                   map[i][j + 1], map[i + 1][j + 1], map[i + 1][j],
-                                   map[i + 1][j - 1], map[i][j - 1]);
-            pScore = calculatePyramid(map[i - 1][j - 1], map[i - 1][j], map[i - 1][j + 1],
-                                      map[i][j + 1], map[i + 1][j + 1], map[i + 1][j],
-                                      map[i + 1][j - 1], map[i][j - 1], map[i][j]);
+            fScore = calculateFlat(map.at(i - 1, j - 1), map.at(i - 1, j), map.at(i - 1, j + 1),
+                                   map.at(i, j + 1), map.at(i + 1, j + 1), map.at(i + 1, j),
+                                   map.at(i + 1, j - 1), map.at(i, j - 1));
+            pScore = calculatePyramid(map.at(i - 1, j - 1), map.at(i - 1, j), map.at(i - 1, j + 1),
+                                      map.at(i, j + 1), map.at(i + 1, j + 1), map.at(i + 1, j),
+                                      map.at(i + 1, j - 1), map.at(i, j - 1), map.at(i, j));
             ratio = fScore / pScore;
             line[j] = ratio <= _phi;
         }
         activationMap.push_back(line);
     }
-    activationMap.emplace_back(map.size(), true);
+    activationMap.emplace_back(map.rows(), true);
     return (activationMap);
 }

@@ -6,6 +6,9 @@
 #include <iostream>
 #include <exception>
 
+
+#include "encapsulation/Matrix.h"
+
 const unsigned int SCR_WIDTH = 960;
 const unsigned int SCR_HEIGHT = 540;
 

@@ -8,20 +8,20 @@
 #include "map/Chunk.h"
 #include "out/WriteObj.h"
 #include <map>
-
+#include "encapsulation/Matrix.h"
 class QuadTreeNode
 {
 public:
-    std::vector<std::vector<float>>	_map;
+    Matrix<float>	_map;
     std::vector<std::vector<bool>>	_activationMap;
     glm::vec2                       _pos;
 
 public:
     QuadTreeNode(unsigned int size, const glm::vec2 &,
-                 const std::vector<std::vector<float>> &,
-                 const std::vector<std::vector<float>> &,
-                 const std::vector<std::vector<float>> &,
-                 const std::vector<std::vector<float>> &);
+                 const Matrix<float> &,
+                 const Matrix<float> &,
+                 const Matrix<float> &,
+                 const Matrix<float> &);
 };
 
 class QuadTree

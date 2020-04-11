@@ -11,10 +11,10 @@
 /////////////////////
 
 QuadTreeNode::QuadTreeNode(unsigned int size, const glm::vec2 &pos,
-                           const std::vector<std::vector<float>> &northMap,
-                           const std::vector<std::vector<float>> &eastMap,
-                           const std::vector<std::vector<float>> &southMap,
-                           const std::vector<std::vector<float>> &westMap)
+                           const Matrix<float> &northMap,
+                           const Matrix<float> &eastMap,
+                           const Matrix<float> &southMap,
+                           const Matrix<float> &westMap)
                            : _pos(pos)
 {
     Chunk chunk(size);
@@ -33,7 +33,7 @@ QuadTree::QuadTree(unsigned int power)
     _currentPos = {0, 0};
     _size = (unsigned int)pow(2, power) + 1;
 
-    std::vector<std::vector<float>> noMap;
+    Matrix<float> noMap;
     auto ptr = std::make_shared<QuadTreeNode>(_size, glm::vec2(0, 0), noMap, noMap, noMap, noMap);
     _miniMap.emplace(std::make_pair(_currentPos.x, _currentPos.y), ptr);
 }
@@ -58,8 +58,8 @@ void QuadTree::gatherChunks()
             {
                 if (quad->_activationMap[i][j])
                 {
-                    maxHeight = std::max(map[i][j] * 250.f - 100, maxHeight);
-                    minHeight = std::min(map[i][j] * 250.f - 100, minHeight);
+                    maxHeight = std::max(map.at(i, j) * 250.f - 100, maxHeight);
+                    minHeight = std::min(map.at(i, j) * 250.f - 100, minHeight);
                     coords.push_back(i + (xMap * (int)_size));
                     coords.push_back(j + (zMap * (int)_size));
                 }
@@ -104,7 +104,7 @@ void QuadTree::gatherChunks()
             // shift the absolute position to the map position
             xPos  = x[j] - (int)_size * xPos;
             zPos = z[j] - (int)_size * zPos;
-            h[j] = (quad->_map[xPos][zPos] + p.getHeight(x[j], z[j])) * 250.f - 100.f;
+            h[j] = (quad->_map.at(xPos, zPos) + p.getHeight(x[j], z[j])) * 250.f - 100.f;
         }
         ultraMax = std::max(ultraMax, h[1]);
         ultraMin = std::min(ultraMin, h[1]);
@@ -128,10 +128,10 @@ void    QuadTree::addChunk(const glm::ivec2 &adder)
 {
     _currentPos += adder;
 
-    std::vector<std::vector<float>> northMap;
-    std::vector<std::vector<float>> eastMap;
-    std::vector<std::vector<float>> southMap;
-    std::vector<std::vector<float>> westMap;
+    Matrix<float> northMap;
+    Matrix<float> eastMap;
+    Matrix<float> southMap;
+    Matrix<float> westMap;
 
     if (auto it = _miniMap.find({_currentPos.x, _currentPos.y + 1}); it != _miniMap.end())
         northMap = it->second->_map;

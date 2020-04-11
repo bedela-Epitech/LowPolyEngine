@@ -7,15 +7,16 @@
 
 #include "Mountain.h"
 #include "Land.h"
+#include "encapsulation/Matrix.h"
 #include <iostream>
-#include <vector>
+
 
 enum flag {NORMAL, RIGHT_END, TOP_END};
 
 class Diamond
 {
 public:
-    std::vector<std::vector<float>> _map;
+    Matrix<float> _map;
 
 private:
 	float		    _height = 0.55f;
@@ -29,8 +30,8 @@ private:
 
 public:
 	Diamond(unsigned int,
-	        const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &,
-	        const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &);
+	        const Matrix<float> &, const Matrix<float> &,
+	        const Matrix<float> &, const Matrix<float> &);
     void	fillMap();
     void	printMap() const;
 

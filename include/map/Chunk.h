@@ -17,10 +17,10 @@ public:
 
 public:
     explicit Chunk(unsigned int);
-    std::vector<std::vector<float>>    generateMap(const glm::vec2 &,
-                                                   const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &,
-                                                   const std::vector<std::vector<float>> &, const std::vector<std::vector<float>> &);
-    [[nodiscard]] std::vector<std::vector<bool>>    mapSimplify(const std::vector<std::vector<float>> &) const;
+    Matrix<float>    generateMap(const glm::vec2 &,
+                                 const Matrix<float> &, const Matrix<float> &,
+                                 const Matrix<float> &, const Matrix<float> &);
+    [[nodiscard]] std::vector<std::vector<bool>>    mapSimplify(const Matrix<float> &) const;
 
 private:
     [[nodiscard]] double   calculateFlat(double, double, double, double, double, double, double, double) const;
