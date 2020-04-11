@@ -12,7 +12,6 @@ template<class T>
 class Matrix{
 private:
     // row and/or colsize must be greater then 0;
-    typedef T & reference;
     std::vector<T>  _matrix;
     unsigned int    _rowSize;
     unsigned int    _columnSize;
@@ -20,10 +19,12 @@ private:
 public:
     Matrix() {}
 
-    Matrix(unsigned int rowSize, unsigned colSize, T value)
+    Matrix(unsigned int rowSize, unsigned int colSize, T value)
             : _rowSize(rowSize),
               _columnSize(colSize)
     {
+        if (!(rowSize > 0 && colSize > 0))
+            throw std::logic_error("size not valid");
         _matrix = std::vector<T>(_rowSize * _columnSize, value);
     }
 
@@ -32,6 +33,8 @@ public:
               _rowSize(rowSize),
               _columnSize(colSize)
     {
+        if (!(rowSize > 0 && colSize > 0))
+            throw std::logic_error("size not valid");
         if (il.size() != _rowSize * _columnSize)
             throw std::logic_error("Wrong init list size");
     }
@@ -46,6 +49,8 @@ public:
               _rowSize(rowSize),
               _columnSize(colSize)
     {
+        if (!(rowSize > 0 && colSize > 0))
+            throw std::logic_error("size not valid");
         if (_matrix.size() != _rowSize * _columnSize)
             throw std::logic_error("Wrong init list size");
     }
@@ -60,6 +65,8 @@ public:
               _rowSize(rowSize),
               _columnSize(colSize)
     {
+        if (!(rowSize > 0 && colSize > 0))
+            throw std::logic_error("size not valid");
         if (_matrix.size() != _rowSize * _columnSize)
             throw std::logic_error("Wrong init list size");
     }
@@ -102,13 +109,14 @@ public:
         return _matrix;
     }
 
-    T & at(unsigned int raw, unsigned int col)
+    typename std::vector<T>::reference at(unsigned int raw, unsigned int col)
     {
-        return (_matrix.at(index(raw, col)));
+        return _matrix.at(index(raw, col));
     }
-    const T   &at(unsigned int raw, unsigned int col) const
+
+    typename std::vector<T>::const_reference at(unsigned int raw, unsigned int col) const
     {
-        return (_matrix[index(raw, col)]);
+        return _matrix.at(index(raw, col));
     }
     // allows to access an element of the matrix by index expressed
     // in terms of rows and columns
