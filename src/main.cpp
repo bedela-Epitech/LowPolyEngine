@@ -2,7 +2,6 @@
 
 #include "encapsulation/Input.h"
 #include "encapsulation/L_OpenGL.h"
-#include "encapsulation/Texture.h"
 #include <iostream>
 #include <exception>
 

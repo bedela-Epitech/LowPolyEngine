@@ -9,16 +9,24 @@
 #include <vector>
 
 template<class T>
-class Matrix{
+class Matrix
+{
 private:
+
     // row and/or colsize must be greater then 0;
     std::vector<T>  _matrix;
     unsigned int    _rowSize;
     unsigned int    _columnSize;
 
 public:
+    ////////////////////////
+    //                    //
+    //    CONSTRUCTORS    //
+    //                    //
+    ////////////////////////
     Matrix() {}
 
+    // Init the matrix size rowSize * colSize with the given value
     Matrix(unsigned int rowSize, unsigned int colSize, T value)
             : _rowSize(rowSize),
               _columnSize(colSize)
@@ -28,6 +36,8 @@ public:
         _matrix = std::vector<T>(_rowSize * _columnSize, value);
     }
 
+    // init the matrix with the given init list
+    // check that init list size matches rowSize * colSize
     Matrix(unsigned int rowSize, unsigned colSize, std::initializer_list<T> il)
             : _matrix(il),
               _rowSize(rowSize),
@@ -39,11 +49,8 @@ public:
             throw std::logic_error("Wrong init list size");
     }
 
-    // constructor by MVector
-    // if the size of the vector is larger then the size of the matrix,
-    // the matrix will construct with the first rowsize*colsize elements of the vector
-    // if the size of the vector is smaller then the size of the matrix,
-    // the matrix will not construct
+    // init the matrix with the given vector
+    // check that vector's size matches rowSize * colSize
     explicit Matrix(unsigned int rowSize, unsigned colSize, const std::vector<T> &vector)
             : _matrix(vector),
               _rowSize(rowSize),
@@ -55,10 +62,8 @@ public:
             throw std::logic_error("Wrong init list size");
     }
 
-    // parameter pack constructor
-    // constructs a matrix by typing values into the brackets
-    // example: Matrix<int, 2, 2> a_matrix(1,2,3,4)
-    // values can be of any type, they will be interpreted as of class T
+    // init the matrix with the given arguments
+    // check that the number of arguments matches rowSize * colSize
     template<class ... N>
     explicit Matrix(unsigned int rowSize, unsigned colSize, T first, N&&... values)
             : _matrix{first, std::forward<T>(static_cast<T>(values))...},
@@ -71,28 +76,64 @@ public:
             throw std::logic_error("Wrong init list size");
     }
 
+    ///////////////////////////////////////
+    //                                   //
+    //    VECTOR FUNCTION REPLICATION    //
+    //                                   //
+    ///////////////////////////////////////
 
-
-// *******************************************************
-    // Iterator support
-// *******************************************************
-
-    // traverse the entire vector
+    // return the begin iterator of the internal vector
     typename std::vector<T>::iterator begin() {
         return _matrix.begin();
     }
 
+    // return the begin iterator of the internal vector
     typename std::vector<T>::const_iterator begin()  const{
         return _matrix.begin();
     }
 
+    // return the end iterator of the internal vector
     typename std::vector<T>::iterator end() {
         return _matrix.end();
     }
 
+    // return the end iterator of the internal vector
     typename std::vector<T>::const_iterator end() const {
         return _matrix.end();
     }
+
+    // With a vector of vector, we would access like that :
+    // auto value = myVectorOfVector[row][col]
+    // here we access the same value with :
+    // auto value = Matrix.at(row, col)
+    // the major difference here is that we have only one vector
+    // internaly, leads to better memory optimisation
+
+
+    // return the element at the raw/col position
+    typename std::vector<T>::reference at(unsigned int raw, unsigned int col)
+    {
+        return _matrix.at(index(raw, col));
+    }
+
+    // return the element at the raw/col position
+    typename std::vector<T>::const_reference at(unsigned int raw, unsigned int col) const
+    {
+        return _matrix.at(index(raw, col));
+    }
+
+    // check if internal vector is empty
+    [[nodiscard]] bool    empty() const
+    {
+        return (_matrix.empty());
+    }
+
+
+    ///////////////////////
+    //                   //
+    //      GETTERS      //
+    //                   //
+    ///////////////////////
 
     // returns the number of rows of the matrix
     [[nodiscard]] unsigned int rows() const{
@@ -109,26 +150,9 @@ public:
         return _matrix;
     }
 
-    typename std::vector<T>::reference at(unsigned int raw, unsigned int col)
-    {
-        return _matrix.at(index(raw, col));
-    }
-
-    typename std::vector<T>::const_reference at(unsigned int raw, unsigned int col) const
-    {
-        return _matrix.at(index(raw, col));
-    }
-    // allows to access an element of the matrix by index expressed
-    // in terms of rows and columns
-    // @ param "r" - r'th row of the matrix
-    // @ param "c" - c'th column of the matrix
-    [[nodiscard]] unsigned int index(unsigned int r, unsigned int c) const {
-        return r * cols() + c;
-    }
-
-    [[nodiscard]] bool    empty() const
-    {
-        return (_matrix.empty());
+    // allows to access an element of the matrix by index
+    [[nodiscard]] unsigned int index(unsigned int row, unsigned int col) const {
+        return row * cols() + col;
     }
 };
 
