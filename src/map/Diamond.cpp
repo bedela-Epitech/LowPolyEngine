@@ -1,6 +1,7 @@
 
 
 #include "map/Diamond.h"
+#include <type_traits>
 
 Diamond::Diamond(unsigned int size,
                  const Matrix<float> &northMap,
@@ -95,22 +96,20 @@ void    Diamond::fillMap()
     unsigned int    nbSquare = (_size - 1) / 2;
     unsigned int    squareSize = _size - 1;
     _height = 0.1;
-    _map.at(squareSize / 2, squareSize / 2) = _map.at(0, 0) +
-                                              _map.at(_map.rows() - 1, _map.cols() - 1) +
-                                              _map.at(_map.rows() - 1, 0) +
-                                              _map.at(0, _map.cols() - 1)/* + boundedRand(-_height, _height)*/;
+    _map.at(squareSize / 2, squareSize / 2) = (_map.at(0, 0) +
+                                              _map.at(squareSize, squareSize) +
+                                              _map.at(squareSize, 0) +
+                                              _map.at(0, squareSize) +
+                                              _map.at(squareSize / 2, 0) +
+                                              _map.at(squareSize / 2, squareSize) +
+                                              _map.at(0, squareSize / 2) +
+                                              _map.at(squareSize, squareSize / 2)) / 8.f;
 
     Matrix<std::shared_ptr<Biome>> biomes(2, 2, nullptr);
-    for (int i = 0; i < 2; i++)
-    {
-        for (int j = 0; j < 2; j++)
-        {
-            if (getDiff(i, j, squareSize / 2) > 1.f)
-                biomes.at(i, j) = std::make_shared<Mountain>(Mountain());
-            else
-                biomes.at(i, j) = std::make_shared<Land>(Land());
-        }
-    }
+    biomes.at(0, 0) = getBiome(_map.at(0,0), _map.at(0, squareSize / 2), _map.at(squareSize / 2, 0), _map.at(squareSize / 2, squareSize / 2));
+    biomes.at(1, 0) = getBiome(_map.at(squareSize / 2, 0), _map.at(squareSize, 0), _map.at(squareSize / 2, squareSize / 2), _map.at(squareSize, squareSize / 2));
+    biomes.at(0, 1) = getBiome(_map.at(0, squareSize / 2), _map.at(squareSize / 2, squareSize / 2), _map.at(0, squareSize), _map.at(squareSize / 2, squareSize));
+    biomes.at(1, 1) = getBiome(_map.at(squareSize / 2, squareSize / 2), _map.at(squareSize, squareSize / 2), _map.at(squareSize / 2, squareSize), _map.at(squareSize, squareSize));
     for (int i = 1; i <= nbSquare; i *= 2)
     {
         int line = 0;
@@ -131,8 +130,12 @@ void    Diamond::fillMap()
         }
         squareSize /= 2;
 
-        for (auto &line : biomes)
-            line->_height /= 2.f;
+        for (auto &line : biomes) {
+            if (dynamic_cast<Mountain*>(line.get()))
+                line->_height /= 2.4f;
+            else
+                line->_height /= 2.f;
+        }
     }
 }
 
@@ -149,7 +152,7 @@ float   Diamond::getDiff(int x, int y, unsigned int size) const
             min = std::min(_map.at(i, j), min);
         }
     }
-    std::cout << max - min << std::endl;
+    std::cout << "diff " << max - min << std::endl;
     return max - min;
 }
 
@@ -164,5 +167,20 @@ void	Diamond::printMap() const
     for (const auto &value : _map)
     {
         std::cout << value << ", " << std::endl;;
+    }
+}
+
+std::shared_ptr<Biome>  Diamond::getBiome(float A, float B, float C, float D)
+{
+    float height = (A + B + C + D) / 4.f;
+    if (height > 15.f)
+    {
+        std::cout << "mountain" << std::endl;
+        return (std::make_shared<Mountain>());
+    }
+    else
+    {
+        std::cout << "land" << std::endl;
+        return (std::make_shared<Land>());
     }
 }

@@ -27,7 +27,7 @@ public:
     float       _upAngleLimit = 89.9f;
     float       _downAngleLimit = -89.9f;
 
-    float       _translationCelerity = 750.f;
+    float       _translationCelerity = 150.f;
     float       _rotationCelerity = 60.f;
 
 public:

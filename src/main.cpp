@@ -18,7 +18,7 @@ int main()
     {
         window.loadFunctions();
 
-        std::shared_ptr<Camera> camera = std::make_shared<Camera>(1000.f, 1000.0f, -3.f, // eye position
+        std::shared_ptr<Camera> camera = std::make_shared<Camera>(250.f, 250.0f, -3.f, // eye position
                                                                   0.0f, 1.0f, 0.0f, // eye look at direction
                                                                   0.0f, 0.0f, 1.0f); // eye look up direction
         std::shared_ptr<Menu> menu = std::make_shared<Menu>("../shaders/texture.vs", "../shaders/texture.fs",

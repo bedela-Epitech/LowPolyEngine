@@ -58,7 +58,10 @@ std::vector<std::vector<bool>> Chunk::mapSimplify(const Matrix<float> &map) cons
                                       map.at(i, j + 1), map.at(i + 1, j + 1), map.at(i + 1, j),
                                       map.at(i + 1, j - 1), map.at(i, j - 1), map.at(i, j));
             ratio = fScore / pScore;
-            line[j] = ratio <= _phi;
+            if (map.at(i, j) < 0.f)
+                line[j] = ratio <= _phiLand;
+            else
+                line[j] = ratio <= _phiMountain;
         }
         activationMap.push_back(line);
     }

@@ -19,7 +19,7 @@ public:
     Matrix<float> _map;
 
 private:
-	float		    _height = 0.55f;
+	float		    _height = 100.f;
     unsigned int    _size;
     std::mt19937    _gen;
 
@@ -38,7 +38,8 @@ public:
 private:
     void	manageSquare(unsigned int , unsigned int , unsigned int, const std::shared_ptr<Biome> &);
     void	manageDiamond(unsigned int, unsigned int , unsigned int, int, const std::shared_ptr<Biome> &);
-	[[nodiscard]] float getDiff(int, int, unsigned int) const;
+    std::shared_ptr<Biome>  getBiome(float , float , float , float );
+    [[nodiscard]] float getDiff(int, int, unsigned int) const;
 	[[nodiscard]] float	boundedRand(float, float);
 
 };
