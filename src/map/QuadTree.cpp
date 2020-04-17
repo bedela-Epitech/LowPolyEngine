@@ -41,16 +41,18 @@ QuadTree::QuadTree(unsigned int power)
 glm::vec3   getColor(float height, float yNormal)
 {
     glm::vec3 grey(0.28f, 0.28f, 0.28f);
-    glm::vec3 green(.25, .35, .05);
-    glm::vec3 darkGreen(.2f, .2f, .0f);
+    glm::vec3 green(.40, .45, .1);
+    glm::vec3 darkGreen(.18f, .32f, .14f);
     glm::vec3 mount(.4, .3, .1);
     glm::vec3 color = green;
+    mount = darkGreen;
     glm::vec3 white(.5f, .5f, .5f);
     if (height > -50.f)
     {
         color = darkGreen * ((height + 50.f) / 50.f) +
                 green * (-height / 50.f);
     }
+
     if (height > 0.f)
     {
         color = mount;
@@ -58,16 +60,17 @@ glm::vec3   getColor(float height, float yNormal)
             color = darkGreen * ((50.f - height) / 50.f) +
                     mount * (height / 50.f);
 
-        if (yNormal > 0.9f)
-            color += (mount * 0.15f);
-        if (yNormal < 0.8f && height > 50.f)
-            color += (grey * 0.1f);
-    }
-    if (height > 150.f)
-        color = white;
 
-    if (yNormal > 0.98f)
-        color += (green * 0.1f);
+    }
+    if (height > 50.f)
+    {
+        float ratio = (yNormal - 0.9f) * 10.f;
+        color -= (color * .3f);
+        color += (((green * ratio) + darkGreen * (1.f - ratio)) / 4.f);
+        if (yNormal < 0.9f)
+            color = darkGreen - (darkGreen * 0.1f);
+    }
+
     return  color;
 }
 
@@ -142,9 +145,9 @@ void QuadTree::gatherChunks()
         _vertices.push_back(v0);
         _vertices.push_back(v1);
         _vertices.push_back(v2);
-        _colors.emplace_back(getColor(h[1], normal.y));
-        _colors.emplace_back(getColor(h[2], normal.y));
-        _colors.emplace_back(getColor(h[0], normal.y));
+        _colors.emplace_back(getColor((h[0] + h[1] + h[2]) / 3.f, normal.y));
+        _colors.emplace_back(getColor((h[0] + h[1] + h[2]) / 3.f, normal.y));
+        _colors.emplace_back(getColor((h[0] + h[1] + h[2]) / 3.f, normal.y));
         _normals.push_back(normal);
     }
     std::cout << ultraMax << " " << ultraMin << std::endl;

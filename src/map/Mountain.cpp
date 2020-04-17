@@ -8,12 +8,12 @@ Mountain::Mountain()
 {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     _gen = std::mt19937(rd());
-    _height = 100.f;
+    _height = 80.f;
 }
 
 float   Mountain::boundedRand()
 {
-    std::uniform_real_distribution<> dis(-_height / 2.f, _height * 1.5f);
+    std::uniform_real_distribution<> dis(-_height / 4.f, _height * 1.75f);
     return (static_cast<float>(dis(_gen)));
 }
 

@@ -12,7 +12,7 @@
 class Chunk
 {
 public:
-    double          _phiMountain = 0.96;
+    double          _phiMountain = 0.92;
     double          _phiLand = 0.9;
     unsigned int    _size;
 
