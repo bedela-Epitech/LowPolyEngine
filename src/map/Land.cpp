@@ -8,7 +8,7 @@ Land::Land()
 {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     _gen = std::mt19937(rd());
-    _height = 50.f;
+    _height = 25.f;
 }
 
 float   Land::boundedRand()

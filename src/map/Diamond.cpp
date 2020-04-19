@@ -132,7 +132,7 @@ void    Diamond::fillMap()
 
         for (auto &line : biomes) {
             if (dynamic_cast<Mountain*>(line.get()))
-                line->_height /= 2.4f;
+                line->_height /= 2.8f;
             else
                 line->_height /= 2.f;
         }
