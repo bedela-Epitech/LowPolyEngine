@@ -95,21 +95,28 @@ void    Diamond::fillMap()
 {
     unsigned int    nbSquare = (_size - 1) / 2;
     unsigned int    squareSize = _size - 1;
-    _height = 0.1;
-    _map.at(squareSize / 2, squareSize / 2) = (_map.at(0, 0) +
+    /*_map.at(squareSize / 2, squareSize / 2) = (_map.at(0, 0) +
                                               _map.at(squareSize, squareSize) +
                                               _map.at(squareSize, 0) +
                                               _map.at(0, squareSize) +
                                               _map.at(squareSize / 2, 0) +
                                               _map.at(squareSize / 2, squareSize) +
                                               _map.at(0, squareSize / 2) +
-                                              _map.at(squareSize, squareSize / 2)) / 8.f;
+                                              _map.at(squareSize, squareSize / 2)) / 8.f;*/
 
     Matrix<std::shared_ptr<Biome>> biomes(2, 2, nullptr);
     biomes.at(0, 0) = getBiome(_map.at(0,0), _map.at(0, squareSize / 2), _map.at(squareSize / 2, 0), _map.at(squareSize / 2, squareSize / 2));
     biomes.at(1, 0) = getBiome(_map.at(squareSize / 2, 0), _map.at(squareSize, 0), _map.at(squareSize / 2, squareSize / 2), _map.at(squareSize, squareSize / 2));
     biomes.at(0, 1) = getBiome(_map.at(0, squareSize / 2), _map.at(squareSize / 2, squareSize / 2), _map.at(0, squareSize), _map.at(squareSize / 2, squareSize));
     biomes.at(1, 1) = getBiome(_map.at(squareSize / 2, squareSize / 2), _map.at(squareSize, squareSize / 2), _map.at(squareSize / 2, squareSize), _map.at(squareSize, squareSize));
+    for (const auto &biome : biomes)
+    {
+        if (_nbMountain > 2 && dynamic_cast<Mountain *>(biome.get()))
+            _height = biome->_height;
+        else if (_nbMountain <= 2 && dynamic_cast<Land *>(biome.get()))
+            _height = biome->_height;
+    }
+
     for (int i = 1; i <= nbSquare; i *= 2)
     {
         int line = 0;
@@ -121,23 +128,18 @@ void    Diamond::fillMap()
                 column = (j % i) / (i / 2);
                 _height = biomes.at(line, column)->_height;
             }
-            if (i != 1) {
-                manageSquare(j % i * squareSize, j / i * squareSize,
-                             squareSize, biomes.at(line, column));// check if end of column + check if end of line
-            }
+            manageSquare(j % i * squareSize, j / i * squareSize,
+                         squareSize, biomes.at(line, column));// check if end of column + check if end of line
             manageDiamond(j % i * squareSize, j / i * squareSize, squareSize,
                           (2 * (j / i == i - 1)) + (j % i == i - 1), biomes.at(line, column));
         }
         squareSize /= 2;
 
-        if (i != 1)
-        {
-            for (auto &line : biomes) {
-                if (dynamic_cast<Mountain *>(line.get()))
-                    line->_height /= 2.5f;
-                else
-                    line->_height /= 2.f;
-            }
+        for (auto &line : biomes) {
+            if (dynamic_cast<Mountain *>(line.get()))
+                line->_height /= 3.f;
+            else
+                line->_height /= 2.f;
         }
     }
 }
@@ -179,6 +181,7 @@ std::shared_ptr<Biome>  Diamond::getBiome(float A, float B, float C, float D)
     if (height > 15.f)
     {
         std::cout << "mountain" << std::endl;
+        _nbMountain++;
         return (std::make_shared<Mountain>());
     }
     else

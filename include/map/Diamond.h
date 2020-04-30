@@ -19,6 +19,7 @@ public:
     Matrix<float> _map;
 
 private:
+    unsigned int    _nbMountain = 0;
 	float		    _height = 100.f;
     unsigned int    _size;
     std::mt19937    _gen;
