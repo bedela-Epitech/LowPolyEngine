@@ -61,7 +61,7 @@ std::vector<std::vector<bool>> Chunk::mapSimplify(const Matrix<float> &map) cons
             if (map.at(i, j) < 0.f)
                 line[j] = (ratio >= 0.9 && ratio <= 0.98);
             else
-                line[j] = (ratio >= 0.96 && ratio <= 0.98);
+                line[j] = (ratio >= 0.9 && ratio <= 0.98);
             //line[j] = true;
         }
         activationMap.push_back(line);

@@ -111,7 +111,7 @@ void    Diamond::fillMap()
     biomes.at(1, 1) = getBiome(_map.at(squareSize / 2, squareSize / 2), _map.at(squareSize, squareSize / 2), _map.at(squareSize / 2, squareSize), _map.at(squareSize, squareSize));
     for (const auto &biome : biomes)
     {
-        if (_nbMountain > 2 && dynamic_cast<Mountain *>(biome.get()))
+        if (_nbMountain > 0 && dynamic_cast<Mountain *>(biome.get()))
             _height = biome->_height;
         else if (_nbMountain <= 2 && dynamic_cast<Land *>(biome.get()))
             _height = biome->_height;
@@ -135,11 +135,23 @@ void    Diamond::fillMap()
         }
         squareSize /= 2;
 
-        for (auto &line : biomes) {
-            if (dynamic_cast<Mountain *>(line.get()))
-                line->_height /= 3.f;
-            else
-                line->_height /= 2.f;
+        if (i > 1)
+        {
+            for (auto &line : biomes) {
+                if (dynamic_cast<Mountain *>(line.get()))
+                    line->_height /= 3.f;
+                else
+                    line->_height /= 2.f;
+            }
+        }
+        else
+        {
+            for (auto &line : biomes) {
+                if (dynamic_cast<Mountain *>(line.get()))
+                    line->_height /= 1.5f;
+                else
+                    line->_height /= 1.5f;
+            }
         }
     }
 }

@@ -138,9 +138,9 @@ void QuadTree::gatherChunks()
         }
         ultraMax = std::max(ultraMax, h[1]);
         ultraMin = std::min(ultraMin, h[1]);
-        glm::vec3 v0(x[1], h[1], z[1]);
-        glm::vec3 v1(x[2], h[2], z[2]);
-        glm::vec3 v2(x[0], h[0], z[0]);
+        glm::vec3 v0(x[1] * 8.f, h[1], z[1] * 8.f);
+        glm::vec3 v1(x[2] * 8.f, h[2], z[2] * 8.f);
+        glm::vec3 v2(x[0] * 8.f, h[0], z[0] * 8.f);
         glm::vec3 normal = glm::normalize(glm::cross(v1 - v0, v2 - v0));
         _vertices.push_back(v0);
         _vertices.push_back(v1);

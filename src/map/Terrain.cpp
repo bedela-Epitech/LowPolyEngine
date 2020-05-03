@@ -22,7 +22,7 @@ Terrain::Terrain(const std::string &vsPath, const std::string &fsPath)
 
 void Terrain::generateTerrain()
 {
-    QuadTree qt(9);
+    QuadTree qt(6);
     qt.addChunk(glm::ivec2(1, 0));
     qt.addChunk(glm::ivec2(0, 1));
     qt.addChunk(glm::ivec2(-1, 0));
