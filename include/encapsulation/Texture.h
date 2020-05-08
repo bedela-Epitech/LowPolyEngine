@@ -15,7 +15,6 @@
 class Texture
 {
 private:
-    unsigned int    _mRenderer;
     std::string     _filePath;
     unsigned char   *_localBuffer;
     int             _width;
@@ -24,9 +23,16 @@ private:
     inline static unsigned int    _textureId = 0;
 
 public:
-    explicit Texture(const std::string &);
+    unsigned int    _mRenderer;
+
+public:
+    Texture(const std::string &);
+    Texture(int, int);
+    Texture();
     ~Texture();
 
+    void    initImageTexture();
+    void    initDepthTexture();
     unsigned int bind();
     void unbind() const;
 };
