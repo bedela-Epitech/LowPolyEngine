@@ -31,6 +31,20 @@ void Terrain::generateTerrain()
     qt.addChunk(glm::ivec2(0, -1));
     qt.addChunk(glm::ivec2(1, 0));
     qt.addChunk(glm::ivec2(1, 0));
+    qt.addChunk(glm::ivec2(1, 0));
+    qt.addChunk(glm::ivec2(0, 1));
+    qt.addChunk(glm::ivec2(0, 1));
+    qt.addChunk(glm::ivec2(0, 1));
+    qt.addChunk(glm::ivec2(-1, 0));
+    qt.addChunk(glm::ivec2(-1, 0));
+    qt.addChunk(glm::ivec2(-1, 0));
+    qt.addChunk(glm::ivec2(-1, 0));
+    qt.addChunk(glm::ivec2(0, -1));
+    qt.addChunk(glm::ivec2(0, -1));
+    qt.addChunk(glm::ivec2(0, -1));
+    qt.addChunk(glm::ivec2(1, 0));
+    qt.addChunk(glm::ivec2(1, 0));
+    qt.addChunk(glm::ivec2(1, 0));
     qt.gatherChunks();
 
     for (int i = 0; i < qt._vertices.size(); i++)
