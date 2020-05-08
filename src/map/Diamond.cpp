@@ -113,7 +113,7 @@ void    Diamond::fillMap()
     {
         if (_nbMountain > 0 && dynamic_cast<Mountain *>(biome.get()))
             _height = biome->_height;
-        else if (_nbMountain <= 2 && dynamic_cast<Land *>(biome.get()))
+        else if (_nbMountain < 1 && dynamic_cast<Land *>(biome.get()))
             _height = biome->_height;
     }
 
