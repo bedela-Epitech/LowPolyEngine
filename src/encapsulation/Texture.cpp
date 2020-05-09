@@ -24,12 +24,14 @@ Texture::Texture(const std::string &filepPath)
         stbi_image_free(_localBuffer);
 }
 
-Texture::Texture(int width, int height) : _width(width), _height(height)
+Texture::Texture(int width, int height)
+: _width(width), _height(height)
+{}
+
+void Texture::genTexture()
 {
     glGenTextures(1, &_mRenderer);
 }
-
-Texture::Texture() {}
 
 void Texture::initImageTexture()
 {

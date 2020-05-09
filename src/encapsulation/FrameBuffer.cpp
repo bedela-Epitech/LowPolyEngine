@@ -5,7 +5,8 @@
 #include "encapsulation/FrameBuffer.h"
 
 FrameBuffer::FrameBuffer(bool needImage, bool needDepth, int width, int height)
-        : _width(width), _height(height)
+        : _width(width), _height(height),
+          _imageTexture(width, height), _depthTexture(width, height)
 {
     glGenFramebuffers(1, &_fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
@@ -23,6 +24,8 @@ FrameBuffer::FrameBuffer(bool needImage, bool needDepth, int width, int height)
     if (needImage)
         attachImageTexture();
 
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        throw std::runtime_error("FrameBufferObject could not be created");
     unbind();
 }
 
@@ -33,6 +36,7 @@ FrameBuffer::~FrameBuffer()
 
 void FrameBuffer::attachImageTexture()
 {
+    _imageTexture.genTexture();
     _imageTexture.bind();
     _imageTexture.initImageTexture();
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _imageTexture._mRenderer, 0);
@@ -41,6 +45,7 @@ void FrameBuffer::attachImageTexture()
 
 void FrameBuffer::attachDepthTexture()
 {
+    _depthTexture.genTexture();
     _depthTexture.bind();
     _depthTexture.initDepthTexture();
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _depthTexture._mRenderer, 0);

@@ -28,11 +28,11 @@ public:
 public:
     Texture(const std::string &);
     Texture(int, int);
-    Texture();
     ~Texture();
 
     void    initImageTexture();
     void    initDepthTexture();
+    void    genTexture();
     unsigned int bind();
     void unbind() const;
 };
