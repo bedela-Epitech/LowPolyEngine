@@ -15,11 +15,9 @@
 class Texture
 {
 private:
-    std::string     _filePath;
-    unsigned char   *_localBuffer;
+    unsigned char   *_imageData;
     int             _width;
     int             _height;
-    int             _bitsPerPixel;
     inline static unsigned int    _textureNb = 0;
 
 public:
@@ -35,7 +33,7 @@ public:
     void    initDepthTexture();
     void    genTexture();
     void    bind() const;
-    void    unbind() const;
+    static void    unbind();
 };
 
 #endif //INC_71K2LEDEB_TEXTURE_H

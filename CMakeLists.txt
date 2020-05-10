@@ -28,7 +28,7 @@ set(LPE_SOURCES src/main.cpp
 				src/out/WriteObj.cpp src/map/Land.cpp
 				src/map/Mountain.cpp include/map/Land.h
 				include/map/Mountain.h include/map/Biome.h src/map/QuadTree.cpp include/map/QuadTree.h include/encapsulation/Texture.h src/encapsulation/Texture.cpp src/encapsulation/stb_image.cpp include/encapsulation/Menu.h src/encapsulation/Menu.cpp include/encapsulation/VertexBuffer.h src/encapsulation/VertexBuffer.cpp include/encapsulation/VertexArray.h src/encapsulation/VertexArray.cpp src/encapsulation/Layout.cpp include/encapsulation/ErrorManager.h src/encapsulation/ErrorManager.cpp
-		include/encapsulation/Matrix.h include/encapsulation/FrameBuffer.h src/encapsulation/FrameBuffer.cpp)
+		include/encapsulation/Matrix.h include/encapsulation/FrameBuffer.h src/encapsulation/FrameBuffer.cpp include/encapsulation/GUI.h src/encapsulation/GUI.cpp)
 
 # add exec with sources
 add_executable(LowPolyEngine ${LPE_SOURCES} ${GLAD_SOURCES})

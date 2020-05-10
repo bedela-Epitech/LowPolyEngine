@@ -82,6 +82,12 @@ void Terrain::bindTerrain()
     _vArray.addVertexBuffer(_vertices.data(), sizeof(float) * _vertices.size(), _bufferLayout);
 }
 
+void    Terrain::draw() const
+{
+    GLCall(glBindVertexArray(_vArray._vArrayId));
+    GLCall(glDrawArrays(GL_TRIANGLES, 0, _vertexNb));
+}
+
 //////////////////
 //
 //      SUN

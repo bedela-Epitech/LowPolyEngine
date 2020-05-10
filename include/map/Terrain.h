@@ -28,6 +28,7 @@ public:
 
     void    generateTerrain();
     void    bindTerrain();
+    void    draw() const;
 
     // sun manager
     void setDir(const glm::vec3 &);

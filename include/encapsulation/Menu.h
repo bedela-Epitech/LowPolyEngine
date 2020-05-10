@@ -5,10 +5,8 @@
 #ifndef INC_71K2LEDEB_MENU_H
 #define INC_71K2LEDEB_MENU_H
 
-#include "encapsulation/VertexArray.h"
-#include "encapsulation/Shader.h"
+#include "encapsulation/GUI.h"
 #include "encapsulation/Window.h"
-#include "encapsulation/Texture.h"
 
 class Box
 {
@@ -24,14 +22,9 @@ public:
 class Menu
 {
 public:
-    Shader              _textShader;
+    GUI                 _gui;
     Texture             _menuTexture;
     Texture             _loadingTexture;
-    Layout              _bufferLayout;
-    VertexArray         _vArray;
-
-    std::vector<float>  _textVertices;
-    unsigned int        _vertexNb;
 
     bool                _linkDone = false;
 
@@ -41,10 +34,8 @@ public:
 
 public:
     Menu(const std::string &, const std::string &, const std::string &, const std::string &);
-    void    linkTextureInfo();
-    void    initTexture();
     void    click();
-    void    bindTexture(Texture &);
+    void    useShader() const;
 };
 
 #endif //INC_71K2LEDEB_MENU_H

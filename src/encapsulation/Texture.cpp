@@ -5,18 +5,18 @@
 #include "encapsulation/Texture.h"
 
 Texture::Texture(const std::string &filepPath)
-: _filePath(filepPath)
 {
     stbi_set_flip_vertically_on_load(1);
-    _localBuffer = stbi_load(filepPath.c_str(), &_width, &_height, &_bitsPerPixel, 4);
+    int bitPerPixel;
+    _imageData = stbi_load(filepPath.c_str(), &_width, &_height, &bitPerPixel, 4);
 
     genTexture();
     bind();
-    initImageTexture(_localBuffer);
+    initImageTexture(_imageData);
     unbind();
 
-    if (_localBuffer)
-        stbi_image_free(_localBuffer);
+    if (_imageData)
+        stbi_image_free(_imageData);
 }
 
 Texture::Texture(int width, int height)
@@ -59,7 +59,7 @@ void    Texture::bind() const
     glBindTexture(GL_TEXTURE_2D, _mRenderer);
 }
 
-void        Texture::unbind() const
+void        Texture::unbind()
 {
     glBindTexture(GL_TEXTURE_2D, 0);
 }

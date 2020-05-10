@@ -14,6 +14,7 @@
 class L_OpenGL
 {
 public:
+    GUI                     _gui;
     FrameBuffer             _fbo;
     std::thread             _loadingThread;
     Terrain                 _terrain;
@@ -21,11 +22,12 @@ public:
 
 public:
     L_OpenGL(const std::string &, const std::string &,
-             const std::shared_ptr<Menu> &);
+             const std::shared_ptr<Menu> &, GUI &);
 
     void    initShader(const glm::mat4 &);
     void    updateShader(const glm::vec3 &, const glm::mat4 &);
-    void    display();
+    void    display() const;
+    void    clear() const;
 };
 
 #endif // _L_OPENGL_H_

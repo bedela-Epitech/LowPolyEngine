@@ -24,10 +24,12 @@ int main()
         std::shared_ptr<Menu> menu = std::make_shared<Menu>("../shaders/texture.vs", "../shaders/texture.fs",
                                                             "../ressources/maxresdefault960x540.jpg",
                                                             "../ressources/backgroundloading.jpg");
+        GUI gui("../shaders/texture.vs", "../shaders/texture.fs",
+                glm::vec2(-1.f, 0.f), glm::vec2(1.f, 1.f));
         Input inputKeys(camera, menu);
 
 
-        L_OpenGL opengl("../shaders/terrain.vs", "../shaders/terrain.fs", menu);
+        L_OpenGL opengl("../shaders/terrain.vs", "../shaders/terrain.fs", menu, gui);
 
 
         opengl.initShader(camera->_projection);
