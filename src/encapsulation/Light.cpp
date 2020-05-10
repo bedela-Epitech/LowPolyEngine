@@ -1,6 +1,11 @@
 
 #include "encapsulation/Light.h"
 
+Light::Light()
+{
+    _lightDir = glm::normalize(_lightDir);
+}
+
 void Light::setDir(const glm::vec3 &dir)
 {
     _lightDir = dir;

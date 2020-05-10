@@ -13,13 +13,13 @@ class Light
 {
 
 public:
-	glm::vec3   _lightDir{0, 1, 0};
+	glm::vec3   _lightDir{-1, -1, 0};
 	glm::vec3   _lightColor{1, 1, 1};
 	float       _specularStrenght = 0.5f;
     float       _ambiantCoeff = 0.3f;
 
 public:
-	Light() = default;
+	Light();
 
 	void setDir(const glm::vec3 &);
 	void setColor(const glm::vec3 &);
