@@ -27,12 +27,12 @@ void    Menu::initTexture()
 
     _textVertices = {
             -1.f, -1.f, 0.f, 0.f,
-            1.f, -1.f, 1.f, 0.f,
-            1.f, 1.f, 1.f, 1.f,
+            0.f, -1.f, 1.f, 0.f,
+            0.f, 0.f, 1.f, 1.f,
 
-            -1.f, 1.f, 0.f, 1.f,
+            -1.f, 0.f, 0.f, 1.f,
             -1.f, -1.f, 0.f, 0.f,
-            1.f, 1.f, 1.f, 1.f,
+            0.f, 0.f, 1.f, 1.f,
     };
 
     _vertexNb = _textVertices.size() / 2;
@@ -59,7 +59,7 @@ void Menu::click()
     if (_start.isInside(mousePos))
     {
         _linkDone = true;
-        bindTexture(_loadingTexture);
+        //bindTexture(_loadingTexture);
         Window::hideCursor();
     }
     if (_quit.isInside(mousePos))

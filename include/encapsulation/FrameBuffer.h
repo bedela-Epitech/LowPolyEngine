@@ -9,7 +9,7 @@
 
 class FrameBuffer
 {
-private:
+public:
     unsigned int _fbo;
     int         _width;
     int         _height;

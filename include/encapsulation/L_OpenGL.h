@@ -9,10 +9,12 @@
 #include <future>
 #include "map/Terrain.h"
 #include "encapsulation/Menu.h"
+#include "encapsulation/FrameBuffer.h"
 
 class L_OpenGL
 {
 public:
+    FrameBuffer             _fbo;
     std::thread             _loadingThread;
     Terrain                 _terrain;
     std::shared_ptr<Menu>   _menu;

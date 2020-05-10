@@ -10,12 +10,10 @@
 
 L_OpenGL::L_OpenGL(const std::string &mapVsPath, const std::string &mapFsPath,
                    const std::shared_ptr<Menu> &menu)
-        : _menu(menu), _terrain(mapVsPath, mapFsPath)
+        : _menu(menu), _terrain(mapVsPath, mapFsPath), _fbo(true, true, 200, 200)
 {
     GLCall(glEnable(GL_DEPTH_TEST));
-
     _loadingThread = std::thread(&Terrain::generateTerrain, &_terrain);
-
 }
 
 void    L_OpenGL::initShader(const glm::mat4 &projection)
@@ -35,6 +33,9 @@ void    L_OpenGL::updateShader(const glm::vec3 &dirLook, const glm::mat4 &view)
             _terrain.bindTerrain();
             _terrain._isTerrainLinked = true;
             _menu->_textShader.use();
+            unsigned int textureID = _fbo._imageTexture.bind();
+            _menu->_textShader.use();
+            _menu->_textShader.setInt("u_Texture", textureID);
         }
     }
     else
@@ -59,5 +60,19 @@ void    L_OpenGL::display()
     {
         GLCall(glBindVertexArray(_terrain._vArray._vArrayId));
         GLCall(glDrawArrays(GL_TRIANGLES, 0, _terrain._vertexNb));
+        _fbo.bind();
+        GLCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
+        GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+        GLCall(glBindVertexArray(_terrain._vArray._vArrayId));
+        GLCall(glDrawArrays(GL_TRIANGLES, 0, _terrain._vertexNb));
+        _fbo.unbind();
+
+
+        _menu->_textShader.use();
+        glBindTexture(GL_TEXTURE_2D, _fbo._imageTexture._mRenderer);
+
+        /*_menu->_textShader.setInt("u_Texture", _fbo._imageTexture._mRenderer);*/
+        GLCall(glBindVertexArray(_menu->_vArray._vArrayId));
+        GLCall(glDrawArrays(GL_TRIANGLES, 0, _menu->_vertexNb));
     }
 }
