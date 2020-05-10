@@ -4,10 +4,6 @@
 
 #include "encapsulation/Window.h"
 
-// Declare static members
-GLFWwindow * Window::_window;
-glm::ivec2   Window::_windowSize;
-
 Window::Window(int sizeX, int sizeY, bool fullScreen)
 {
     _windowSize = glm::ivec2(sizeX, sizeY);

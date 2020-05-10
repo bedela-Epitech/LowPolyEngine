@@ -16,8 +16,8 @@
 class Window
 {
 public:
-    static GLFWwindow   *_window;
-    static glm::ivec2   _windowSize;
+    inline static GLFWwindow   *_window;
+    inline static glm::ivec2   _windowSize;
 
 public:
     Window() = delete;

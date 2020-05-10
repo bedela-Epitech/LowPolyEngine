@@ -7,7 +7,6 @@
 //
 /////////////////////
 
-
 L_OpenGL::L_OpenGL(const std::string &mapVsPath, const std::string &mapFsPath,
                    const std::shared_ptr<Menu> &menu, GUI &gui)
         : _menu(menu), _terrain(mapVsPath, mapFsPath),
