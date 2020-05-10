@@ -33,9 +33,7 @@ void    L_OpenGL::updateShader(const glm::vec3 &dirLook, const glm::mat4 &view)
             _terrain.bindTerrain();
             _terrain._isTerrainLinked = true;
             _menu->_textShader.use();
-            unsigned int textureID = _fbo._imageTexture.bind();
-            _menu->_textShader.use();
-            _menu->_textShader.setInt("u_Texture", textureID);
+            _menu->_textShader.setInt("u_Texture", _fbo._imageTexture._textureId);
         }
     }
     else
@@ -69,9 +67,7 @@ void    L_OpenGL::display()
 
 
         _menu->_textShader.use();
-        glBindTexture(GL_TEXTURE_2D, _fbo._imageTexture._mRenderer);
-
-        /*_menu->_textShader.setInt("u_Texture", _fbo._imageTexture._mRenderer);*/
+        _fbo._imageTexture.bind();
         GLCall(glBindVertexArray(_menu->_vArray._vArrayId));
         GLCall(glDrawArrays(GL_TRIANGLES, 0, _menu->_vertexNb));
     }

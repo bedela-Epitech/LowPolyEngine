@@ -20,21 +20,22 @@ private:
     int             _width;
     int             _height;
     int             _bitsPerPixel;
-    inline static unsigned int    _textureId = 0;
+    inline static unsigned int    _textureNb = 0;
 
 public:
     unsigned int    _mRenderer;
+    unsigned int    _textureId;
 
 public:
     Texture(const std::string &);
     Texture(int, int);
     ~Texture();
 
-    void    initImageTexture();
+    void    initImageTexture(void *data = nullptr);
     void    initDepthTexture();
     void    genTexture();
-    unsigned int bind();
-    void unbind() const;
+    void    bind() const;
+    void    unbind() const;
 };
 
 #endif //INC_71K2LEDEB_TEXTURE_H

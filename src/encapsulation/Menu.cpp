@@ -48,9 +48,9 @@ void    Menu::linkTextureInfo()
 
 void Menu::bindTexture(Texture &texture)
 {
-    unsigned int textureID = texture.bind();
+    texture.bind();
     _textShader.use();
-    _textShader.setInt("u_Texture", textureID);
+    _textShader.setInt("u_Texture", texture._textureId);
 }
 
 void Menu::click()

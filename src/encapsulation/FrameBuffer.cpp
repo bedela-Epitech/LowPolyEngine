@@ -55,12 +55,10 @@ void FrameBuffer::attachDepthTexture()
 void FrameBuffer::bind() const
 {
     glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
-    glViewport(0, 0, 200, 200);
 }
 
 void FrameBuffer::unbind() const
 {
-    glViewport(0, 0, 960, 540);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
