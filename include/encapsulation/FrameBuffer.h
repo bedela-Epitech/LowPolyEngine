@@ -5,6 +5,7 @@
 #ifndef LOWPOLYENGINE_FRAMEBUFFER_H
 #define LOWPOLYENGINE_FRAMEBUFFER_H
 
+#include "Window.h"
 #include "Texture.h"
 
 class FrameBuffer
