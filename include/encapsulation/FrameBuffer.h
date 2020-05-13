@@ -7,19 +7,23 @@
 
 #include "Window.h"
 #include "Texture.h"
+#include "GUI.h"
 
 class FrameBuffer
 {
 public:
-    unsigned int _fbo;
-    int         _width;
-    int         _height;
+    GUI             _gui;
+    unsigned int    _fbo;
+    int             _width;
+    int             _height;
 
     Texture _imageTexture;
     Texture _depthTexture;
 
 public:
-    FrameBuffer(bool, bool, int, int);
+    FrameBuffer(const std::string &, const std::string &,
+                const glm::vec2 &, const glm::vec2 &,
+                bool, bool, int, int);
     ~FrameBuffer();
 
     void    bind() const;

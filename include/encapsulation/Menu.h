@@ -5,6 +5,7 @@
 #ifndef INC_71K2LEDEB_MENU_H
 #define INC_71K2LEDEB_MENU_H
 
+#include <memory>
 #include "encapsulation/GUI.h"
 #include "encapsulation/Window.h"
 

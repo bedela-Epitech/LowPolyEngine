@@ -11,7 +11,6 @@
 #include <glm/vec2.hpp>
 
 #include <iostream>
-#include <memory>
 
 class Window
 {

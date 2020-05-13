@@ -4,10 +4,13 @@
 
 #include "encapsulation/FrameBuffer.h"
 
-FrameBuffer::FrameBuffer(bool needImage, bool needDepth, int width, int height)
-        : _width(width), _height(height),
-          _imageTexture(width, height), _depthTexture(width, height)
+FrameBuffer::FrameBuffer(const std::string &textVsPath, const std::string &textFsPath,
+                         const glm::vec2 &pos, const glm::vec2 &size,
+                         bool needImage, bool needDepth, int width, int height)
+        : _gui(textVsPath, textFsPath, pos, size),
+          _width(width), _height(height), _imageTexture(width, height), _depthTexture(width, height)
 {
+
     glGenFramebuffers(1, &_fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
 
@@ -22,7 +25,10 @@ FrameBuffer::FrameBuffer(bool needImage, bool needDepth, int width, int height)
     if (needDepth)
         attachDepthTexture();
     if (needImage)
+    {
         attachImageTexture();
+        _gui.attachTexture(_imageTexture);
+    }
 
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         throw std::runtime_error("FrameBufferObject could not be created");

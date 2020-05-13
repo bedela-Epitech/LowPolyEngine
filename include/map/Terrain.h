@@ -5,6 +5,7 @@
 #ifndef INC_71K2LEDEB_TERRAIN_H
 #define INC_71K2LEDEB_TERRAIN_H
 
+#include <future>
 #include "encapsulation/Shader.h"
 #include "encapsulation/Light.h"
 #include "map/QuadTree.h"
@@ -18,6 +19,8 @@ public:
     bool                _isTerrainLinked = false;
     VertexArray         _vArray;
     unsigned int        _vertexNb;
+    std::thread         _loadingThread;
+
 private:
     Light               _sun;
     std::vector<float>  _vertices;

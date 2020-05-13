@@ -84,6 +84,7 @@ void Terrain::bindTerrain()
 
 void    Terrain::draw() const
 {
+    _shader.use();
     GLCall(glBindVertexArray(_vArray._vArrayId));
     GLCall(glDrawArrays(GL_TRIANGLES, 0, _vertexNb));
 }

@@ -6,23 +6,21 @@
 
 #define _L_OPENGL_H_
 
-#include <future>
 #include "map/Terrain.h"
 #include "encapsulation/Menu.h"
-#include "encapsulation/FrameBuffer.h"
+#include "encapsulation/ShadowMap.h"
 
 class L_OpenGL
 {
 public:
-    GUI                     _gui;
-    FrameBuffer             _fbo;
-    std::thread             _loadingThread;
-    Terrain                 _terrain;
-    std::shared_ptr<Menu>   _menu;
+    std::shared_ptr<Terrain>    _terrain;
+    std::shared_ptr<Menu>       _menu;
+    std::shared_ptr<ShadowMap>  _shadowMap;
 
 public:
-    L_OpenGL(const std::string &, const std::string &,
-             const std::shared_ptr<Menu> &, GUI &);
+    L_OpenGL(const std::shared_ptr<Terrain> &,
+             const std::shared_ptr<Menu> &,
+             const std::shared_ptr<ShadowMap> &);
 
     void    initShader(const glm::mat4 &);
     void    updateShader(const glm::vec3 &, const glm::mat4 &);
