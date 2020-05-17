@@ -15,8 +15,7 @@ L_OpenGL::L_OpenGL(const std::shared_ptr<Terrain> &terrain, const std::shared_pt
 
 void    L_OpenGL::initShader(const glm::mat4 &projection)
 {
-    _terrain->_shader.use();
-    _terrain->_shader.setMat4("projection", projection);
+    _terrain->_projection = projection;
 }
 
 void    L_OpenGL::updateShader(const glm::vec3 &dirLook, const glm::mat4 &view)
@@ -36,7 +35,8 @@ void    L_OpenGL::updateShader(const glm::vec3 &dirLook, const glm::mat4 &view)
     {
         _terrain->_shader.use();
         _terrain->_shader.setVec3("cameraDir", dirLook);
-        _terrain->_shader.setMat4("view", view);
+        _terrain->_mvp = _terrain->_projection * view;
+        _terrain->_shader.setMat4("mvp", _terrain->_mvp);
     }
 }
 
@@ -56,6 +56,7 @@ void    L_OpenGL::display() const
     }
     else
     {
+        _terrain->_shader.use();
         _terrain->draw();
 
         _shadowMap->draw();

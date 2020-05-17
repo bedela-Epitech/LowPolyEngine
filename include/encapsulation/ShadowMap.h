@@ -12,10 +12,12 @@
 class ShadowMap
 {
 public:
+    Shader          _shader;
+    GUI             _gui;
     FrameBuffer             _fbo;
     std::shared_ptr<Terrain>    _terrain;
 public:
-    ShadowMap(const std::shared_ptr<Terrain> &, const std::string &, const std::string &, const glm::vec2 &, const glm::vec2 &, bool , bool , int , int);
+    ShadowMap(const std::string &, const std::string &, const std::shared_ptr<Terrain> &, const std::string &, const std::string &, const glm::vec2 &, const glm::vec2 &, bool , bool , int , int);
     void    draw();
 };
 

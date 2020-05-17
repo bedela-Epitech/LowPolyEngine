@@ -20,7 +20,8 @@ public:
     VertexArray         _vArray;
     unsigned int        _vertexNb;
     std::thread         _loadingThread;
-
+    glm::mat4           _projection;
+    glm::mat4           _mvp;
 private:
     Light               _sun;
     std::vector<float>  _vertices;

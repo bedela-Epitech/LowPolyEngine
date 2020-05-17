@@ -4,11 +4,8 @@
 
 #include "encapsulation/FrameBuffer.h"
 
-FrameBuffer::FrameBuffer(const std::string &textVsPath, const std::string &textFsPath,
-                         const glm::vec2 &pos, const glm::vec2 &size,
-                         bool needImage, bool needDepth, int width, int height)
-        : _gui(textVsPath, textFsPath, pos, size),
-          _width(width), _height(height), _imageTexture(width, height), _depthTexture(width, height)
+FrameBuffer::FrameBuffer(bool needImage, bool needDepth, int width, int height)
+        : _width(width), _height(height), _imageTexture(width, height), _depthTexture(width, height)
 {
 
     glGenFramebuffers(1, &_fbo);
@@ -17,18 +14,15 @@ FrameBuffer::FrameBuffer(const std::string &textVsPath, const std::string &textF
     if (!needImage && !needDepth)
         throw std::logic_error("FrameBufferObject needs at least one attribute");
 
+    if (needDepth)
+        attachDepthTexture();
+    if (needImage)
+        attachImageTexture();
+
     if (!needImage)
         glDrawBuffer(GL_NONE);
     else
         glDrawBuffer(GL_COLOR_ATTACHMENT0);
-
-    if (needDepth)
-        attachDepthTexture();
-    if (needImage)
-    {
-        attachImageTexture();
-        _gui.attachTexture(_imageTexture);
-    }
 
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         throw std::runtime_error("FrameBufferObject could not be created");

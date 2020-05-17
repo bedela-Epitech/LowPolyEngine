@@ -12,7 +12,6 @@
 class FrameBuffer
 {
 public:
-    GUI             _gui;
     unsigned int    _fbo;
     int             _width;
     int             _height;
@@ -21,9 +20,7 @@ public:
     Texture _depthTexture;
 
 public:
-    FrameBuffer(const std::string &, const std::string &,
-                const glm::vec2 &, const glm::vec2 &,
-                bool, bool, int, int);
+    FrameBuffer(bool, bool, int, int);
     ~FrameBuffer();
 
     void    bind() const;
