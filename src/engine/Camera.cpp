@@ -29,6 +29,36 @@ Camera::Camera(float cameraX,  float cameraY, float cameraZ,
 //
 /////////////////////
 
+glm::mat4    doRotation(glm::vec3 v1, glm::vec3 v2)
+{
+    glm::vec3 a = glm::cross(v1, v2);
+    glm::vec4 q;
+
+    float dot = glm::dot(v1, v2);
+
+    float s = sqrt( (1+dot)*2 );
+    float invs = 1 / s;
+
+    glm::vec3 c = glm::cross(v1, v2);
+
+    q.x = c.x * invs;
+    q.y = c.y * invs;
+    q.z = c.z * invs;
+    q.w = s * 0.5f;
+    q = glm::normalize(q);
+
+
+    v1 = glm::normalize(v1);
+    v2 = glm::normalize(v2);
+    glm::vec3 v = glm::cross(v2, v1);
+    float angle = acos(glm::dot(v2, v1) / (glm::length(v2) * glm::length(v1)));
+    glm::mat4 rotmat = glm::mat4(1.0);
+    if (glm::dot(v2, v1) == 1)
+        return rotmat;
+    rotmat = glm::rotate(rotmat, angle, v);
+    return rotmat;
+}
+
 void    Camera::updateCamera()
 {
     _dirLook = glm::vec3(sin(glm::radians(_rotateY)) * cos(glm::radians(_rotateX)),
@@ -36,6 +66,36 @@ void    Camera::updateCamera()
                          cos(glm::radians(_rotateY)) * cos(glm::radians(_rotateX)));
 
     _view = glm::lookAt(_cameraPos, _cameraPos + _dirLook, _cameraUp);
+
+    glm::mat4 rot = doRotation(_dirLook, glm::vec3(0, 0, 1));
+    glm::vec3 right = rot * glm::vec4(1, 0, 0, 1);
+    glm::vec3 up = rot * glm::vec4(_cameraUp, 1);
+
+    float tanFov = tan(_fov / 2);
+
+    float heightNear = (2.f * tanFov * _near) / 2.f;
+    float widthNear = (heightNear * _screenRatio) / 2.f;
+
+    float heightFar = (2.f * tanFov * _far) / 2.f;
+    float widthFar = (heightFar * _screenRatio) / 2.f;
+
+    glm::vec3 centerNear = _cameraPos + _dirLook * _near;
+    glm::vec3 centerFar = _cameraPos + _dirLook * _far;
+
+    auto nearTopLeft = centerNear + _cameraUp * heightNear + right * -widthNear;
+    auto nearTopRight = centerNear + _cameraUp * heightNear + right * widthNear;
+    auto nearBottomLeft = centerNear + _cameraUp * -heightNear + right * -widthNear;
+    auto nearBottomRight = centerNear + _cameraUp * -heightNear + right * widthNear;
+
+    auto farTopLeft = centerFar + _cameraUp * heightFar + right * -widthFar;
+    auto farTopRight = centerFar + _cameraUp * heightFar + right * widthFar;
+    auto farBottomLeft = centerFar + _cameraUp * -heightFar + right * -widthFar;
+    auto farBottomRight = centerFar + _cameraUp * -heightFar + right * widthFar;
+
+    std::cout << "---------" << std::endl;
+    std::cout << _dirLook.x << " " << _dirLook.y << " " << _dirLook.z << std::endl;
+    std::cout << right.x << " " << right.y << " " << right.z << std::endl;
+    std::cout << up.x << " " << up.y << " " << up.z << std::endl;
 }
 
 /////////////////////
