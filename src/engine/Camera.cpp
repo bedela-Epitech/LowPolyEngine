@@ -91,6 +91,43 @@ void    Camera::updateCamera()
     auto farTopRight = centerFar + _cameraUp * heightFar + right * widthFar;
     auto farBottomLeft = centerFar + _cameraUp * -heightFar + right * -widthFar;
     auto farBottomRight = centerFar + _cameraUp * -heightFar + right * widthFar;
+    glm::vec3 sun(-1, -1, 0);
+    glm::mat4 rotSun = doRotation(sun, glm::vec3(0, 0, 1));
+    auto upSun = rotSun * glm::vec4(0, 1, 0, 1);
+    std::cout << upSun.x << " " << upSun.y << " " << upSun.z << " " << upSun.w << std::endl;
+    glm::vec3 array[8];
+
+    array[0] = rotSun * glm::vec4(nearTopLeft, 1.0);
+    array[1] = rotSun * glm::vec4(nearTopRight, 1.0);
+    array[2] = rotSun * glm::vec4(nearBottomLeft, 1.0);
+    array[3] = rotSun * glm::vec4(nearBottomRight, 1.0);
+
+    array[4] = rotSun * glm::vec4(farTopLeft, 1.0);
+    array[5] = rotSun * glm::vec4(farTopRight, 1.0);
+    array[6] = rotSun * glm::vec4(farBottomLeft, 1.0);
+    array[7] = rotSun * glm::vec4(farBottomRight, 1.0);
+
+    float minX = array[0].x;
+    float minY = array[0].y;
+    float minZ = array[0].z;
+    float maxX = array[0].x;
+    float maxY = array[0].y;
+    float maxZ = array[0].z;
+    glm::vec3 centroid(0, 0, 0);
+    for (int i = 0; i < 8; i++)
+    {
+        minX = std::min(minX, array[i].x);
+        minY = std::min(minY, array[i].y);
+        minZ = std::min(minZ, array[i].z);
+        maxX = std::max(maxX, array[i].x);
+        maxY = std::max(maxY, array[i].y);
+        maxZ = std::max(maxZ, array[i].z);
+        centroid += array[i];
+    }
+    centroid /= 8;
+    auto width = maxX - minX;
+    auto height = maxY - minY;
+    auto deep = maxZ - minZ;
 
     std::cout << "---------" << std::endl;
     std::cout << _dirLook.x << " " << _dirLook.y << " " << _dirLook.z << std::endl;

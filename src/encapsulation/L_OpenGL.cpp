@@ -33,6 +33,9 @@ void    L_OpenGL::updateShader(const glm::vec3 &dirLook, const glm::mat4 &view)
     }
     else
     {
+
+
+
         _terrain->_shader.use();
         _terrain->_shader.setVec3("cameraDir", dirLook);
         _terrain->_mvp = _terrain->_projection * view;
