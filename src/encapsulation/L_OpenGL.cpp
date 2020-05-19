@@ -39,10 +39,10 @@ void    L_OpenGL::updateShader(std::shared_ptr<Camera> camera)
         glm::mat4 depthProjectionMatrix = glm::ortho<float>(camera->_width * -0.5f, camera->_width * 0.5f,
                                                             camera->_height * -0.5f, camera->_height * 0.5f,
                                                             camera->_deep * -0.5f, camera->_deep * 0.5f);
-        glm::mat4 depthViewMatrix = glm::lookAt(camera->_centroid, camera->_centroid + glm::vec3(-1, -1, 0) , camera->_upSun);
+        glm::mat4 depthViewMatrix = glm::lookAt(camera->_centroid, camera->_centroid + glm::vec3(-1000, -1000, 0) , glm::vec3(-1000, 1000, 0));
         glm::mat4 depthModelMatrix = glm::mat4(1.0);
         glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
-        _shadowMap->_shader.setMat4("mvp", depthMVP);
+        _shadowMap->_shader.setMat4("mvp", camera->_fff);
 
         _terrain->_shader.use();
         _terrain->_shader.setVec3("cameraDir", camera->_dirLook);

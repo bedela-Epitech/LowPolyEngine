@@ -128,13 +128,24 @@ void    Camera::updateCamera()
         maxX = std::max(maxX, array[i].x);
         maxY = std::max(maxY, array[i].y);
         maxZ = std::max(maxZ, array[i].z);
-        centroid += array[i];
     }
-    centroid /= 8.f;
-    _centroid = centroid;
+    glm::mat4 rotBackSun = doRotation(glm::vec3(0, 0, 1), sun);
+    centroid.x = (maxX + minX) / 2.f;
+    centroid.y = (maxY + minY) / 2.f;
+    centroid.z = (maxZ + minZ) / 2.f;
+    _centroid = rotBackSun * glm::vec4(centroid, 1.0);
     _width = maxX - minX;
     _height = maxY - minY;
     _deep = maxZ - minZ;
+
+
+    glm::mat4 trans = glm::translate(rotSun, _centroid);
+    glm::mat4 final = trans;
+    glm::mat4 ortho{2.f /_width, 0,             0,           0,
+                    0,           2.f / _height, 0,           0,
+                    0,           0,             2.f / _deep, 0,
+                    0,           0,             0,           1};
+    _fff =  glm::mat4(1.0f) * ortho * trans;
     std::cout << "w = " << _width << ", h " << _height << ", d" << _deep << std::endl;
 }
 
