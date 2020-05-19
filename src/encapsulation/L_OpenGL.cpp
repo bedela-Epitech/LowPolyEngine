@@ -10,6 +10,8 @@
 L_OpenGL::L_OpenGL(const std::shared_ptr<Terrain> &terrain, const std::shared_ptr<Menu> &menu, const std::shared_ptr<ShadowMap> &shadowMap)
         : _terrain(terrain), _menu(menu), _shadowMap(shadowMap)
 {
+    _terrain->_shader.setInt("shadowMap", _shadowMap->_fbo._depthTexture._textureId);
+
     GLCall(glEnable(GL_DEPTH_TEST));
 }
 
@@ -45,6 +47,14 @@ void    L_OpenGL::updateShader(std::shared_ptr<Camera> camera)
         _shadowMap->_shader.setMat4("mvp", camera->_fff);
 
         _terrain->_shader.use();
+        glm::mat4 biasMatrix(
+                0.5, 0.0, 0.0, 0.0,
+                0.0, 0.5, 0.0, 0.0,
+                0.0, 0.0, 0.5, 0.0,
+                0.5, 0.5, 0.5, 1.0
+        );
+        auto fff = biasMatrix*camera->_fff;
+        _terrain->_shader.setMat4("lightMvp", fff); // toremove
         _terrain->_shader.setVec3("cameraDir", camera->_dirLook);
         _terrain->_mvp = _terrain->_projection * camera->_view;
         _terrain->_shader.setMat4("mvp", _terrain->_mvp);
@@ -67,9 +77,10 @@ void    L_OpenGL::display() const
     }
     else
     {
-        _terrain->_shader.use();
-        _terrain->draw();
-
         _shadowMap->draw();
+
+        _terrain->_shader.use();
+        _shadowMap->_fbo._depthTexture.bind();
+        _terrain->draw();
     }
 }

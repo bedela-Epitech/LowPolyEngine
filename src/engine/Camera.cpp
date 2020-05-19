@@ -139,8 +139,13 @@ void    Camera::updateCamera()
     _deep = maxZ - minZ;
 
 
+    glm::mat4 actualRot = doRotation(sun, _dirLook);
     glm::mat4 trans = glm::translate(rotSun, _centroid);
     glm::mat4 final = trans;
+    glm::mat4 depthProjectionMatrix = glm::ortho<float>(_width * -0.5f, _width * 0.5f,
+                                                        _height * -0.5f, _height * 0.5f,
+                                                        _deep * -0.5f, _deep * 0.5f);
+
     glm::mat4 ortho{2.f /_width, 0,             0,           0,
                     0,           2.f / _height, 0,           0,
                     0,           0,             2.f / _deep, 0,
