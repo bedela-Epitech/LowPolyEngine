@@ -18,7 +18,7 @@ Camera::Camera(float cameraX,  float cameraY, float cameraZ,
     _fov = 60.f;
     _screenRatio = Window::getScreenRatio();
     _near = 0.1f;
-    _far = 10240.f;
+    _far = 10040.f;
     _projection = glm::perspective(glm::radians(_fov), _screenRatio, _near, _far);
     _projection = glm::scale(_projection, glm::vec3(-1, 1, 1));
 }
@@ -31,23 +31,6 @@ Camera::Camera(float cameraX,  float cameraY, float cameraZ,
 
 glm::mat4    doRotation(glm::vec3 v1, glm::vec3 v2)
 {
-    glm::vec3 a = glm::cross(v1, v2);
-    glm::vec4 q;
-
-    float dot = glm::dot(v1, v2);
-
-    float s = sqrt( (1+dot)*2 );
-    float invs = 1 / s;
-
-    glm::vec3 c = glm::cross(v1, v2);
-
-    q.x = c.x * invs;
-    q.y = c.y * invs;
-    q.z = c.z * invs;
-    q.w = s * 0.5f;
-    q = glm::normalize(q);
-
-
     v1 = glm::normalize(v1);
     v2 = glm::normalize(v2);
     glm::vec3 v = glm::cross(v2, v1);
@@ -57,6 +40,11 @@ glm::mat4    doRotation(glm::vec3 v1, glm::vec3 v2)
         return rotmat;
     rotmat = glm::rotate(rotmat, angle, v);
     return rotmat;
+}
+
+double getDist(glm::vec3 a, glm::vec3 b)
+{
+    return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2) + pow(a.z - b.z, 2));
 }
 
 void    Camera::updateCamera()
@@ -70,8 +58,9 @@ void    Camera::updateCamera()
     glm::mat4 rot = doRotation(_dirLook, glm::vec3(0, 0, 1));
     glm::vec3 right = rot * glm::vec4(1, 0, 0, 1);
     glm::vec3 up = rot * glm::vec4(_cameraUp, 1);
+    std::cout << "right" << right.x << " " << right.y << " " << right.z << std::endl;
 
-    float tanFov = tan(_fov / 2);
+    float tanFov = tanf((_fov / 2.f) * M_PI / 180.0 );
 
     float heightNear = (2.f * tanFov * _near) / 2.f;
     float widthNear = (heightNear * _screenRatio) / 2.f;
@@ -82,6 +71,12 @@ void    Camera::updateCamera()
     glm::vec3 centerNear = _cameraPos + _dirLook * _near;
     glm::vec3 centerFar = _cameraPos + _dirLook * _far;
 
+    std::cout << "centerNear" << centerNear.x << " " << centerNear.y << " " << centerNear.z << std::endl;
+    std::cout << "centerFar" << centerFar.x << " " << centerFar.y << " " << centerFar.z << std::endl;
+    std::cout << "dist = " << getDist(centerNear, centerFar) << std::endl;
+    std::cout << "HN = " << heightNear << std::endl;
+    std::cout << "HF = " << tanFov << std::endl;
+
     auto nearTopLeft = centerNear + _cameraUp * heightNear + right * -widthNear;
     auto nearTopRight = centerNear + _cameraUp * heightNear + right * widthNear;
     auto nearBottomLeft = centerNear + _cameraUp * -heightNear + right * -widthNear;
@@ -91,10 +86,12 @@ void    Camera::updateCamera()
     auto farTopRight = centerFar + _cameraUp * heightFar + right * widthFar;
     auto farBottomLeft = centerFar + _cameraUp * -heightFar + right * -widthFar;
     auto farBottomRight = centerFar + _cameraUp * -heightFar + right * widthFar;
+
+
     glm::vec3 sun(-1, -1, 0);
     glm::mat4 rotSun = doRotation(sun, glm::vec3(0, 0, 1));
     auto upSun = rotSun * glm::vec4(0, 1, 0, 1);
-    std::cout << upSun.x << " " << upSun.y << " " << upSun.z << " " << upSun.w << std::endl;
+    _upSun = upSun;
     glm::vec3 array[8];
 
     array[0] = rotSun * glm::vec4(nearTopLeft, 1.0);
@@ -106,6 +103,15 @@ void    Camera::updateCamera()
     array[5] = rotSun * glm::vec4(farTopRight, 1.0);
     array[6] = rotSun * glm::vec4(farBottomLeft, 1.0);
     array[7] = rotSun * glm::vec4(farBottomRight, 1.0);
+
+    /*std::cout << array[0].x << " " << array[0].y << " " << array[0].z << std::endl;
+    std::cout << array[1].x << " " << array[1].y << " " << array[1].z << std::endl;
+    std::cout << array[2].x << " " << array[2].y << " " << array[2].z << std::endl;
+    std::cout << array[3].x << " " << array[3].y << " " << array[3].z << std::endl;
+    std::cout << array[4].x << " " << array[4].y << " " << array[4].z << std::endl;
+    std::cout << array[5].x << " " << array[5].y << " " << array[5].z << std::endl;
+    std::cout << array[6].x << " " << array[6].y << " " << array[6].z << std::endl;
+    std::cout << array[7].x << " " << array[7].y << " " << array[7].z << std::endl;*/
 
     float minX = array[0].x;
     float minY = array[0].y;
@@ -124,15 +130,12 @@ void    Camera::updateCamera()
         maxZ = std::max(maxZ, array[i].z);
         centroid += array[i];
     }
-    centroid /= 8;
-    auto width = maxX - minX;
-    auto height = maxY - minY;
-    auto deep = maxZ - minZ;
-
-    std::cout << "---------" << std::endl;
-    std::cout << _dirLook.x << " " << _dirLook.y << " " << _dirLook.z << std::endl;
-    std::cout << right.x << " " << right.y << " " << right.z << std::endl;
-    std::cout << up.x << " " << up.y << " " << up.z << std::endl;
+    centroid /= 8.f;
+    _centroid = centroid;
+    _width = maxX - minX;
+    _height = maxY - minY;
+    _deep = maxZ - minZ;
+    std::cout << "w = " << _width << ", h " << _height << ", d" << _deep << std::endl;
 }
 
 /////////////////////

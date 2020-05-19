@@ -35,7 +35,7 @@ int main()
             inputKeys.mouseManger();
 
             camera->updateCamera();
-            opengl.updateShader(camera->_dirLook, camera->_view);
+            opengl.updateShader(camera);
 
             opengl.display();
 

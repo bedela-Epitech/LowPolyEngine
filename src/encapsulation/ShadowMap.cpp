@@ -10,15 +10,7 @@ ShadowMap::ShadowMap(const std::string &shadowVsPath,
                      bool needImage, bool needDepth, int width, int height)
         : _shader(shadowVsPath, shadowFsPath), _gui(textVsPath, textFsPath, pos, size), _terrain(terrain), _fbo(needImage, needDepth, width, height)
 {
-    glm::vec3 lightInvDir = glm::vec3(500, 300, 1000);
 
-    // Compute the MVP matrix from the light's point of view
-    glm::mat4 depthProjectionMatrix = glm::ortho<float>(-1000,1000,-1000,1000,-1,1000);
-    glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, lightInvDir + glm::vec3(-1, -1, 0) , glm::vec3(0,1,0));
-    glm::mat4 depthModelMatrix = glm::mat4(1.0);
-    glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
-    _shader.use();
-    _shader.setMat4("mvp", depthMVP);
 
     _gui.attachTexture(_fbo._depthTexture);
 

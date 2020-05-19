@@ -9,6 +9,7 @@
 #include "map/Terrain.h"
 #include "encapsulation/Menu.h"
 #include "encapsulation/ShadowMap.h"
+#include "engine/Camera.h"
 
 class L_OpenGL
 {
@@ -23,7 +24,7 @@ public:
              const std::shared_ptr<ShadowMap> &);
 
     void    initShader(const glm::mat4 &);
-    void    updateShader(const glm::vec3 &, const glm::mat4 &);
+    void    updateShader(std::shared_ptr<Camera>);
     void    display() const;
     void    clear() const;
 };

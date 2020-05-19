@@ -11,6 +11,12 @@
 class Camera
 {
 public:
+    float _width;
+    float _height;
+    float _deep;
+    glm::vec3 _centroid;
+    glm::vec3 _upSun;
+
     float               _fov;
     float               _screenRatio;
     float               _near;

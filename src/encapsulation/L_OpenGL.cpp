@@ -18,7 +18,7 @@ void    L_OpenGL::initShader(const glm::mat4 &projection)
     _terrain->_projection = projection;
 }
 
-void    L_OpenGL::updateShader(const glm::vec3 &dirLook, const glm::mat4 &view)
+void    L_OpenGL::updateShader(std::shared_ptr<Camera> camera)
 {
     if (!(_menu->_linkDone && _terrain->_isTerrainLinked))
     {
@@ -33,12 +33,20 @@ void    L_OpenGL::updateShader(const glm::vec3 &dirLook, const glm::mat4 &view)
     }
     else
     {
-
-
+        _shadowMap->_shader.use();
+        // Compute the MVP matrix from the light's point of view
+        std::cout << camera->_width << " " << camera->_height << " " << camera->_deep << std::endl;
+        glm::mat4 depthProjectionMatrix = glm::ortho<float>(camera->_width * -0.5f, camera->_width * 0.5f,
+                                                            camera->_height * -0.5f, camera->_height * 0.5f,
+                                                            camera->_deep * -0.5f, camera->_deep * 0.5f);
+        glm::mat4 depthViewMatrix = glm::lookAt(camera->_centroid, camera->_centroid + glm::vec3(-1, -1, 0) , camera->_upSun);
+        glm::mat4 depthModelMatrix = glm::mat4(1.0);
+        glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
+        _shadowMap->_shader.setMat4("mvp", depthMVP);
 
         _terrain->_shader.use();
-        _terrain->_shader.setVec3("cameraDir", dirLook);
-        _terrain->_mvp = _terrain->_projection * view;
+        _terrain->_shader.setVec3("cameraDir", camera->_dirLook);
+        _terrain->_mvp = _terrain->_projection * camera->_view;
         _terrain->_shader.setMat4("mvp", _terrain->_mvp);
     }
 }
