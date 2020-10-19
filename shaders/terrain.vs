@@ -1,4 +1,4 @@
-#version 130
+#version 330
 precision highp float;
 attribute vec4 aPos;
 attribute  vec3 in_Color;

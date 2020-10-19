@@ -58,7 +58,6 @@ void    Camera::updateCamera()
     glm::mat4 rot = doRotation(_dirLook, glm::vec3(0, 0, 1));
     glm::vec3 right = rot * glm::vec4(1, 0, 0, 1);
     glm::vec3 up = rot * glm::vec4(_cameraUp, 1);
-    std::cout << "right" << right.x << " " << right.y << " " << right.z << std::endl;
 
     float tanFov = tanf((_fov / 2.f) * M_PI / 180.0 );
 
@@ -71,11 +70,11 @@ void    Camera::updateCamera()
     glm::vec3 centerNear = _cameraPos + _dirLook * _near;
     glm::vec3 centerFar = _cameraPos + _dirLook * _far;
 
-    std::cout << "centerNear" << centerNear.x << " " << centerNear.y << " " << centerNear.z << std::endl;
+    /*std::cout << "centerNear" << centerNear.x << " " << centerNear.y << " " << centerNear.z << std::endl;
     std::cout << "centerFar" << centerFar.x << " " << centerFar.y << " " << centerFar.z << std::endl;
     std::cout << "dist = " << getDist(centerNear, centerFar) << std::endl;
     std::cout << "HN = " << heightNear << std::endl;
-    std::cout << "HF = " << tanFov << std::endl;
+    std::cout << "HF = " << tanFov << std::endl;*/
 
     auto nearTopLeft = centerNear + _cameraUp * heightNear + right * -widthNear;
     auto nearTopRight = centerNear + _cameraUp * heightNear + right * widthNear;
@@ -137,6 +136,7 @@ void    Camera::updateCamera()
     _width = maxX - minX;
     _height = maxY - minY;
     _deep = maxZ - minZ;
+    std::cout << "centroid " << _centroid.x << " " << _centroid.y << " " << _centroid.z << std::endl;
 
 
     glm::mat4 actualRot = doRotation(sun, _dirLook);
@@ -151,7 +151,7 @@ void    Camera::updateCamera()
                     0,           0,             2.f / _deep, 0,
                     0,           0,             0,           1};
     _fff =  glm::mat4(1.0f) * ortho * trans;
-    std::cout << "w = " << _width << ", h " << _height << ", d" << _deep << std::endl;
+    //std::cout << "w = " << _width << ", h " << _height << ", d" << _deep << std::endl;
 }
 
 /////////////////////

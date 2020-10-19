@@ -1,4 +1,4 @@
-#version 130
+#version 330
 precision highp float;
 in  vec3 ex_Color;
 in vec4 shadowCoord;
