@@ -4,15 +4,15 @@ project(LowPolyEngine)
 
 # SETTERS
 set(CMAKE_CXX_STANDARD 17)
-set(GLAD_DIR "/usr/include/glad")
-set(GLFW_DIR "/usr/local/include/GLFW")
+set(GLAD_DIR "/usr/include/glad/")
+set(GLFW_DIR "/usr/include/GLFW")
 SET(PLATFORM_SPECIFIC_LIBS "-lpthread")
 
 include_directories(include)
 include_directories(lib)
 
 # SET SOURCES
-SET(GLAD_SOURCES ${GLAD_DIR}/src/glad.c)
+SET(GLAD_SOURCES ${GLAD_DIR}/glad.c)
 set(LPE_SOURCES src/main.cpp
 		include/encapsulation/L_OpenGL.h src/encapsulation/L_OpenGL.cpp
         include/engine/Camera.h src/engine/Camera.cpp
@@ -35,11 +35,11 @@ add_executable(LowPolyEngine ${LPE_SOURCES} ${GLAD_SOURCES})
 
 # link GLFW
 target_include_directories(LowPolyEngine PRIVATE "${GLFW_DIR}/include")
-target_link_libraries(LowPolyEngine glfw3)
+target_link_libraries(LowPolyEngine glfw)
 
 # link GLAD
-target_include_directories(LowPolyEngine PRIVATE "${GLAD_DIR}/include/glad/")
-target_link_libraries(LowPolyEngine ${GLAD_DIR}/glad)
+#target_include_directories(LowPolyEngine PRIVATE "${GLAD_DIR}/include/glad/")
+#target_link_libraries(LowPolyEngine ${GLAD_DIR}/glad)
 
 # add external libs
 target_link_libraries(LowPolyEngine ${PLATFORM_SPECIFIC_LIBS})

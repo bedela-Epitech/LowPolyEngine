@@ -5,7 +5,7 @@
 #ifndef INC_71K2LEDEB_ERRORMANAGER_H
 #define INC_71K2LEDEB_ERRORMANAGER_H
 
-#include "glad.h"
+#include "glad/glad.h"
 #include <GL/gl.h>
 #include <iostream>
 
