@@ -1,4 +1,4 @@
-#version 330
+#version 330 core
 precision highp float;
 
 attribute vec4 aPos;

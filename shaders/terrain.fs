@@ -1,6 +1,6 @@
-#version 330
+#version 330 core
 precision highp float;
-in  vec3 ex_Color;
+in vec3 ex_Color;
 in vec4 shadowCoord;
 out vec4 out_Color;
 
@@ -12,5 +12,5 @@ void main(void)
     float lightFactor = 1.0;
     if (shadowCoord.z > objectNear)
         lightFactor = 0.6;
-    out_Color = vec4(ex_Color * lightFactor,1.0);
+    out_Color = vec4(ex_Color * lightFactor, 1.0);
 }

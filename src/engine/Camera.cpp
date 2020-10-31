@@ -136,7 +136,7 @@ void    Camera::updateCamera()
     _width = maxX - minX;
     _height = maxY - minY;
     _deep = maxZ - minZ;
-    std::cout << "centroid " << _centroid.x << " " << _centroid.y << " " << _centroid.z << std::endl;
+    //std::cout << "centroid " << _centroid.x << " " << _centroid.y << " " << _centroid.z << std::endl;
 
 
     glm::mat4 actualRot = doRotation(sun, _dirLook);

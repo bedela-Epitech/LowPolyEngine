@@ -37,7 +37,7 @@ void    L_OpenGL::updateShader(std::shared_ptr<Camera> camera)
     {
         _shadowMap->_shader.use();
         // Compute the MVP matrix from the light's point of view
-        std::cout << camera->_width << " " << camera->_height << " " << camera->_deep << std::endl;
+        //std::cout << camera->_width << " " << camera->_height << " " << camera->_deep << std::endl;
         glm::mat4 depthProjectionMatrix = glm::ortho<float>(camera->_width * -0.5f, camera->_width * 0.5f,
                                                             camera->_height * -0.5f, camera->_height * 0.5f,
                                                             camera->_deep * -0.5f, camera->_deep * 0.5f);

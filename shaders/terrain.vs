@@ -1,8 +1,8 @@
-#version 330
+#version 330 core
 precision highp float;
 attribute vec4 aPos;
-attribute  vec3 in_Color;
-attribute  vec3 normal;
+attribute vec3 in_Color;
+attribute vec3 normal;
 varying  vec3 ex_Color;
 varying vec4 shadowCoord;
 uniform vec3 lightDir;
