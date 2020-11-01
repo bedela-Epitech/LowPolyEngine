@@ -27,5 +27,5 @@ void main()
 {
     ex_Color = (ambiant + diffuse + specular) * in_Color;
     gl_Position = mvp * aPos;
-    shadowCoord = lightMvp * gl_Position;
+    shadowCoord = lightMvp * aPos;
 }

@@ -64,6 +64,41 @@ void Terrain::generateTerrain()
         _vertices.push_back(qt._colors[i].z);
 
     }
+    _vertices.push_back(50.f);
+    _vertices.push_back(100.f);
+    _vertices.push_back(50.f);
+
+    _vertices.push_back(0.f);
+    _vertices.push_back(0.f);
+    _vertices.push_back(-1.f);
+
+    _vertices.push_back(1.f);
+    _vertices.push_back(0.f);
+    _vertices.push_back(0.f);
+
+    _vertices.push_back(-50.f);
+    _vertices.push_back(100.f);
+    _vertices.push_back(50.f);
+
+    _vertices.push_back(0.f);
+    _vertices.push_back(0.f);
+    _vertices.push_back(-1.f);
+
+    _vertices.push_back(1.f);
+    _vertices.push_back(0.f);
+    _vertices.push_back(0.f);
+
+    _vertices.push_back(50.f);
+    _vertices.push_back(150.f);
+    _vertices.push_back(50.f);
+
+    _vertices.push_back(0.f);
+    _vertices.push_back(0.f);
+    _vertices.push_back(-1.f);
+
+    _vertices.push_back(1.f);
+    _vertices.push_back(0.f);
+    _vertices.push_back(0.f);
 
     _vertexNb = _vertices.size() / 3;
 
