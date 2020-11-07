@@ -36,11 +36,13 @@ void    L_OpenGL::updateShader(std::shared_ptr<Camera> camera)
     {
         _shadowMap->_shader.use();
         // Compute the MVP matrix from the light's point of view
+        std::cout << "camera = " << camera->_cameraPos.x << " " << camera->_cameraPos.y << " " << camera->_cameraPos.z << std::endl;
+        std::cout << "centoid = " << camera->_centroid.x << " " << camera->_centroid.y << " " << camera->_centroid.z << std::endl;
         //std::cout << camera->_width << " " << camera->_height << " " << camera->_deep << std::endl;
-        glm::mat4 depthProjectionMatrix = glm::ortho<float>(camera->_width * -0.01f, camera->_width * 0.01f,
-                                                            camera->_height * -0.01f, camera->_height * 0.01f,
-                                                            camera->_deep * -0.05f, camera->_deep * 0.05f);
-        glm::mat4 depthViewMatrix = glm::lookAt(glm::vec3(0.f, 300.f, -50.f), glm::vec3(0.f, 0.f, 100.f) , glm::vec3(0.f, 1.f, 0.f));
+        glm::mat4 depthProjectionMatrix = glm::ortho<float>(camera->_width * -0.5f, camera->_width * 0.5f,
+                                                            camera->_height * -0.5f, camera->_height * 0.5f,
+                                                            camera->_deep * -0.5f, camera->_deep * 0.5f);
+        glm::mat4 depthViewMatrix = glm::lookAt(camera->_centroid, camera->_centroid + glm::vec3(-1000, -1000, 0) , glm::vec3(-1000, 1000, 0));
         glm::mat4 depthModelMatrix = glm::mat4(1.0);
         glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
         _shadowMap->_shader.setMat4("mvp", depthMVP);

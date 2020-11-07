@@ -64,11 +64,11 @@ void    Camera::updateCamera()
     float heightNear = (2.f * tanFov * _near) / 2.f;
     float widthNear = (heightNear * _screenRatio) / 2.f;
 
-    float heightFar = (2.f * tanFov * _far) / 2.f;
+    float heightFar = (2.f * tanFov * (_far / 100.f)) / 2.f;
     float widthFar = (heightFar * _screenRatio) / 2.f;
 
     glm::vec3 centerNear = _cameraPos + _dirLook * _near;
-    glm::vec3 centerFar = _cameraPos + _dirLook * _far;
+    glm::vec3 centerFar = _cameraPos + _dirLook * (_far / 100.f);
 
     /*std::cout << "centerNear" << centerNear.x << " " << centerNear.y << " " << centerNear.z << std::endl;
     std::cout << "centerFar" << centerFar.x << " " << centerFar.y << " " << centerFar.z << std::endl;
@@ -86,6 +86,15 @@ void    Camera::updateCamera()
     auto farBottomLeft = centerFar + _cameraUp * -heightFar + right * -widthFar;
     auto farBottomRight = centerFar + _cameraUp * -heightFar + right * widthFar;
 
+    /*std::cout << "nearTopLeft = " << nearTopLeft.x << " " << nearTopLeft.y << " " << nearTopLeft.z << std::endl;
+    std::cout << "nearTopRight = " << nearTopRight.x << " " << nearTopRight.y << " " << nearTopRight.z << std::endl;
+    std::cout << "nearBottomLeft = " << nearBottomLeft.x << " " << nearBottomLeft.y << " " << nearBottomLeft.z << std::endl;
+    std::cout << "nearBottomRight = " << nearBottomRight.x << " " << nearBottomRight.y << " " << nearBottomRight.z << std::endl;
+
+    std::cout << "farTopLeft = " << farTopLeft.x << " " << farTopLeft.y << " " << farTopLeft.z << std::endl;
+    std::cout << "farTopRight = " << farTopRight.x << " " << farTopRight.y << " " << farTopRight.z << std::endl;
+    std::cout << "farBottomLeft = " << farBottomLeft.x << " " << farBottomLeft.y << " " << farBottomLeft.z << std::endl;
+    std::cout << "farBottomRight = " << farBottomRight.x << " " << farBottomRight.y << " " << farBottomRight.z << std::endl;*/
 
     glm::vec3 sun(-1, -1, 0);
     glm::mat4 rotSun = doRotation(sun, glm::vec3(0, 0, 1));
