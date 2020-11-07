@@ -66,11 +66,11 @@ void    Camera::updateCamera()
     float heightNear = (2.f * tanFov * _near) / 2.f;
     float widthNear = (heightNear * _screenRatio) / 2.f;
 
-    float heightFar = (2.f * tanFov * (_far / 100.f)) / 2.f;
+    float heightFar = (2.f * tanFov * (_far / 10.f)) / 2.f;
     float widthFar = (heightFar * _screenRatio) / 2.f;
 
     glm::vec3 centerNear = _cameraPos + _dirLook * _near;
-    glm::vec3 centerFar = _cameraPos + _dirLook * (_far / 100.f);
+    glm::vec3 centerFar = _cameraPos + _dirLook * (_far / 10.f);
 
     /*std::cout << "centerNear" << centerNear.x << " " << centerNear.y << " " << centerNear.z << std::endl;
     std::cout << "centerFar" << centerFar.x << " " << centerFar.y << " " << centerFar.z << std::endl;
