@@ -34,6 +34,8 @@ public:
     void    bindTerrain();
     void    draw() const;
 
+    void    modifyTerrain();
+
     // sun manager
     void setDir(const glm::vec3 &);
     void setColor(const glm::vec3 &);

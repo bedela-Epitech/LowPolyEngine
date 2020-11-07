@@ -27,8 +27,13 @@ void VertexArray::addVertexBuffer(const void *data, unsigned int size, const Lay
         GLCall(glVertexAttribPointer(element.location, element.count, element.type, element.normalized, layout._size, (const char*)offset));
         offset += element.count * sizeof(element.type);
     }
-
 }
+
+void VertexArray::modifyData(const void *data, unsigned int size)
+{
+    _vBuffers[0].modifyData(data, size);
+}
+
 void VertexArray::bind()
 {
     GLCall(glBindVertexArray(_vArrayId));

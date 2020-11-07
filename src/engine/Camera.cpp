@@ -21,6 +21,8 @@ Camera::Camera(float cameraX,  float cameraY, float cameraZ,
     _far = 10040.f;
     _projection = glm::perspective(glm::radians(_fov), _screenRatio, _near, _far);
     _projection = glm::scale(_projection, glm::vec3(-1, 1, 1));
+
+    _corners = std::vector<glm::vec3>(8);
 }
 
 /////////////////////
@@ -85,6 +87,16 @@ void    Camera::updateCamera()
     auto farTopRight = centerFar + _cameraUp * heightFar + right * widthFar;
     auto farBottomLeft = centerFar + _cameraUp * -heightFar + right * -widthFar;
     auto farBottomRight = centerFar + _cameraUp * -heightFar + right * widthFar;
+
+    _corners[0] = nearTopLeft;
+    _corners[1] = nearTopRight;
+    _corners[2] = nearBottomLeft;
+    _corners[3] = nearBottomRight;
+
+    _corners[4] = farTopLeft;
+    _corners[5] = farTopRight;
+    _corners[6] = farBottomLeft;
+    _corners[7] = farBottomRight;
 
     /*std::cout << "nearTopLeft = " << nearTopLeft.x << " " << nearTopLeft.y << " " << nearTopLeft.z << std::endl;
     std::cout << "nearTopRight = " << nearTopRight.x << " " << nearTopRight.y << " " << nearTopRight.z << std::endl;

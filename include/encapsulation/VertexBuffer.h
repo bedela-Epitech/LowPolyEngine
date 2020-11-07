@@ -47,6 +47,7 @@ public:
 
     void bind();
     void unbind();
+    void modifyData(const void *, unsigned int);
 };
 
 #endif //INC_71K2LEDEB_VERTEXBUFFER_H

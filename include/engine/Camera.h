@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <vector>
 
 class Camera
 {
@@ -16,6 +17,7 @@ public:
     float _deep;
     glm::vec3 _centroid;
     glm::vec3 _upSun;
+    std::vector<glm::vec3> _corners;
 
     float               _fov;
     float               _screenRatio;

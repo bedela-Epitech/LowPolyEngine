@@ -18,6 +18,7 @@ public:
     VertexArray();
     ~VertexArray();
 
+    void modifyData(const void *, unsigned int);
     void addVertexBuffer(const void *, unsigned int , const Layout &);
     void bind();
     void unbind();
