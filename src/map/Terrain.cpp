@@ -64,8 +64,22 @@ void Terrain::generateTerrain()
         _vertices.push_back(qt._colors[i].z);
 
     }
-
+    _idxEnd = _vertices.size();
     auto cube = getCube(glm::vec3(0.f, 100.f, 0.f),  50.f);
+    _vertices.insert(_vertices.end(), cube.begin(), cube.end());
+    cube = getCube(glm::vec3(0.f, 100.f, 0.f),  50.f);
+    _vertices.insert(_vertices.end(), cube.begin(), cube.end());
+    cube = getCube(glm::vec3(0.f, 100.f, 0.f),  50.f);
+    _vertices.insert(_vertices.end(), cube.begin(), cube.end());
+    cube = getCube(glm::vec3(0.f, 100.f, 0.f),  50.f);
+    _vertices.insert(_vertices.end(), cube.begin(), cube.end());
+    cube = getCube(glm::vec3(0.f, 100.f, 0.f),  50.f);
+    _vertices.insert(_vertices.end(), cube.begin(), cube.end());
+    cube = getCube(glm::vec3(0.f, 100.f, 0.f),  50.f);
+    _vertices.insert(_vertices.end(), cube.begin(), cube.end());
+    cube = getCube(glm::vec3(0.f, 100.f, 0.f),  50.f);
+    _vertices.insert(_vertices.end(), cube.begin(), cube.end());
+    cube = getCube(glm::vec3(0.f, 100.f, 0.f),  50.f);
     _vertices.insert(_vertices.end(), cube.begin(), cube.end());
 
     _vertexNb = _vertices.size() / 3;
@@ -103,6 +117,32 @@ std::vector<float> Terrain::getCube(const glm::vec3 &pos, float size)
     a = getTriangle({pos + glm::vec3(size, size, -size), pos + glm::vec3(-size, -size, -size), pos + glm::vec3(-size, size, -size)} , glm::vec3(0.f, 0.f, -1.f), glm::vec3(1.f, 0.f, 0.f));
     cube.insert(cube.end(), a.begin(), a.end());
 
+    a = getTriangle({pos + glm::vec3(size, -size, size), pos + glm::vec3(-size, -size, size), pos + glm::vec3(size, size, size)} , glm::vec3(0.f, 0.f, 1.f), glm::vec3(1.f, 0.f, 0.f));
+    cube.insert(cube.end(), a.begin(), a.end());
+    a = getTriangle({pos + glm::vec3(size, size, size), pos + glm::vec3(-size, -size, size), pos + glm::vec3(-size, size, size)} , glm::vec3(0.f, 0.f, 1.f), glm::vec3(1.f, 0.f, 0.f));
+    cube.insert(cube.end(), a.begin(), a.end());
+
+
+    a = getTriangle({pos + glm::vec3(-size, -size, -size), pos + glm::vec3(-size, size, -size), pos + glm::vec3(-size, -size, size)} , glm::vec3(-1.f, 0.f, 0.f), glm::vec3(1.f, 0.f, 0.f));
+    cube.insert(cube.end(), a.begin(), a.end());
+    a = getTriangle({pos + glm::vec3(-size, size, -size), pos + glm::vec3(-size, size, size), pos + glm::vec3(-size, -size, size)} , glm::vec3(-1.f, 0.f, 0.f), glm::vec3(1.f, 0.f, 0.f));
+    cube.insert(cube.end(), a.begin(), a.end());
+
+    a = getTriangle({pos + glm::vec3(size, -size, -size), pos + glm::vec3(size, size, -size), pos + glm::vec3(size, -size, size)} , glm::vec3(1.f, 0.f, 0.f), glm::vec3(1.f, 0.f, 0.f));
+    cube.insert(cube.end(), a.begin(), a.end());
+    a = getTriangle({pos + glm::vec3(size, size, -size), pos + glm::vec3(size, size, size), pos + glm::vec3(size, -size, size)} , glm::vec3(1.f, 0.f, 0.f), glm::vec3(1.f, 0.f, 0.f));
+    cube.insert(cube.end(), a.begin(), a.end());
+
+
+    a = getTriangle({pos + glm::vec3(-size, size, -size), pos + glm::vec3(-size, size, size), pos + glm::vec3(size, size, size)} , glm::vec3(0.f, 1.f, 0.f), glm::vec3(1.f, 0.f, 0.f));
+    cube.insert(cube.end(), a.begin(), a.end());
+    a = getTriangle({pos + glm::vec3(-size, size, -size), pos + glm::vec3(size, size, -size), pos + glm::vec3(size, size, size)} , glm::vec3(0.f, 1.f, 0.f), glm::vec3(1.f, 0.f, 0.f));
+    cube.insert(cube.end(), a.begin(), a.end());
+
+    a = getTriangle({pos + glm::vec3(-size, -size, -size), pos + glm::vec3(-size, -size, size), pos + glm::vec3(size, -size, size)} , glm::vec3(0.f, -1.f, 0.f), glm::vec3(1.f, 0.f, 0.f));
+    cube.insert(cube.end(), a.begin(), a.end());
+    a = getTriangle({pos + glm::vec3(-size, -size, -size), pos + glm::vec3(size, -size, -size), pos + glm::vec3(size, -size, size)} , glm::vec3(0.f, -1.f, 0.f), glm::vec3(1.f, 0.f, 0.f));
+    cube.insert(cube.end(), a.begin(), a.end());
     return cube;
 }
 
@@ -116,6 +156,20 @@ void Terrain::bindTerrain()
     _shader.setFloat("specularStrength", _sun._specularStrenght);
 
     _vArray.addVertexBuffer(_vertices.data(), sizeof(float) * _vertices.size(), _bufferLayout);
+}
+
+void Terrain::changeCamCorner(const std::vector<glm::vec3> &corners)
+{
+    std::cout << _vertices.size() << std::endl;
+    _vertices.erase(_vertices.begin() + _idxEnd, _vertices.end());
+
+    std::vector<float> cube;
+    for (const auto &corner : corners)
+    {
+        cube = getCube(corner,  0.1f);
+        _vertices.insert(_vertices.end(), cube.begin(), cube.end());
+    }
+    std::cout << _vertices.size() << std::endl;
 }
 
 void Terrain::modifyTerrain()

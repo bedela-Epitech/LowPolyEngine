@@ -23,6 +23,8 @@ public:
     glm::mat4           _projection;
     glm::mat4           _mvp;
 private:
+    //toremove
+    int                 _idxEnd;
     Light               _sun;
     std::vector<float>  _vertices;
     Layout              _bufferLayout;
@@ -33,6 +35,7 @@ public:
     void    generateTerrain();
     void    bindTerrain();
     void    draw() const;
+    void    changeCamCorner(const std::vector<glm::vec3> &);
 
     void    modifyTerrain();
 

@@ -61,6 +61,7 @@ void    L_OpenGL::updateShader(std::shared_ptr<Camera> camera)
         _terrain->_shader.setMat4("mvp", _terrain->_mvp);
         _terrain->_shader.setInt("shadowMap", _shadowMap->_fbo._depthTexture._textureId);
 
+        _terrain->changeCamCorner(camera->_corners);
         _terrain->modifyTerrain();
     }
 }
