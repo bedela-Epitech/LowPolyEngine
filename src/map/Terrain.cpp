@@ -166,7 +166,7 @@ void Terrain::changeCamCorner(const std::vector<glm::vec3> &corners)
     std::vector<float> cube;
     for (const auto &corner : corners)
     {
-        cube = getCube(corner,  0.1f);
+        cube = getCube(corner,  10.f);
         _vertices.insert(_vertices.end(), cube.begin(), cube.end());
     }
     std::cout << _vertices.size() << std::endl;

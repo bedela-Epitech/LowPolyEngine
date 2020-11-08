@@ -54,12 +54,14 @@ void    Camera::updateCamera()
     _dirLook = glm::vec3(sin(glm::radians(_rotateY)) * cos(glm::radians(_rotateX)),
                          sin(glm::radians(_rotateX)),
                          cos(glm::radians(_rotateY)) * cos(glm::radians(_rotateX)));
+    glm::vec3 upp = glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::vec3 cameraRight = glm::normalize(glm::cross(upp, _dirLook));
+    _cameraUp = glm::cross(_dirLook, cameraRight);
+
 
     _view = glm::lookAt(_cameraPos, _cameraPos + _dirLook, _cameraUp);
 
     glm::mat4 rot = doRotation(_dirLook, glm::vec3(0, 0, 1));
-    glm::vec3 right = rot * glm::vec4(1, 0, 0, 1);
-    glm::vec3 up = rot * glm::vec4(_cameraUp, 1);
 
     float tanFov = tanf((_fov / 2.f) * M_PI / 180.0 );
 
@@ -72,26 +74,35 @@ void    Camera::updateCamera()
     glm::vec3 centerNear = _cameraPos + _dirLook * _near;
     glm::vec3 centerFar = _cameraPos + _dirLook * (_far / 10.f);
 
+    std::cout << "camera Look" << _dirLook.x << " " << _dirLook.y << " " << _dirLook.z << std::endl;
+    std::cout << "camera up" << _cameraUp.x << " " << _cameraUp.y << " " << _cameraUp.z << std::endl;
+
+
     /*std::cout << "centerNear" << centerNear.x << " " << centerNear.y << " " << centerNear.z << std::endl;
     std::cout << "centerFar" << centerFar.x << " " << centerFar.y << " " << centerFar.z << std::endl;
     std::cout << "dist = " << getDist(centerNear, centerFar) << std::endl;
     std::cout << "HN = " << heightNear << std::endl;
     std::cout << "HF = " << tanFov << std::endl;*/
 
-    auto nearTopLeft = centerNear + _cameraUp * heightNear + right * -widthNear;
-    auto nearTopRight = centerNear + _cameraUp * heightNear + right * widthNear;
-    auto nearBottomLeft = centerNear + _cameraUp * -heightNear + right * -widthNear;
-    auto nearBottomRight = centerNear + _cameraUp * -heightNear + right * widthNear;
+    auto nearTopLeft = centerNear + _cameraUp * heightNear + cameraRight * -widthNear;
+    auto nearTopRight = centerNear + _cameraUp * heightNear + cameraRight * widthNear;
+    auto nearBottomLeft = centerNear + _cameraUp * -heightNear + cameraRight * -widthNear;
+    auto nearBottomRight = centerNear + _cameraUp * -heightNear + cameraRight * widthNear;
 
-    auto farTopLeft = centerFar + _cameraUp * heightFar + right * -widthFar;
-    auto farTopRight = centerFar + _cameraUp * heightFar + right * widthFar;
-    auto farBottomLeft = centerFar + _cameraUp * -heightFar + right * -widthFar;
-    auto farBottomRight = centerFar + _cameraUp * -heightFar + right * widthFar;
+    auto farTopLeft = centerFar + _cameraUp * heightFar + cameraRight * -widthFar;
+    auto farTopRight = centerFar + _cameraUp * heightFar + cameraRight * widthFar;
+    auto farBottomLeft = centerFar + _cameraUp * -heightFar + cameraRight * -widthFar;
+    auto farBottomRight = centerFar + _cameraUp * -heightFar + cameraRight * widthFar;
 
-    _corners[0] = nearTopLeft;
+
+    _corners[0] = glm::vec3(0, 0, 0);
+    _corners[1] = glm::vec3(0, 0, 0);
+    _corners[2] = glm::vec3(0, 0, 0);
+    _corners[3] = glm::vec3(0, 0, 0);
+    /*_corners[0] = nearTopLeft;
     _corners[1] = nearTopRight;
     _corners[2] = nearBottomLeft;
-    _corners[3] = nearBottomRight;
+    _corners[3] = nearBottomRight;*/
 
     _corners[4] = farTopLeft;
     _corners[5] = farTopRight;
