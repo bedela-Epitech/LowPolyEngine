@@ -95,19 +95,7 @@ void    Camera::updateCamera()
     auto farBottomRight = centerFar + _cameraUp * -heightFar + cameraRight * widthFar;
 
 
-    _corners[0] = glm::vec3(0, 0, 0);
-    _corners[1] = glm::vec3(0, 0, 0);
-    _corners[2] = glm::vec3(0, 0, 0);
-    _corners[3] = glm::vec3(0, 0, 0);
-    /*_corners[0] = nearTopLeft;
-    _corners[1] = nearTopRight;
-    _corners[2] = nearBottomLeft;
-    _corners[3] = nearBottomRight;*/
 
-    _corners[4] = farTopLeft;
-    _corners[5] = farTopRight;
-    _corners[6] = farBottomLeft;
-    _corners[7] = farBottomRight;
 
     /*std::cout << "nearTopLeft = " << nearTopLeft.x << " " << nearTopLeft.y << " " << nearTopLeft.z << std::endl;
     std::cout << "nearTopRight = " << nearTopRight.x << " " << nearTopRight.y << " " << nearTopRight.z << std::endl;
@@ -121,7 +109,28 @@ void    Camera::updateCamera()
 
     glm::vec3 sun(-1, -1, 0);
     glm::mat4 rotSun = doRotation(sun, glm::vec3(0, 0, 1));
+    glm::mat4 rotBackSun = doRotation(glm::vec3(0, 0, 1), sun);
     auto upSun = rotSun * glm::vec4(0, 1, 0, 1);
+
+    _corners[0] = glm::vec3(0, 0, 0);
+    _corners[1] = glm::vec3(0, 0, 0);
+    _corners[2] = glm::vec3(0, 0, 0);
+    _corners[3] = glm::vec3(0, 0, 0);
+    /*_corners[0] = nearTopLeft;
+    _corners[1] = nearTopRight;
+    _corners[2] = nearBottomLeft;
+    _corners[3] = nearBottomRight;*/
+
+    /*_corners[4] = (rotBackSun * (rotSun * glm::vec4(farTopLeft,1.0)));
+    _corners[4] = (rotBackSun * (rotSun * glm::vec4(farTopRight,1.0)));
+    _corners[4] = (rotBackSun * (rotSun * glm::vec4(farBottomLeft,1.0)));
+    _corners[4] = (rotBackSun * (rotSun * glm::vec4(farTopLeft,1.0)));*/
+    _corners[4] = farTopLeft;
+    _corners[5] = farTopRight;
+    _corners[6] = farBottomLeft;
+    _corners[7] = farBottomRight;
+
+
     _upSun = upSun;
     glm::vec3 array[8];
 
@@ -160,11 +169,11 @@ void    Camera::updateCamera()
         maxY = std::max(maxY, array[i].y);
         maxZ = std::max(maxZ, array[i].z);
     }
-    glm::mat4 rotBackSun = doRotation(glm::vec3(0, 0, 1), sun);
     centroid.x = (maxX + minX) / 2.f;
     centroid.y = (maxY + minY) / 2.f;
     centroid.z = (maxZ + minZ) / 2.f;
     _centroid = rotBackSun * glm::vec4(centroid, 1.0);
+    _corners[0] = _centroid;
     _width = maxX - minX;
     _height = maxY - minY;
     _deep = maxZ - minZ;
