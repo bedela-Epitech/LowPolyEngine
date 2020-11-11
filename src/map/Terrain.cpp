@@ -64,6 +64,9 @@ void Terrain::generateTerrain()
         _vertices.push_back(qt._colors[i].z);
 
     }
+    auto c = getCube(glm::vec3(0.f, 100.f, 0.f),  50.f);
+    _vertices.insert(_vertices.end(), c.begin(), c.end());
+
     _idxEnd = _vertices.size();
     auto cube = getCube(glm::vec3(0.f, 100.f, 0.f),  50.f);
     _vertices.insert(_vertices.end(), cube.begin(), cube.end());

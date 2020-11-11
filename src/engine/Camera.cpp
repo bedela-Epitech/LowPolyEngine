@@ -63,13 +63,14 @@ void    Camera::updateCamera()
 
     glm::mat4 rot = doRotation(_dirLook, glm::vec3(0, 0, 1));
 
-    float tanFov = tanf((_fov / 2.f) * M_PI / 180.0 );
 
-    float heightNear = (2.f * tanFov * _near) / 2.f;
-    float widthNear = (heightNear * _screenRatio) / 2.f;
+    float tanFov = tanf(((_fov / 2.f) * M_PI) / 180.f);
 
-    float heightFar = (2.f * tanFov * (_far / 10.f)) / 2.f;
-    float widthFar = (heightFar * _screenRatio) / 2.f;
+    float heightNear = tanFov * _near;
+    float widthNear = heightNear * _screenRatio;
+
+    float heightFar = tanFov * (_far / 10.f);
+    float widthFar = heightFar * _screenRatio;
 
     glm::vec3 centerNear = _cameraPos + _dirLook * _near;
     glm::vec3 centerFar = _cameraPos + _dirLook * (_far / 10.f);
