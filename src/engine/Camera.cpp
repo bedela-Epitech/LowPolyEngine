@@ -108,9 +108,9 @@ void    Camera::updateCamera()
     std::cout << "farBottomLeft = " << farBottomLeft.x << " " << farBottomLeft.y << " " << farBottomLeft.z << std::endl;
     std::cout << "farBottomRight = " << farBottomRight.x << " " << farBottomRight.y << " " << farBottomRight.z << std::endl;*/
 
-    glm::vec3 sun(-1, -1, 0);
-    glm::mat4 rotSun = doRotation(sun, glm::vec3(0, 0, 1));
-    glm::mat4 rotBackSun = doRotation(glm::vec3(0, 0, 1), sun);
+    glm::vec3 sun(1, -1, 0);
+    glm::mat4 rotBackSun = doRotation(sun, glm::vec3(0, 0, 1));
+    glm::mat4 rotSun = doRotation(glm::vec3(0, 0, 1), sun);
     auto upSun = rotSun * glm::vec4(0, 1, 0, 1);
 
     _corners[0] = glm::vec3(0, 0, 0);
@@ -145,14 +145,18 @@ void    Camera::updateCamera()
     array[6] = rotSun * glm::vec4(farBottomLeft, 1.0);
     array[7] = rotSun * glm::vec4(farBottomRight, 1.0);
 
+
+    /*auto expected = rotSun * glm::vec4(-1, -1, 0, 1);
+    expected = glm::normalize(expected);
+    std::cout << expected.x << " " << expected.y << " " << expected.z << std::endl;*/
     /*std::cout << array[0].x << " " << array[0].y << " " << array[0].z << std::endl;
-    std::cout << array[1].x << " " << array[1].y << " " << array[1].z << std::endl;
-    std::cout << array[2].x << " " << array[2].y << " " << array[2].z << std::endl;
-    std::cout << array[3].x << " " << array[3].y << " " << array[3].z << std::endl;
-    std::cout << array[4].x << " " << array[4].y << " " << array[4].z << std::endl;
-    std::cout << array[5].x << " " << array[5].y << " " << array[5].z << std::endl;
-    std::cout << array[6].x << " " << array[6].y << " " << array[6].z << std::endl;
-    std::cout << array[7].x << " " << array[7].y << " " << array[7].z << std::endl;*/
+       std::cout << array[1].x << " " << array[1].y << " " << array[1].z << std::endl;
+       std::cout << array[2].x << " " << array[2].y << " " << array[2].z << std::endl;
+       std::cout << array[3].x << " " << array[3].y << " " << array[3].z << std::endl;
+       std::cout << array[4].x << " " << array[4].y << " " << array[4].z << std::endl;
+       std::cout << array[5].x << " " << array[5].y << " " << array[5].z << std::endl;
+       std::cout << array[6].x << " " << array[6].y << " " << array[6].z << std::endl;
+       std::cout << array[7].x << " " << array[7].y << " " << array[7].z << std::endl;*/
 
     float minX = array[0].x;
     float minY = array[0].y;
