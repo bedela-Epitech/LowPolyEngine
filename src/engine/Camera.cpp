@@ -62,8 +62,8 @@ void    Camera::updateCamera()
     _view = glm::lookAt(_cameraPos, _cameraPos + _dirLook, _cameraUp);
 
     glm::mat4 rot = doRotation(_dirLook, glm::vec3(0, 0, 1));
-    
-    float tanFov = tanf(((_fov / 2.f) * M_PI) / 180.f);
+
+    float tanFov = tanf(((_fov / 2.f) * (float)M_PI) / 180.f);
 
     float heightNear = tanFov * _near;
     float widthNear = heightNear * _screenRatio;
@@ -74,8 +74,8 @@ void    Camera::updateCamera()
     glm::vec3 centerNear = _cameraPos + _dirLook * _near;
     glm::vec3 centerFar = _cameraPos + _dirLook * (_far / 10.f);
 
-    std::cout << "camera Look" << _dirLook.x << " " << _dirLook.y << " " << _dirLook.z << std::endl;
-    std::cout << "camera up" << _cameraUp.x << " " << _cameraUp.y << " " << _cameraUp.z << std::endl;
+    //std::cout << "camera Look" << _dirLook.x << " " << _dirLook.y << " " << _dirLook.z << std::endl;
+    //std::cout << "camera up" << _cameraUp.x << " " << _cameraUp.y << " " << _cameraUp.z << std::endl;
 
 
     /*std::cout << "centerNear" << centerNear.x << " " << centerNear.y << " " << centerNear.z << std::endl;
@@ -107,10 +107,10 @@ void    Camera::updateCamera()
     std::cout << "farBottomLeft = " << farBottomLeft.x << " " << farBottomLeft.y << " " << farBottomLeft.z << std::endl;
     std::cout << "farBottomRight = " << farBottomRight.x << " " << farBottomRight.y << " " << farBottomRight.z << std::endl;*/
 
-    glm::vec3 sun(1, -1, 0);
+    glm::vec3 sun(-1, -1, 0);
     glm::mat4 rotBackSun = doRotation(sun, glm::vec3(0, 0, 1));
     glm::mat4 rotSun = doRotation(glm::vec3(0, 0, 1), sun);
-    auto upSun = rotSun * glm::vec4(0, 1, 0, 1);
+    auto upSun = rotSun * glm::vec4(0, 0, 1, 1);
 
     _corners[0] = glm::vec3(0, 0, 0);
     _corners[1] = glm::vec3(0, 0, 0);
@@ -182,21 +182,6 @@ void    Camera::updateCamera()
     _height = maxY - minY;
     _deep = maxZ - minZ;
     //std::cout << "centroid " << _centroid.x << " " << _centroid.y << " " << _centroid.z << std::endl;
-
-
-    glm::mat4 actualRot = doRotation(sun, _dirLook);
-    glm::mat4 trans = glm::translate(rotSun, _centroid);
-    glm::mat4 final = trans;
-    glm::mat4 depthProjectionMatrix = glm::ortho<float>(_width * -0.5f, _width * 0.5f,
-                                                        _height * -0.5f, _height * 0.5f,
-                                                        _deep * -0.5f, _deep * 0.5f);
-
-    glm::mat4 ortho{2.f /_width, 0,             0,           0,
-                    0,           2.f / _height, 0,           0,
-                    0,           0,             2.f / _deep, 0,
-                    0,           0,             0,           1};
-    _fff =  glm::mat4(1.0f) * ortho * trans;
-    //std::cout << "w = " << _width << ", h " << _height << ", d" << _deep << std::endl;
 }
 
 /////////////////////
