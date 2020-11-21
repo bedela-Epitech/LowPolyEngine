@@ -62,8 +62,7 @@ void    Camera::updateCamera()
     _view = glm::lookAt(_cameraPos, _cameraPos + _dirLook, _cameraUp);
 
     glm::mat4 rot = doRotation(_dirLook, glm::vec3(0, 0, 1));
-
-
+    
     float tanFov = tanf(((_fov / 2.f) * M_PI) / 180.f);
 
     float heightNear = tanFov * _near;

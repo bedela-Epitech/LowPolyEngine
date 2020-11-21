@@ -5,6 +5,7 @@ attribute vec3 in_Color;
 attribute vec3 normal;
 varying  vec3 ex_Color;
 varying vec4 shadowCoord;
+varying float bias;
 uniform vec3 lightDir;
 uniform float ambiantCoeff;
 uniform vec3 cameraDir;
@@ -28,4 +29,6 @@ void main()
     ex_Color = (ambiant + diffuse + specular) * in_Color;
     gl_Position = mvp * aPos;
     shadowCoord = lightMvp * aPos;
+    bias = 0.005*tan(acos(max(dot(normal, -lightDir), 0.0))); // cosTheta is dot( n,l ), clamped between 0 and 1
+    bias = clamp(bias, 0,0.01);
 }
