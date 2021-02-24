@@ -4,15 +4,17 @@ project(LowPolyEngine)
 
 # SETTERS
 set(CMAKE_CXX_STANDARD 17)
-set(GLAD_DIR "/usr/include/glad")
-set(GLFW_DIR "/usr/local/include/GLFW")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+set(GLFW_DIR "/usr/include/GLFW")
+
+add_subdirectory(lib/glad/)
 SET(PLATFORM_SPECIFIC_LIBS "-lpthread")
 
 include_directories(include)
 include_directories(lib)
+include_directories(lib/glad/include/glad)
 
 # SET SOURCES
-SET(GLAD_SOURCES ${GLAD_DIR}/src/glad.c)
 set(LPE_SOURCES src/main.cpp
 		include/encapsulation/L_OpenGL.h src/encapsulation/L_OpenGL.cpp
         include/engine/Camera.h src/engine/Camera.cpp
@@ -31,16 +33,8 @@ set(LPE_SOURCES src/main.cpp
 		include/encapsulation/Matrix.h)
 
 # add exec with sources
-add_executable(LowPolyEngine ${LPE_SOURCES} ${GLAD_SOURCES})
+add_executable(LowPolyEngine ${LPE_SOURCES})
 
-# link GLFW
-target_include_directories(LowPolyEngine PRIVATE "${GLFW_DIR}/include")
-target_link_libraries(LowPolyEngine glfw3)
-
-# link GLAD
-target_include_directories(LowPolyEngine PRIVATE "${GLAD_DIR}/include/glad/")
-target_link_libraries(LowPolyEngine ${GLAD_DIR}/glad)
-
+set(LIBS glfw glad ${PLATFORM_SPECIFIC_LIBS} ${CMAKE_DL_LIBS})
 # add external libs
-target_link_libraries(LowPolyEngine ${PLATFORM_SPECIFIC_LIBS})
-target_link_libraries(LowPolyEngine "${CMAKE_DL_LIBS}")
+target_link_libraries(LowPolyEngine ${LIBS})
