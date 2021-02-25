@@ -125,10 +125,10 @@ void    Camera::updateCamera()
     _corners[4] = (rotBackSun * (rotSun * glm::vec4(farTopRight,1.0)));
     _corners[4] = (rotBackSun * (rotSun * glm::vec4(farBottomLeft,1.0)));
     _corners[4] = (rotBackSun * (rotSun * glm::vec4(farTopLeft,1.0)));*/
-    _corners[4] = farTopLeft;
-    _corners[5] = farTopRight;
-    _corners[6] = farBottomLeft;
-    _corners[7] = farBottomRight;
+    _corners[4] = rotBackSun * rotSun * glm::vec4(farTopLeft, 1.0);
+    _corners[5] = rotBackSun * rotSun * glm::vec4(farTopRight, 1.0);
+    _corners[6] = rotBackSun * rotSun * glm::vec4(farBottomLeft, 1.0);
+    _corners[7] = rotBackSun * rotSun * glm::vec4(farBottomRight, 1.0);
 
 
     _upSun = upSun;
