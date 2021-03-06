@@ -44,20 +44,24 @@ void    L_OpenGL::updateShader(std::shared_ptr<Camera> camera)
                                                             camera->_deep * -0.7f, camera->_deep * 0.7f);
         glm::mat4 depthViewMatrix = glm::lookAt(camera->_centroid, camera->_centroid + glm::vec3(-1, -1, 0) , glm::vec3(0, 1, 0));
         glm::mat4 depthModelMatrix = glm::mat4(1.0);
-        glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
-        _shadowMap->_shader.setMat4("mvp", depthMVP);
-
-        _terrain->_shader.use();
+        glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix/* * depthModelMatrix*/;
         glm::mat4 biasMatrix(
                 0.5, 0.0, 0.0, 0.0,
                 0.0, 0.5, 0.0, 0.0,
                 0.0, 0.0, 0.5, 0.0,
                 0.5, 0.5, 0.5, 1.0
         );
+
+        _shadowMap->_shader.setMat4("lightmvp", depthMVP);
+
+
+
+
+        _terrain->_shader.use();
+        _terrain->_mvp = _terrain->_projection * camera->_view;
         auto fff = biasMatrix * depthMVP;
         _terrain->_shader.setMat4("lightMvp", fff); // toremove
         _terrain->_shader.setVec3("cameraDir", camera->_dirLook);
-        _terrain->_mvp = _terrain->_projection * camera->_view;
         _terrain->_shader.setMat4("mvp", _terrain->_mvp);
         _terrain->_shader.setInt("shadowMap", _shadowMap->_fbo._depthTexture._textureId);
 

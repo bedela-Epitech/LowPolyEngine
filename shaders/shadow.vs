@@ -2,9 +2,9 @@
 precision highp float;
 
 attribute vec4 aPos;
-uniform mat4 mvp;
+uniform mat4 lightmvp;
 
 void main()
 {
-     gl_Position = mvp * aPos;
+     gl_Position = lightmvp * aPos;
 }

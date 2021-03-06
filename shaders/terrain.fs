@@ -12,6 +12,6 @@ void main(void)
     float objectNear = texture(shadowMap, shadowCoord.xy).r;
     float lightFactor = 1.0;
     if (shadowCoord.z - bias > objectNear)
-        lightFactor = 0.6;
+        lightFactor = 1.0 - (shadowCoord.w * 0.4);
     out_Color = vec4(ex_Color * lightFactor, 1.0);
 }

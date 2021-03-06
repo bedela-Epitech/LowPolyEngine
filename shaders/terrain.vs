@@ -24,6 +24,9 @@ vec3 ambiant = ambiantCoeff * lightColor;
 vec3 diffuse = diff * lightColor;
 vec3 specular = specularStrength * spec * lightColor;
 
+const float shadowDistance = 1040;
+const float transitionDistance = 15;
+
 void main()
 {
     ex_Color = (ambiant + diffuse + specular) * in_Color;
@@ -31,4 +34,9 @@ void main()
     shadowCoord = lightMvp * aPos;
     bias = 0.005*tan(acos(max(dot(normal, -lightDir), 0.0))); // cosTheta is dot( n,l ), clamped between 0 and 1
     bias = clamp(bias, 0,0.01);
+
+    float distance = length(gl_Position.xyz);
+    distance = distance - (shadowDistance - transitionDistance);
+    distance = distance / transitionDistance;
+    shadowCoord.w = clamp(1.0 - distance, 0.0, 1.0);
 }

@@ -19,6 +19,7 @@ FrameBuffer::FrameBuffer(bool needImage, bool needDepth, int width, int height)
     if (needImage)
         attachImageTexture();
 
+    glReadBuffer(GL_NONE);
     if (!needImage)
         glDrawBuffer(GL_NONE);
     else
