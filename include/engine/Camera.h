@@ -12,20 +12,18 @@
 class Camera
 {
 public:
-    float _width;
-    float _height;
-    float _deep;
-    glm::vec3 _centroid;
-
-    float               _fov;
-    float               _screenRatio;
-    float               _near;
-    float               _far;
-    glm::mat4           _projection;
-	glm::vec3	_cameraPos;
-	glm::vec3	_cameraUp;
-    glm::vec3	_dirLook;
+    float       _fov;
+    float       _screenRatio;
+    float       _near;
+    float       _far;
+    glm::mat4   _projection;
     glm::mat4	_view;
+
+    glm::vec3	_cameraPos;
+    glm::vec3	_cameraRight{1, 0, 0};
+    glm::vec3	_cameraUp{0, 1, 0};
+    glm::vec3	_cameraLook{0, 0, 1};
+
 
     float       _rotateX = 0.f;
     float       _rotateY = 0.f;
@@ -36,7 +34,7 @@ public:
     float       _rotationCelerity = 60.f;
 
 public:
-	Camera(float, float, float, float, float, float, float, float, float);
+	Camera(float, float, float);
 
     void	closeWindow(float);
 
@@ -50,17 +48,7 @@ public:
 	void	rotateUp(float);
 	void	rotateDown(float);
 
-    void    setFov(float);
-    void    setScreenRatio(float);
-    void    setNear(float);
-    void    setFar(float);
-    void    setProjection(const glm::mat4 &);
-
-
     void    updateCamera();
-
-private:
-    void    updateProjection();
 
 };
 

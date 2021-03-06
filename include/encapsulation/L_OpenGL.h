@@ -16,6 +16,7 @@ public:
     std::shared_ptr<Terrain>    _terrain;
     std::shared_ptr<Menu>       _menu;
     std::shared_ptr<ShadowMap>  _shadowMap;
+    std::unique_ptr<Light>      _light;
 
 public:
     L_OpenGL(const std::shared_ptr<Terrain> &,

@@ -24,10 +24,8 @@ public:
     std::thread         _loadingThread;
     glm::mat4           _projection;
     glm::mat4           _mvp;
+
 private:
-    //toremove
-    int                 _idxEnd;
-    Light               _sun;
     std::vector<float>  _vertices;
     Layout              _bufferLayout;
 
@@ -35,17 +33,11 @@ public:
     Terrain(const std::string &, const std::string &);
 
     void    generateTerrain();
-    void    bindTerrain();
+    void    bindTerrain(const std::unique_ptr<Light> &);
     void    draw() const;
 
     void    updateShader(std::shared_ptr<Camera>, const glm::mat4&, unsigned int);
     void    modifyTerrain();
-
-    // sun manager
-    void setDir(const glm::vec3 &);
-    void setColor(const glm::vec3 &);
-    void setAmbient(float);
-    void setSpecular(float);
 };
 
 #endif //INC_71K2LEDEB_TERRAIN_H

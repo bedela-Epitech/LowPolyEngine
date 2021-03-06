@@ -10,7 +10,7 @@
 L_OpenGL::L_OpenGL(const std::shared_ptr<Terrain> &terrain, const std::shared_ptr<Menu> &menu, const std::shared_ptr<ShadowMap> &shadowMap)
         : _terrain(terrain), _menu(menu), _shadowMap(shadowMap)
 {
-
+    _light = std::make_unique<Light>();
     GLCall(glEnable(GL_DEPTH_TEST));
 }
 
@@ -27,15 +27,16 @@ void    L_OpenGL::updateShader(std::shared_ptr<Camera> camera)
         if (_terrain->_isTerrainReady && !_terrain->_isTerrainLinked)
         {
             _terrain->_loadingThread.join();
-            _terrain->bindTerrain();
+            _terrain->bindTerrain(_light);
             _terrain->_isTerrainLinked = true;
             _menu->useShader();
         }
     }
     else
     {
-        _shadowMap->updateShader(camera);
-        _terrain->updateShader(camera, _shadowMap->getBiasLightMvp(), _shadowMap->_fbo._depthTexture._textureId);
+        _light->updateLight(camera);
+        _shadowMap->updateShader(_light->_mvp);
+        _terrain->updateShader(camera, _light->getBiasLightMvp(), _shadowMap->_fbo._depthTexture._textureId);
     }
 }
 

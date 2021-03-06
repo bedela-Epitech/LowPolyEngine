@@ -1,6 +1,8 @@
+//
+// Created by bedela on 13/05/2020.
+//
 
 #include "engine/Camera.h"
-#include <iostream>
 
 /////////////////////
 //
@@ -8,18 +10,15 @@
 //
 /////////////////////
 
-Camera::Camera(float cameraX,  float cameraY, float cameraZ,
-               float cameraUpX, float cameraUpY, float cameraUpZ,
-               float dirLookX, float dirLookY, float dirLookZ)
-        : _cameraPos(glm::vec3(cameraX, cameraY, cameraZ)),
-          _cameraUp(glm::vec3(cameraUpX, cameraUpY, cameraUpZ)),
-          _dirLook(glm::vec3(dirLookX, dirLookY, dirLookZ))
+Camera::Camera(float cameraX, float cameraY, float cameraZ)
+        : _cameraPos({cameraX, cameraY, cameraZ})
 {
     _fov = 60.f;
     _screenRatio = Window::getScreenRatio();
     _near = 0.1f;
     _far = 10040.f;
     _projection = glm::perspective(glm::radians(_fov), _screenRatio, _near, _far);
+    // invert x for left handed coordinate system
     _projection = glm::scale(_projection, glm::vec3(-1, 1, 1));
 }
 
@@ -29,141 +28,16 @@ Camera::Camera(float cameraX,  float cameraY, float cameraZ,
 //
 /////////////////////
 
-glm::mat4    doRotation(glm::vec3 v1, glm::vec3 v2)
-{
-    v1 = glm::normalize(v1);
-    v2 = glm::normalize(v2);
-    glm::vec3 v = glm::cross(v2, v1);
-    float angle = acos(glm::dot(v2, v1) / (glm::length(v2) * glm::length(v1)));
-    glm::mat4 rotmat = glm::mat4(1.0);
-    if (glm::dot(v2, v1) == 1)
-        return rotmat;
-    rotmat = glm::rotate(rotmat, angle, v);
-    return rotmat;
-}
-
-double getDist(glm::vec3 a, glm::vec3 b)
-{
-    return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2) + pow(a.z - b.z, 2));
-}
 
 void    Camera::updateCamera()
 {
-    _dirLook = glm::vec3(sin(glm::radians(_rotateY)) * cos(glm::radians(_rotateX)),
-                         sin(glm::radians(_rotateX)),
+    _cameraLook = glm::vec3(sin(glm::radians(_rotateY)) * cos(glm::radians(_rotateX)),
+                            sin(glm::radians(_rotateX)),
                          cos(glm::radians(_rotateY)) * cos(glm::radians(_rotateX)));
-    glm::vec3 upp = glm::vec3(0.0f, 1.0f, 0.0f);
-    glm::vec3 cameraRight = glm::normalize(glm::cross(upp, _dirLook));
-    _cameraUp = glm::cross(_dirLook, cameraRight);
+    _cameraRight = glm::normalize(glm::cross({0.0f, 1.0f, 0.0f}, _cameraLook));
+    _cameraUp = glm::cross(_cameraLook, _cameraRight);
 
-
-    _view = glm::lookAt(_cameraPos, _cameraPos + _dirLook, _cameraUp);
-
-    glm::mat4 rot = doRotation(_dirLook, glm::vec3(0, 0, 1));
-
-    float tanFov = tanf(((_fov / 2.f) * (float)M_PI) / 180.f);
-
-    float heightNear = tanFov * _near;
-    float widthNear = heightNear * _screenRatio;
-
-    float heightFar = tanFov * (_far / 10.f);
-    float widthFar = heightFar * _screenRatio;
-
-    glm::vec3 centerNear = _cameraPos + _dirLook * _near;
-    glm::vec3 centerFar = _cameraPos + _dirLook * (_far / 10.f);
-
-    auto nearTopLeft = centerNear + _cameraUp * heightNear + cameraRight * -widthNear;
-    auto nearTopRight = centerNear + _cameraUp * heightNear + cameraRight * widthNear;
-    auto nearBottomLeft = centerNear + _cameraUp * -heightNear + cameraRight * -widthNear;
-    auto nearBottomRight = centerNear + _cameraUp * -heightNear + cameraRight * widthNear;
-
-    auto farTopLeft = centerFar + _cameraUp * heightFar + cameraRight * -widthFar;
-    auto farTopRight = centerFar + _cameraUp * heightFar + cameraRight * widthFar;
-    auto farBottomLeft = centerFar + _cameraUp * -heightFar + cameraRight * -widthFar;
-    auto farBottomRight = centerFar + _cameraUp * -heightFar + cameraRight * widthFar;
-
-    glm::vec3 sun(-1, -1, 0);
-    glm::mat4 rotBackSun = doRotation(sun, glm::vec3(0, 0, 1));
-    glm::mat4 rotSun = doRotation(glm::vec3(0, 0, 1), sun);
-    auto upSun = rotSun * glm::vec4(0, 0, 1, 1);
-
-
-    glm::vec3 array[8];
-
-    array[0] = rotSun * glm::vec4(nearTopLeft, 1.0);
-    array[1] = rotSun * glm::vec4(nearTopRight, 1.0);
-    array[2] = rotSun * glm::vec4(nearBottomLeft, 1.0);
-    array[3] = rotSun * glm::vec4(nearBottomRight, 1.0);
-
-    array[4] = rotSun * glm::vec4(farTopLeft, 1.0);
-    array[5] = rotSun * glm::vec4(farTopRight, 1.0);
-    array[6] = rotSun * glm::vec4(farBottomLeft, 1.0);
-    array[7] = rotSun * glm::vec4(farBottomRight, 1.0);
-
-    float minX = array[0].x;
-    float minY = array[0].y;
-    float minZ = array[0].z;
-    float maxX = array[0].x;
-    float maxY = array[0].y;
-    float maxZ = array[0].z;
-    glm::vec3 centroid(0, 0, 0);
-    for (int i = 0; i < 8; i++)
-    {
-        minX = std::min(minX, array[i].x);
-        minY = std::min(minY, array[i].y);
-        minZ = std::min(minZ, array[i].z);
-        maxX = std::max(maxX, array[i].x);
-        maxY = std::max(maxY, array[i].y);
-        maxZ = std::max(maxZ, array[i].z);
-    }
-    centroid.x = (maxX + minX) / 2.f;
-    centroid.y = (maxY + minY) / 2.f;
-    centroid.z = (maxZ + minZ) / 2.f;
-    _centroid = rotBackSun * glm::vec4(centroid, 1.0);
-    _width = maxX - minX;
-    _height = maxY - minY;
-    _deep = maxZ - minZ;
-    //std::cout << "centroid " << _centroid.x << " " << _centroid.y << " " << _centroid.z << std::endl;
-}
-
-/////////////////////
-//
-//	SETTERS
-//
-/////////////////////
-
-void    Camera::setFov(float fov)
-{
-    _fov = fov;
-    updateProjection();
-}
-
-void    Camera::setScreenRatio(float screenratio)
-{
-    _screenRatio = screenratio;
-    updateProjection();
-}
-
-void    Camera::setNear(float near)
-{
-    _near = near;
-    updateProjection();
-}
-
-void    Camera::setFar(float far)
-{
-    _far = far;
-    updateProjection();
-}
-
-void    Camera::setProjection(const glm::mat4 &projection)
-{
-    _projection = projection;
-}
-
-void    Camera::updateProjection()
-{
-    _projection = glm::perspective(glm::radians(_fov), _screenRatio, _near, _far);
+    _view = glm::lookAt(_cameraPos, _cameraPos + _cameraLook, _cameraUp);
 }
 
 /////////////////////
@@ -185,22 +59,22 @@ void	Camera::closeWindow(float speed)
 
 void	Camera::moveLeft(float deltaTime)
 {
-    _cameraPos -= _translationCelerity * deltaTime * glm::normalize(glm::cross(_cameraUp, _dirLook));
+    _cameraPos -= _translationCelerity * deltaTime * glm::normalize(glm::cross(_cameraUp, _cameraLook));
 }
 
 void	Camera::moveRight(float deltaTime)
 {
-    _cameraPos += _translationCelerity * deltaTime * glm::normalize(glm::cross(_cameraUp, _dirLook));
+    _cameraPos += _translationCelerity * deltaTime * glm::normalize(glm::cross(_cameraUp, _cameraLook));
 }
 
 void	Camera::moveBack(float deltaTime)
 {
-    _cameraPos -= _translationCelerity * deltaTime * _dirLook;
+    _cameraPos -= _translationCelerity * deltaTime * _cameraLook;
 }
 
 void	Camera::moveForward(float deltaTime)
 {
-    _cameraPos += _translationCelerity * deltaTime * _dirLook;
+    _cameraPos += _translationCelerity * deltaTime * _cameraLook;
 }
 
 /////////////////////

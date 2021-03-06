@@ -72,14 +72,14 @@ void Terrain::generateTerrain()
     _isTerrainReady = true;
 }
 
-void Terrain::bindTerrain()
+void Terrain::bindTerrain(const std::unique_ptr<Light> &light)
 {
     _shader.use();
 
-    _shader.setVec3("lightDir", _sun._lightDir);
-    _shader.setFloat("ambiantCoeff", _sun._ambiantCoeff);
-    _shader.setVec3("lightColor", _sun._lightColor);
-    _shader.setFloat("specularStrength", _sun._specularStrenght);
+    _shader.setVec3("lightDir", light->_lightDir);
+    _shader.setFloat("ambiantCoeff", light->_ambiantCoeff);
+    _shader.setVec3("lightColor", light->_lightColor);
+    _shader.setFloat("specularStrength", light->_specularStrenght);
 
     _vArray.addVertexBuffer(_vertices.data(), sizeof(float) * _vertices.size(), _bufferLayout);
 }
@@ -89,7 +89,7 @@ void Terrain::updateShader(std::shared_ptr<Camera> camera, const glm::mat4 &Bias
     _shader.use();
     _mvp = _projection * camera->_view;
     _shader.setMat4("lightMvp", BiaslightMvp); // toremove
-    _shader.setVec3("cameraDir", camera->_dirLook);
+    _shader.setVec3("cameraDir", camera->_cameraLook);
     _shader.setMat4("mvp", _mvp);
     _shader.setInt("shadowMap", shadowMapTextureId);
 }
@@ -103,34 +103,4 @@ void    Terrain::draw() const
 {
     GLCall(glBindVertexArray(_vArray._vArrayId));
     GLCall(glDrawArrays(GL_TRIANGLES, 0, _vertexNb));
-}
-
-//////////////////
-//
-//      SUN
-//
-//////////////////
-
-void Terrain::setDir(const glm::vec3 &dir)
-{
-    _sun.setDir(dir);
-    _shader.setVec3("lightDir", _sun._lightDir);
-}
-
-void Terrain::setColor(const glm::vec3 &color)
-{
-    _sun.setColor(color);
-    _shader.setVec3("lightColor", _sun._lightColor);
-}
-
-void Terrain::setAmbient(float ambiant)
-{
-    _sun.setAmbient(ambiant);
-    _shader.setFloat("ambiantCoeff", _sun._ambiantCoeff);
-}
-
-void Terrain::setSpecular(float specular)
-{
-    _sun.setSpecular(specular);
-    _shader.setFloat("specularStrength", _sun._specularStrenght);
 }

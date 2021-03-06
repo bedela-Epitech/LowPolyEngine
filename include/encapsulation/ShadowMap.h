@@ -11,20 +11,15 @@
 
 class ShadowMap
 {
-private:
-    glm::mat4       _bias;
-    
 public:
     Shader          _shader;
     FrameBuffer     _fbo;
-    glm::mat4       _lightMvp;
     std::shared_ptr<Terrain>    _terrain;
 
 public:
     ShadowMap(const std::string &, const std::string &, const std::shared_ptr<Terrain> &, bool , bool , int , int);
     void    draw();
-    void    updateShader(std::shared_ptr<Camera>);
-    [[nodiscard]] glm::mat4   getBiasLightMvp() const;
+    void    updateShader(const glm::mat4 &);
 };
 
 #endif //LOWPOLYENGINE_SHADOWMAP_H
