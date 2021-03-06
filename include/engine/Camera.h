@@ -16,15 +16,12 @@ public:
     float _height;
     float _deep;
     glm::vec3 _centroid;
-    glm::vec3 _upSun;
-    std::vector<glm::vec3> _corners;
 
     float               _fov;
     float               _screenRatio;
     float               _near;
     float               _far;
     glm::mat4           _projection;
-    glm::mat4       _fff;
 	glm::vec3	_cameraPos;
 	glm::vec3	_cameraUp;
     glm::vec3	_dirLook;

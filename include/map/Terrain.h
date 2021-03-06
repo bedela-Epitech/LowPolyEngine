@@ -6,6 +6,8 @@
 #define INC_71K2LEDEB_TERRAIN_H
 
 #include <future>
+#include "tool/ModelCreator.h"
+#include "engine/Camera.h"
 #include "encapsulation/Shader.h"
 #include "encapsulation/Light.h"
 #include "map/QuadTree.h"
@@ -35,12 +37,10 @@ public:
     void    generateTerrain();
     void    bindTerrain();
     void    draw() const;
-    void    changeCamCorner(const std::vector<glm::vec3> &);
 
+    void    updateShader(std::shared_ptr<Camera>, const glm::mat4&, unsigned int);
     void    modifyTerrain();
 
-    std::vector<float>  getCube(const glm::vec3 &, float size);
-    std::vector<float>  getTriangle(const std::vector<glm::vec3> &, const glm::vec3 &, const glm::vec3 &);
     // sun manager
     void setDir(const glm::vec3 &);
     void setColor(const glm::vec3 &);

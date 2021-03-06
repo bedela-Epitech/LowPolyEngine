@@ -9,7 +9,6 @@
 #include "map/Terrain.h"
 #include "encapsulation/Menu.h"
 #include "encapsulation/ShadowMap.h"
-#include "engine/Camera.h"
 
 class L_OpenGL
 {

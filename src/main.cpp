@@ -21,7 +21,7 @@ int main()
         std::shared_ptr<Terrain> terrain = std::make_shared<Terrain>("../shaders/terrain.vs", "../shaders/terrain.fs");
         terrain->_loadingThread = std::thread(&Terrain::generateTerrain, terrain);
         std::shared_ptr<Menu> menu = std::make_shared<Menu>("../shaders/texture.vs", "../shaders/texture.fs", "../ressources/maxresdefault960x540.jpg", "../ressources/backgroundloading.jpg");
-        std::shared_ptr<ShadowMap> shadowMap = std::make_shared<ShadowMap>("../shaders/shadow.vs", "../shaders/shadow.fs", terrain, "../shaders/texture.vs", "../shaders/texture.fs", glm::vec2(-1.f, 0.f), glm::vec2(1.f, 1.f), false, true, 2000, 2000);
+        std::shared_ptr<ShadowMap> shadowMap = std::make_shared<ShadowMap>("../shaders/shadow.vs", "../shaders/shadow.fs", terrain, false, true, 2000, 2000);
         Input inputKeys(camera, menu);
 
 

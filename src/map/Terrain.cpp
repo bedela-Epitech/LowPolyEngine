@@ -64,89 +64,12 @@ void Terrain::generateTerrain()
         _vertices.push_back(qt._colors[i].z);
 
     }
-    auto c = getCube(glm::vec3(0.f, 100.f, 0.f),  50.f);
+    auto c = ModelCreator::getCube(glm::vec3(0.f, 100.f, 0.f),  50.f);
     _vertices.insert(_vertices.end(), c.begin(), c.end());
-
-    _idxEnd = _vertices.size();
-    auto cube = getCube(glm::vec3(0.f, 100.f, 0.f),  50.f);
-    _vertices.insert(_vertices.end(), cube.begin(), cube.end());
-    cube = getCube(glm::vec3(0.f, 100.f, 0.f),  50.f);
-    _vertices.insert(_vertices.end(), cube.begin(), cube.end());
-    cube = getCube(glm::vec3(0.f, 100.f, 0.f),  50.f);
-    _vertices.insert(_vertices.end(), cube.begin(), cube.end());
-    cube = getCube(glm::vec3(0.f, 100.f, 0.f),  50.f);
-    _vertices.insert(_vertices.end(), cube.begin(), cube.end());
-    cube = getCube(glm::vec3(0.f, 100.f, 0.f),  50.f);
-    _vertices.insert(_vertices.end(), cube.begin(), cube.end());
-    cube = getCube(glm::vec3(0.f, 100.f, 0.f),  50.f);
-    _vertices.insert(_vertices.end(), cube.begin(), cube.end());
-    cube = getCube(glm::vec3(0.f, 100.f, 0.f),  50.f);
-    _vertices.insert(_vertices.end(), cube.begin(), cube.end());
-    cube = getCube(glm::vec3(0.f, 100.f, 0.f),  50.f);
-    _vertices.insert(_vertices.end(), cube.begin(), cube.end());
 
     _vertexNb = _vertices.size() / 3;
 
     _isTerrainReady = true;
-}
-
-std::vector<float> Terrain::getTriangle(const std::vector<glm::vec3> &triPos, const glm::vec3 &normal, const glm::vec3 &color)
-{
-    std::vector<float> triangle;
-
-    for (const auto &pos : triPos)
-    {
-        triangle.push_back(pos.x);
-        triangle.push_back(pos.y);
-        triangle.push_back(pos.z);
-
-        triangle.push_back(normal.x);
-        triangle.push_back(normal.y);
-        triangle.push_back(normal.z);
-
-        triangle.push_back(color.x);
-        triangle.push_back(color.y);
-        triangle.push_back(color.z);
-    }
-
-    return triangle;
-}
-
-std::vector<float> Terrain::getCube(const glm::vec3 &pos, float size)
-{
-    std::vector<float> cube;
-    auto a = getTriangle({pos + glm::vec3(size, -size, -size), pos + glm::vec3(-size, -size, -size), pos + glm::vec3(size, size, -size)} , glm::vec3(0.f, 0.f, -1.f), glm::vec3(1.f, 0.f, 0.f));
-    cube.insert(cube.end(), a.begin(), a.end());
-    a = getTriangle({pos + glm::vec3(size, size, -size), pos + glm::vec3(-size, -size, -size), pos + glm::vec3(-size, size, -size)} , glm::vec3(0.f, 0.f, -1.f), glm::vec3(1.f, 0.f, 0.f));
-    cube.insert(cube.end(), a.begin(), a.end());
-
-    a = getTriangle({pos + glm::vec3(size, -size, size), pos + glm::vec3(-size, -size, size), pos + glm::vec3(size, size, size)} , glm::vec3(0.f, 0.f, 1.f), glm::vec3(1.f, 0.f, 0.f));
-    cube.insert(cube.end(), a.begin(), a.end());
-    a = getTriangle({pos + glm::vec3(size, size, size), pos + glm::vec3(-size, -size, size), pos + glm::vec3(-size, size, size)} , glm::vec3(0.f, 0.f, 1.f), glm::vec3(1.f, 0.f, 0.f));
-    cube.insert(cube.end(), a.begin(), a.end());
-
-
-    a = getTriangle({pos + glm::vec3(-size, -size, -size), pos + glm::vec3(-size, size, -size), pos + glm::vec3(-size, -size, size)} , glm::vec3(-1.f, 0.f, 0.f), glm::vec3(1.f, 0.f, 0.f));
-    cube.insert(cube.end(), a.begin(), a.end());
-    a = getTriangle({pos + glm::vec3(-size, size, -size), pos + glm::vec3(-size, size, size), pos + glm::vec3(-size, -size, size)} , glm::vec3(-1.f, 0.f, 0.f), glm::vec3(1.f, 0.f, 0.f));
-    cube.insert(cube.end(), a.begin(), a.end());
-
-    a = getTriangle({pos + glm::vec3(size, -size, -size), pos + glm::vec3(size, size, -size), pos + glm::vec3(size, -size, size)} , glm::vec3(1.f, 0.f, 0.f), glm::vec3(1.f, 0.f, 0.f));
-    cube.insert(cube.end(), a.begin(), a.end());
-    a = getTriangle({pos + glm::vec3(size, size, -size), pos + glm::vec3(size, size, size), pos + glm::vec3(size, -size, size)} , glm::vec3(1.f, 0.f, 0.f), glm::vec3(1.f, 0.f, 0.f));
-    cube.insert(cube.end(), a.begin(), a.end());
-
-
-    a = getTriangle({pos + glm::vec3(-size, size, -size), pos + glm::vec3(-size, size, size), pos + glm::vec3(size, size, size)} , glm::vec3(0.f, 1.f, 0.f), glm::vec3(1.f, 0.f, 0.f));
-    cube.insert(cube.end(), a.begin(), a.end());
-    a = getTriangle({pos + glm::vec3(-size, size, -size), pos + glm::vec3(size, size, -size), pos + glm::vec3(size, size, size)} , glm::vec3(0.f, 1.f, 0.f), glm::vec3(1.f, 0.f, 0.f));
-    cube.insert(cube.end(), a.begin(), a.end());
-
-    a = getTriangle({pos + glm::vec3(-size, -size, -size), pos + glm::vec3(-size, -size, size), pos + glm::vec3(size, -size, size)} , glm::vec3(0.f, -1.f, 0.f), glm::vec3(1.f, 0.f, 0.f));
-    cube.insert(cube.end(), a.begin(), a.end());
-    a = getTriangle({pos + glm::vec3(-size, -size, -size), pos + glm::vec3(size, -size, -size), pos + glm::vec3(size, -size, size)} , glm::vec3(0.f, -1.f, 0.f), glm::vec3(1.f, 0.f, 0.f));
-    cube.insert(cube.end(), a.begin(), a.end());
-    return cube;
 }
 
 void Terrain::bindTerrain()
@@ -161,21 +84,18 @@ void Terrain::bindTerrain()
     _vArray.addVertexBuffer(_vertices.data(), sizeof(float) * _vertices.size(), _bufferLayout);
 }
 
-void Terrain::changeCamCorner(const std::vector<glm::vec3> &corners)
+void Terrain::updateShader(std::shared_ptr<Camera> camera, const glm::mat4 &BiaslightMvp, unsigned int shadowMapTextureId)
 {
-    _vertices.erase(_vertices.begin() + _idxEnd, _vertices.end());
-
-    std::vector<float> cube;
-    for (const auto &corner : corners)
-    {
-        cube = getCube(corner,  10.f);
-        _vertices.insert(_vertices.end(), cube.begin(), cube.end());
-    }
+    _shader.use();
+    _mvp = _projection * camera->_view;
+    _shader.setMat4("lightMvp", BiaslightMvp); // toremove
+    _shader.setVec3("cameraDir", camera->_dirLook);
+    _shader.setMat4("mvp", _mvp);
+    _shader.setInt("shadowMap", shadowMapTextureId);
 }
 
 void Terrain::modifyTerrain()
 {
-    //_vertices[_vertices.size() - 9] += 1.f;
     _vArray.modifyData(_vertices.data(), sizeof(float) * _vertices.size());
 }
 
