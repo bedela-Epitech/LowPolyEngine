@@ -16,7 +16,7 @@ include_directories(lib/glad/include/glad)
 
 # SET SOURCES
 set(LPE_SOURCES src/main.cpp
-		include/encapsulation/L_OpenGL.h src/encapsulation/L_OpenGL.cpp
+        include/encapsulation/Renderer.h src/encapsulation/Renderer.cpp
         include/engine/Camera.h src/engine/Camera.cpp
 		include/encapsulation/Light.h src/encapsulation/Light.cpp
 		include/encapsulation/Window.h src/encapsulation/Window.cpp

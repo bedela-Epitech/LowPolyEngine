@@ -28,7 +28,7 @@ glm::mat4    doRotation(glm::vec3 v1, glm::vec3 v2)
     return rotmat;
 }
 
-void Light::updateLight(std::shared_ptr<Camera> camera)
+void Light::updateLight(const std::unique_ptr<Camera> &camera)
 {
     glm::mat4 rot = doRotation(camera->_cameraLook, glm::vec3(0, 0, 1));
 

@@ -14,11 +14,10 @@ class ShadowMap
 public:
     Shader          _shader;
     FrameBuffer     _fbo;
-    std::shared_ptr<Terrain>    _terrain;
 
 public:
-    ShadowMap(const std::string &, const std::string &, const std::shared_ptr<Terrain> &, bool , bool , int , int);
-    void    draw();
+    ShadowMap(const std::string &, const std::string &, bool , bool , int , int);
+    void    draw(const std::unique_ptr<Terrain> &);
     void    updateShader(const glm::mat4 &);
 };
 

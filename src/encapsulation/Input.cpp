@@ -3,7 +3,7 @@
 
 using namespace std::placeholders;
 
-Input::Input(const std::shared_ptr<Camera> &camera, const std::shared_ptr<Menu> &menu)
+Input::Input(Camera *camera, Menu *menu)
 {
 	_keys = {GLFW_KEY_ESCAPE, GLFW_KEY_W, GLFW_KEY_S,
 			 GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_RIGHT,

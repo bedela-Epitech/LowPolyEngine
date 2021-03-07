@@ -5,18 +5,18 @@
 #include "encapsulation/ShadowMap.h"
 
 ShadowMap::ShadowMap(const std::string &shadowVsPath,
-                     const std::string &shadowFsPath, const std::shared_ptr<Terrain> &terrain,
+                     const std::string &shadowFsPath,
                      bool needImage, bool needDepth, int width, int height)
-        : _shader(shadowVsPath, shadowFsPath), _terrain(terrain), _fbo(needImage, needDepth, width, height)
+        : _shader(shadowVsPath, shadowFsPath), _fbo(needImage, needDepth, width, height)
 { }
 
-void ShadowMap::draw()
+void ShadowMap::draw(const std::unique_ptr<Terrain> &terrain)
 {
     _shader.use();
     _fbo.bind();
     glEnable(GL_DEPTH_TEST);
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-    _terrain->draw();
+    terrain->draw();
     _fbo.unbind();
 }
 

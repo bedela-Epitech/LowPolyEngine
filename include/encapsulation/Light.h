@@ -29,7 +29,7 @@ public:
 public:
 	Light();
 
-	void updateLight(std::shared_ptr<Camera>);
+	void updateLight(const std::unique_ptr<Camera> &);
     glm::mat4 getBiasLightMvp() const;
 
 	void setDir(const glm::vec3 &);

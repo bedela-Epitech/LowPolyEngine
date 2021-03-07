@@ -1,5 +1,8 @@
+//
+// Created by adrien on 15/11/19.
+//
 
-#include "encapsulation/L_OpenGL.h"
+#include "encapsulation/Renderer.h"
 
 /////////////////////
 //
@@ -7,19 +10,14 @@
 //
 /////////////////////
 
-L_OpenGL::L_OpenGL(const std::shared_ptr<Terrain> &terrain, const std::shared_ptr<Menu> &menu, const std::shared_ptr<ShadowMap> &shadowMap)
-        : _terrain(terrain), _menu(menu), _shadowMap(shadowMap)
+Renderer::Renderer(std::unique_ptr<Terrain> terrain, std::unique_ptr<Menu> menu, std::unique_ptr<ShadowMap> shadowMap, std::unique_ptr<Camera> camera)
+        : _terrain(std::move(terrain)), _menu(std::move(menu)), _shadowMap(std::move(shadowMap)), _camera(std::move(camera))
 {
     _light = std::make_unique<Light>();
     GLCall(glEnable(GL_DEPTH_TEST));
 }
 
-void    L_OpenGL::initShader(const glm::mat4 &projection)
-{
-    _terrain->_projection = projection;
-}
-
-void    L_OpenGL::updateShader(std::shared_ptr<Camera> camera)
+void    Renderer::updateShader()
 {
     if (!(_menu->_linkDone && _terrain->_isTerrainLinked))
     {
@@ -34,19 +32,21 @@ void    L_OpenGL::updateShader(std::shared_ptr<Camera> camera)
     }
     else
     {
-        _light->updateLight(camera);
+        _camera->updateCamera();
+        _light->updateLight(_camera);
+
         _shadowMap->updateShader(_light->_mvp);
-        _terrain->updateShader(camera, _light->getBiasLightMvp(), _shadowMap->_fbo._depthTexture._textureId);
+        _terrain->updateShader(_camera, _light->getBiasLightMvp(), _shadowMap->_fbo._depthTexture._textureId);
     }
 }
 
-void    L_OpenGL::clear() const
+void    Renderer::clear() const
 {
     GLCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 }
 
-void    L_OpenGL::display() const
+void    Renderer::display() const
 {
     clear();
 
@@ -56,7 +56,7 @@ void    L_OpenGL::display() const
     }
     else
     {
-        _shadowMap->draw();
+        _shadowMap->draw(_terrain);
         Texture::unbind();
         _terrain->_shader.use();
         _shadowMap->_fbo._depthTexture.bind();

@@ -22,7 +22,6 @@ public:
     VertexArray         _vArray;
     unsigned int        _vertexNb;
     std::thread         _loadingThread;
-    glm::mat4           _projection;
     glm::mat4           _mvp;
 
 private:
@@ -36,7 +35,7 @@ public:
     void    bindTerrain(const std::unique_ptr<Light> &);
     void    draw() const;
 
-    void    updateShader(std::shared_ptr<Camera>, const glm::mat4&, unsigned int);
+    void    updateShader(const std::unique_ptr<Camera> &, const glm::mat4&, unsigned int);
     void    modifyTerrain();
 };
 

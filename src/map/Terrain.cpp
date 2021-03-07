@@ -84,10 +84,10 @@ void Terrain::bindTerrain(const std::unique_ptr<Light> &light)
     _vArray.addVertexBuffer(_vertices.data(), sizeof(float) * _vertices.size(), _bufferLayout);
 }
 
-void Terrain::updateShader(std::shared_ptr<Camera> camera, const glm::mat4 &BiaslightMvp, unsigned int shadowMapTextureId)
+void Terrain::updateShader(const std::unique_ptr<Camera> &camera, const glm::mat4 &BiaslightMvp, unsigned int shadowMapTextureId)
 {
     _shader.use();
-    _mvp = _projection * camera->_view;
+    _mvp = camera->_projection * camera->_view;
     _shader.setMat4("lightMvp", BiaslightMvp); // toremove
     _shader.setVec3("cameraDir", camera->_cameraLook);
     _shader.setMat4("mvp", _mvp);

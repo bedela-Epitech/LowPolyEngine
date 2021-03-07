@@ -24,8 +24,8 @@ private:
     std::map<int, std::function<void(void)>>    _menuFunctions;
 
 public:
-	Input(const std::shared_ptr<Camera> &,
-		  const std::shared_ptr<Menu> &);
+	Input(Camera *,
+		  Menu *);
 
 	void	keyManager();
 	void	mouseManger();
