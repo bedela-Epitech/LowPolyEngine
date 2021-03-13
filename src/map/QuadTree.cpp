@@ -28,10 +28,9 @@ QuadTreeNode::QuadTreeNode(unsigned int size, const glm::vec2 &pos,
 //
 /////////////////////
 
-QuadTree::QuadTree(unsigned int power)
+QuadTree::QuadTree(unsigned int size) : _size(size)
 {
     _currentPos = {0, 0};
-    _size = (unsigned int)pow(2, power) + 1;
     std::cout << "size = " << _size << std::endl;
     Matrix<float> noMap;
     auto ptr = std::make_shared<QuadTreeNode>(_size, glm::vec2(0, 0), noMap, noMap, noMap, noMap);
@@ -76,6 +75,9 @@ glm::vec3   getColor(float height, float yNormal)
 
 void QuadTree::gatherChunks()
 {
+    _vertices.clear();
+    _colors.clear();
+    _normals.clear();
     float maxHeight = std::numeric_limits<float>::lowest();
     float minHeight = std::numeric_limits<float>::max();
     std::vector<double> coords;
@@ -154,9 +156,9 @@ void QuadTree::gatherChunks()
 
 }
 
-void    QuadTree::addChunk(const glm::ivec2 &adder)
+void    QuadTree::addChunk(const glm::ivec2 &pos)
 {
-    _currentPos += adder;
+    _currentPos = pos;
 
     Matrix<float> northMap;
     Matrix<float> eastMap;

@@ -9,6 +9,7 @@
 #include "out/WriteObj.h"
 #include <map>
 #include "encapsulation/Matrix.h"
+
 class QuadTreeNode
 {
 public:

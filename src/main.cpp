@@ -17,7 +17,7 @@ int main()
         std::unique_ptr<Terrain> terrain = std::make_unique<Terrain>("../shaders/terrain.vs", "../shaders/terrain.fs");
         terrain->_loadingThread = std::thread(&Terrain::generateTerrain, terrain.get());
 
-        std::unique_ptr<Camera> camera = std::make_unique<Camera>(250.f, 250.0f, -3.f); //eye position
+        std::unique_ptr<Camera> camera = std::make_unique<Camera>(0, 0, 0); //eye position
         std::unique_ptr<Menu> menu = std::make_unique<Menu>("../shaders/texture.vs", "../shaders/texture.fs", "../ressources/maxresdefault960x540.jpg", "../ressources/backgroundloading.jpg");
         std::unique_ptr<ShadowMap> shadowMap = std::make_unique<ShadowMap>("../shaders/shadow.vs", "../shaders/shadow.fs", false, true, 2000, 2000);
 

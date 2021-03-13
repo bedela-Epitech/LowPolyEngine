@@ -36,7 +36,7 @@ void    Renderer::updateShader()
         _light->updateLight(_camera);
 
         _shadowMap->updateShader(_light->_mvp);
-        _terrain->updateShader(_camera, _light->getBiasLightMvp(), _shadowMap->_fbo._depthTexture._textureId);
+        _terrain->update(_camera, _light->getBiasLightMvp(), _shadowMap->_fbo._depthTexture._textureId);
     }
 }
 

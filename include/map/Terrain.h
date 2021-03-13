@@ -16,6 +16,7 @@
 class Terrain
 {
 public:
+    QuadTree            _qt;
     Shader              _shader;
     bool                _isTerrainReady = false;
     bool                _isTerrainLinked = false;
@@ -27,6 +28,7 @@ public:
 private:
     std::vector<float>  _vertices;
     Layout              _bufferLayout;
+    unsigned int        _size;
 
 public:
     Terrain(const std::string &, const std::string &);
@@ -35,8 +37,11 @@ public:
     void    bindTerrain(const std::unique_ptr<Light> &);
     void    draw() const;
 
-    void    updateShader(const std::unique_ptr<Camera> &, const glm::mat4&, unsigned int);
+    void    update(const std::unique_ptr<Camera> &, const glm::mat4&, unsigned int);
     void    modifyTerrain();
+
+private:
+    void    updatePos(const glm::vec3 &);
 };
 
 #endif //INC_71K2LEDEB_TERRAIN_H
